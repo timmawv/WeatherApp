@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/java/avlyakulov/timur/other
+*.env
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
