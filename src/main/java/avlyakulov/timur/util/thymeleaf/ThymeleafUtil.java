@@ -5,16 +5,17 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import java.util.Map;
-
 public class ThymeleafUtil {
-    private ClassLoaderTemplateResolver resolver;
+    private static final ClassLoaderTemplateResolver resolver;
 
-    {
+    static {
         resolver = configureResolver();
     }
 
-    private ClassLoaderTemplateResolver configureResolver() {
+    private ThymeleafUtil() {
+    }
+
+    private static ClassLoaderTemplateResolver configureResolver() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCharacterEncoding("UTF-8");
@@ -23,20 +24,17 @@ public class ThymeleafUtil {
         return resolver;
     }
 
-    private Context setAttributes(Map<String, ?> attributes) {
-        Context context = new Context();
-        for (Map.Entry<String, ?> entry : attributes.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            context.setVariable(key, value);
-        }
-        return context;
-    }
-
-    public String getHtmlPage(Context context, String htmlPage) {
+    public static String getHtmlPage(String htmlPage, Context context) {
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(resolver);
 
         return templateEngine.process(htmlPage, context);
+    }
+
+    public static String getHtmlPage(String htmlPage) {
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(resolver);
+
+        return templateEngine.process(htmlPage, new Context());
     }
 }
