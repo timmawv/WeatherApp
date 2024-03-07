@@ -2,6 +2,7 @@ package avlyakulov.timur.util.thymeleaf;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.linkbuilder.ILinkBuilder;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
@@ -34,6 +35,7 @@ public class ThymeleafUtil {
     public static String getHtmlPage(String htmlPage) {
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(resolver);
+
 
         return templateEngine.process(htmlPage, new Context());
     }
