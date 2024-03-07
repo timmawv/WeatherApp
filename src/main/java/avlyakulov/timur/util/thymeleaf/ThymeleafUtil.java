@@ -2,7 +2,6 @@ package avlyakulov.timur.util.thymeleaf;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.linkbuilder.ILinkBuilder;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
@@ -20,7 +19,7 @@ public class ThymeleafUtil {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCharacterEncoding("UTF-8");
-        resolver.setPrefix("/templates/");
+        resolver.setPrefix("/view/");
         resolver.setSuffix(".html");
         return resolver;
     }
