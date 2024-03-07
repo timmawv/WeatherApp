@@ -1,7 +1,6 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,8 +15,7 @@ public class ThymeleafController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ServletContext servletContext = req.getServletContext();
-        String htmlPage = ThymeleafUtil.getHtmlPage("main-page", servletContext, new Context());
+        String htmlPage = ThymeleafUtil.getHtmlPage("/main-page", new Context());
 
         resp.getWriter().write(htmlPage);
     }
