@@ -1,22 +1,22 @@
 package avlyakulov.timur.util.thymeleaf;
 
+import jakarta.servlet.ServletContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.WebApplicationTemplateResolver;
+import org.thymeleaf.web.IWebApplication;
+import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 public class ThymeleafUtil {
-    private static final ClassLoaderTemplateResolver resolver;
-
-    static {
-        resolver = configureResolver();
-    }
 
     private ThymeleafUtil() {
     }
 
-    private static ClassLoaderTemplateResolver configureResolver() {
-        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+    private static ITemplateResolver configureResolver(ServletContext servletContext) {
+        IWebApplication application = JakartaServletWebApplication.buildApplication(servletContext);
+        WebApplicationTemplateResolver resolver = new WebApplicationTemplateResolver(application);
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCacheable(true);
         resolver.setCacheTTLMs(3600000L);
@@ -26,18 +26,11 @@ public class ThymeleafUtil {
         return resolver;
     }
 
-    public static String getHtmlPage(String htmlPage, Context context) {
+    public static String getHtmlPage(String htmlPage, ServletContext servletContext, Context context) {
         TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(resolver);
-
+        ITemplateResolver iTemplateResolver = configureResolver(servletContext);
+        templateEngine.setTemplateResolver(iTemplateResolver);
         return templateEngine.process(htmlPage, context);
     }
 
-    public static String getHtmlPage(String htmlPage) {
-        TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(resolver);
-
-
-        return templateEngine.process(htmlPage, new Context());
-    }
 }
