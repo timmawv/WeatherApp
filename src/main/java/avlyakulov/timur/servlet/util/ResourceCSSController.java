@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlet;
+package avlyakulov.timur.servlet.util;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

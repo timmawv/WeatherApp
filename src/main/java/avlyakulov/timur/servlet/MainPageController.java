@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 
@@ -14,7 +15,8 @@ public class MainPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String htmlPage = ThymeleafUtil.getHtmlPage("main-page");
+        Context context = new Context();
+        String htmlPage = ThymeleafUtil.getHtmlPage("main-page", context);
 
         resp.getWriter().write(htmlPage);
     }
