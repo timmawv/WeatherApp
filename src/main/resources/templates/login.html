@@ -23,7 +23,7 @@
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
-                <div style="color: red" th:if="${empty_field_error}" th:text="${empty_field_error}"></div>
+                <div style="color: red" th:if="${error_field}" th:text="${error_field}"></div>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>

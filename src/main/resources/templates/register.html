@@ -25,16 +25,12 @@
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
-                <div style="color: red" th:if="${password_length_error}" th:text="${password_length_error}"></div>
-                <div style="color: red" th:if="${password_matcher_error}" th:text="${password_matcher_error}"></div>
-                <div style="color: red" th:if="${password_strength_error}" th:text="${password_strength_error}"></div>
-                <div style="color: red" th:each="suggestion : ${suggestions}" th:text="${suggestion}"></div>
+
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword2" class="form-label">Confirm password</label>
                 <input type="password" name="confirm_password" class="form-control" id="exampleInputPassword2" required>
-                <div style="color: red" th:if="${confirm_password_error}" th:text="${confirm_password_error}"></div>
-                <div style="color: red" th:if="${empty_field_error}" th:text="${empty_field_error}"></div>
+                <div style="color: red" th:if="${error_field}" th:utext="${error_field}"></div>
             </div>
             <button type="submit" class="btn btn-primary">Register Account</button>
         </form>
