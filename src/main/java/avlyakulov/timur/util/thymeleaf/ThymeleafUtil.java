@@ -10,19 +10,6 @@ public class ThymeleafUtil {
     private ThymeleafUtil() {
     }
 
-
-
-    private static ClassLoaderTemplateResolver configureCssResolver() {
-        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-        resolver.setTemplateMode(TemplateMode.CSS);
-        resolver.setCacheable(true);
-        resolver.setCacheTTLMs(3600000L);
-        resolver.setCharacterEncoding("UTF-8");
-        resolver.setPrefix("/static/css/");
-        resolver.setSuffix(".css");
-        return resolver;
-    }
-
     private static ClassLoaderTemplateResolver configureHtmlResolver() {
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
@@ -30,7 +17,7 @@ public class ThymeleafUtil {
         resolver.setCacheable(true);
         resolver.setCacheTTLMs(3600000L);
         resolver.setCharacterEncoding("UTF-8");
-        resolver.setPrefix("/templates");
+        resolver.setPrefix("/templates/");
         resolver.setSuffix(".html");
         return resolver;
     }
@@ -39,6 +26,12 @@ public class ThymeleafUtil {
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(configureHtmlResolver());
         return templateEngine.process(htmlPage, context);
+    }
+
+    public static String getHtmlPage(String htmlPage) {
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(configureHtmlResolver());
+        return templateEngine.process(htmlPage, new Context());
     }
 
 }
