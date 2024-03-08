@@ -27,11 +27,4 @@ public class ThymeleafUtil {
         templateEngine.setTemplateResolver(configureHtmlResolver());
         return templateEngine.process(htmlPage, context);
     }
-
-    public static String getHtmlPage(String htmlPage) {
-        TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(configureHtmlResolver());
-        return templateEngine.process(htmlPage, new Context());
-    }
-
 }
