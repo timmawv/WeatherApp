@@ -1,30 +1,28 @@
 package avlyakulov.timur.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "sessions")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Session {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "VARCHAR")
     private UUID id;
 
-    @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;
+
 }
