@@ -12,6 +12,10 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
+@NamedQueries({
+        @NamedQuery(name = "HQL_FindUserByUsername",
+        query = "from User where login = :userLogin")
+})
 public class User {
 
     @Id

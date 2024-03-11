@@ -1,6 +1,5 @@
 package avlyakulov.timur.servlet;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import avlyakulov.timur.custom_exception.UserAlreadyExistsException;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.UserService;
@@ -49,9 +48,9 @@ public class RegisterController extends HttpServlet {
                     ThymeleafUtilRespondHtmlView.respondHtmlPage("auth/register", context, resp);
                     return;
                 }
-                Cookie cookie = new Cookie("session_id", UUID.randomUUID().toString());
-                cookie.setMaxAge(30 * 60);
-                resp.addCookie(cookie);
+//                Cookie cookie = new Cookie("session_id", UUID.randomUUID().toString());
+//                cookie.setMaxAge(30 * 60);
+//                resp.addCookie(cookie);
                 resp.sendRedirect("/WeatherApp-1.0/main-page");
             } else {
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);

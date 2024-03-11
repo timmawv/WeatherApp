@@ -1,5 +1,8 @@
 package avlyakulov.timur.servlet;
 
+import avlyakulov.timur.custom_exception.UserNotFoundException;
+import avlyakulov.timur.service.UserService;
+import avlyakulov.timur.util.ContextUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
@@ -16,6 +19,8 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
     private final String htmlPageLogin = "auth/login";
 
+    private final UserService userService = new UserService();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
@@ -25,12 +30,19 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        String username = req.getParameter("login");
+        String login = req.getParameter("login");
         String password = req.getParameter("password");
-        if (LoginRegistrationValidation.isFieldEmpty(context, username, password)) {
+        if (LoginRegistrationValidation.isFieldEmpty(context, login, password)) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         } else {
-            //todo make login
+            try {
+                userService.logUserByCredentials(login, password);
+            } catch (UserNotFoundException e) {
+                ContextUtil.setErrorToContext(context, e.getMessage());
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+                return;
+            }
+            resp.sendRedirect("/WeatherApp-1.0/main-page");
         }
     }
 }

@@ -1,7 +1,10 @@
 package avlyakulov.timur.service;
 
+import avlyakulov.timur.custom_exception.UserNotFoundException;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
+import avlyakulov.timur.util.BCryptUtil;
+import jakarta.persistence.NoResultException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -15,5 +18,17 @@ public class UserService {
 
     public User getUserById(int userId) {
         return userDao.getById(userId);
+    }
+
+    public void logUserByCredentials(String login, String password) {
+        User user;
+        try {
+            user = userDao.getUserByLogin(login);
+        } catch (NoResultException e) {
+            throw new UserNotFoundException("Login or password isn't correct");
+        }
+        if (!BCryptUtil.isPasswordCorrect(password, user.getPassword())) {
+            throw new UserNotFoundException("Login or password isn't correct");
+        }
     }
 }

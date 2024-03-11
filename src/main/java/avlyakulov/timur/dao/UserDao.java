@@ -31,4 +31,12 @@ public class UserDao {
             return session.get(User.class, userId);
         }
     }
+
+    public User getUserByLogin(String login) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createNamedQuery("HQL_FindUserByUsername", User.class)
+                    .setParameter("userLogin", login)
+                    .getSingleResult();
+        }
+    }
 }
