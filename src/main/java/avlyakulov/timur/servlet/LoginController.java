@@ -2,6 +2,7 @@ package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
+import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,11 +14,12 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
+    private final String htmlPageLogin = "auth/login";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        respondHtmlPage(context, resp);
+        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
     }
 
     @Override
@@ -26,14 +28,9 @@ public class LoginController extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         if (LoginRegistrationValidation.isFieldEmpty(context, username, password)) {
-            respondHtmlPage(context, resp);
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         } else {
             //todo make login
         }
-    }
-
-    private void respondHtmlPage(Context context, HttpServletResponse resp) throws IOException {
-        final String htmlPageRegister = "login";
-        resp.getWriter().write(ThymeleafUtil.getHtmlPage(htmlPageRegister, context));
     }
 }

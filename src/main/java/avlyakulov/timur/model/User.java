@@ -23,6 +23,9 @@ public class User {
 
     private String password;
 
+    @OneToOne(mappedBy = "user")
+    private Session session;
+
     public User(String login, String password) {
         this.login = login;
         this.password = password;

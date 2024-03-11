@@ -2,6 +2,7 @@ package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
+import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,13 +14,12 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/registration")
 public class RegistrationController extends HttpServlet {
-
-
+    private final String htmlPageRegister = "auth/register";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        respondHtmlPage(context, resp);
+        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
     }
 
     @Override
@@ -29,18 +29,13 @@ public class RegistrationController extends HttpServlet {
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm_password");
         if (LoginRegistrationValidation.isFieldEmpty(context, username, password, confirmPassword)) {
-            respondHtmlPage(context, resp);
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
         } else {
             if (LoginRegistrationValidation.isPasswordTheSameAndStrong(password, confirmPassword, context)) {
                 //todo add service to register user
             } else {
-                respondHtmlPage(context, resp);
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
             }
         }
-    }
-
-    private void respondHtmlPage(Context context, HttpServletResponse resp) throws IOException {
-        final String htmlPageRegister = "register";
-        resp.getWriter().write(ThymeleafUtil.getHtmlPage(htmlPageRegister, context));
     }
 }
