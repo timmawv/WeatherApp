@@ -25,7 +25,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        String username = req.getParameter("username");
+        String username = req.getParameter("login");
         String password = req.getParameter("password");
         if (LoginRegistrationValidation.isFieldEmpty(context, username, password)) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
