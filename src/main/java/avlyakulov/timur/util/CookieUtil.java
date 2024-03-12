@@ -1,6 +1,7 @@
 package avlyakulov.timur.util;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
@@ -17,5 +18,11 @@ public class CookieUtil {
             }
         }
         return Optional.empty();
+    }
+
+    public static void deleteSessionIdCookie(HttpServletResponse resp) {
+        Cookie cookie = new Cookie("session_id", "");
+        cookie.setMaxAge(0);
+        resp.addCookie(cookie);
     }
 }

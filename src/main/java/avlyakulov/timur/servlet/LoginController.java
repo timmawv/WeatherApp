@@ -17,8 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @WebServlet(urlPatterns = "/login")
@@ -56,7 +54,7 @@ public class LoginController extends HttpServlet {
             Cookie cookie = new Cookie("session_id", session.getId().toString());
             cookie.setMaxAge(30 * 60);
             resp.addCookie(cookie);
-            resp.sendRedirect("/WeatherApp-1.0/weather/main-page");
+            resp.sendRedirect("/WeatherApp-1.0/weather");
         }
     }
 }

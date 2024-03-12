@@ -21,7 +21,7 @@ public class MainPageController extends HttpServlet {
         Context context = new Context();
         Optional<String> cookieId = CookieUtil.getSessionIdFromCookie(req.getCookies());
         if (cookieId.isPresent()) {
-            resp.sendRedirect("/WeatherApp-1.0/weather/main-page");
+            resp.sendRedirect("/WeatherApp-1.0/weather");
         } else {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
         }

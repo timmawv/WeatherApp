@@ -18,9 +18,12 @@
             <a href="/WeatherApp-1.0/registration" type="button" class="btn btn-primary">Sign-up</a>
         </div>
 
-        <div class ="d-flex align-items-center" th:unless="${login == null}">
+        <div class="d-flex align-items-center" th:unless="${login == null}">
             <h4 th:text="'User: ' + ${login}" style="margin-right: 30px">Login</h4>
-            <a style="display: block" href="/WeatherApp-1.0/weather/logout" type="button" class="btn btn-primary">Logout</a>
+            <form action="/WeatherApp-1.0/logout" method="POST">
+                <button type="submit" class="btn btn-primary">Logout</button>
+            </form>
         </div>
+
     </header>
 </div>

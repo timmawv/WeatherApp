@@ -18,6 +18,10 @@ public class SessionService {
         return sessionDao.getById(sessionId);
     }
 
+    public void deleteSessionById(UUID sessionId) {
+        sessionDao.delete(sessionId);
+    }
+
     public boolean isUserSessionExpired(UUID sessionId) {
         Session session = sessionDao.getById(sessionId);
         LocalDateTime now = LocalDateTime.now();

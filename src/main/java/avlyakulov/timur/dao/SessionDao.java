@@ -29,4 +29,16 @@ public class SessionDao {
             throw new ModelNotFoundException("Session with such id doesn't exist");
         }
     }
+
+    public void delete(UUID sessionId) {
+        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
+            hibernateSession.beginTransaction();//открываем транзакцию
+
+            hibernateSession.createNamedQuery("HQL_DeleteSessionById")
+                    .setParameter("sessionId", sessionId)
+                    .executeUpdate();
+
+            hibernateSession.getTransaction().commit();//закрываем транзакцию
+        }
+    }
 }
