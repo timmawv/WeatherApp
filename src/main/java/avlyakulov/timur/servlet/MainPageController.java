@@ -1,15 +1,16 @@
 package avlyakulov.timur.servlet;
 
+import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = "/main-page")
 public class MainPageController extends HttpServlet {
@@ -18,14 +19,11 @@ public class MainPageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) {
-            System.out.println("cookie is null");
+        Optional<String> cookieId = CookieUtil.getSessionIdFromCookie(req.getCookies());
+        if (cookieId.isPresent()) {
+            resp.sendRedirect("/WeatherApp-1.0/weather/main-page");
         } else {
-            for (Cookie cookie : cookies) {
-                System.out.println(cookie.getName() + cookie.getValue());
-            }
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
         }
-        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
     }
 }

@@ -9,12 +9,18 @@
         </div>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="form-control" placeholder="Search..." aria-label="Search" th:disabled="${user == null}">
+            <input type="search" class="form-control" placeholder="Search..." aria-label="Search"
+                   th:disabled="${login == null}">
         </form>
 
-        <div class="col-md-3 text-end">
+        <div class="col-md-3 text-end" th:if="${login == null}">
             <a href="/WeatherApp-1.0/login" type="button" class="btn btn-outline-primary me-2">Login</a>
             <a href="/WeatherApp-1.0/registration" type="button" class="btn btn-primary">Sign-up</a>
+        </div>
+
+        <div class ="d-flex align-items-center" th:unless="${login == null}">
+            <h4 th:text="'User: ' + ${login}" style="margin-right: 30px">Login</h4>
+            <a style="display: block" href="/WeatherApp-1.0/weather/logout" type="button" class="btn btn-primary">Logout</a>
         </div>
     </header>
 </div>

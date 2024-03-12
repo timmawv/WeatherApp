@@ -51,7 +51,7 @@ public class RegisterController extends HttpServlet {
 //                Cookie cookie = new Cookie("session_id", UUID.randomUUID().toString());
 //                cookie.setMaxAge(30 * 60);
 //                resp.addCookie(cookie);
-                resp.sendRedirect("/WeatherApp-1.0/main-page");
+                resp.sendRedirect("/WeatherApp-1.0/main-page/");
             } else {
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
             }
