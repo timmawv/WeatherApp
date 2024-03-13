@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlet;
+package avlyakulov.timur.servlet.auth;
 
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.model.Session;

@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlet;
+package avlyakulov.timur.servlet.auth;
 
 import avlyakulov.timur.custom_exception.UserAlreadyExistsException;
 import avlyakulov.timur.model.User;

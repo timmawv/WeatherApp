@@ -8,8 +8,8 @@
             </a>
         </div>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="form-control" placeholder="Search..." aria-label="Search"
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="POST" action="/WeatherApp-1.0/weather/search">
+            <input type="search" name="city" class="form-control" placeholder="Search weather..." aria-label="Search"
                    th:disabled="${login == null}">
         </form>
 
