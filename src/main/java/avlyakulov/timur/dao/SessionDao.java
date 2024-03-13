@@ -6,11 +6,11 @@ import avlyakulov.timur.util.HibernateSingletonUtil;
 import jakarta.persistence.NoResultException;
 import org.hibernate.SessionFactory;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class SessionDao {
     private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
-
 
     public void create(Session session) {
         try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
@@ -22,9 +22,17 @@ public class SessionDao {
         }
     }
 
-    public Session getById(UUID sessionId) {
+    public Optional<Session> getById(UUID sessionId) {
         try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            return hibernateSession.get(Session.class, sessionId);
+            return Optional.ofNullable(hibernateSession.get(Session.class, sessionId));
+        }
+    }
+
+    public String getUserById(UUID sessionId) {
+        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
+            return hibernateSession.createNamedQuery("HQL_GetUserLoginByHisSession", String.class)
+                    .setParameter("sessionId", sessionId)
+                    .getSingleResult();
         } catch (NoResultException e) {
             throw new ModelNotFoundException("Session with such id doesn't exist");
         }

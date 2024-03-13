@@ -4,6 +4,7 @@ import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.model.Session;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SessionService {
@@ -14,8 +15,8 @@ public class SessionService {
         sessionDao.create(session);
     }
 
-    public Session getSessionById(UUID sessionId) {
-        return sessionDao.getById(sessionId);
+    public String getUserLoginByHisSession(String sessionId) {
+        return sessionDao.getUserById(UUID.fromString(sessionId));
     }
 
     public void deleteSessionById(UUID sessionId) {
@@ -23,8 +24,12 @@ public class SessionService {
     }
 
     public boolean isUserSessionExpired(UUID sessionId) {
-        Session session = sessionDao.getById(sessionId);
-        LocalDateTime now = LocalDateTime.now();
-        return now.isBefore(session.getExpiresAt());
+        Optional<Session> session = sessionDao.getById(sessionId);
+        if (session.isPresent()) {
+            LocalDateTime now = LocalDateTime.now();
+            return now.isAfter(session.get().getExpiresAt());
+        } else {
+            return true;
+        }
     }
 }

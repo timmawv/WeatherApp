@@ -49,6 +49,9 @@ public class LoginController extends HttpServlet {
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
                 return;
             }
+            if (user.getSession() != null) {
+                sessionService.deleteSessionById(user.getSession().getId());
+            }
             Session session = new Session(UUID.randomUUID(), user);
             sessionService.createSession(session);
             Cookie cookie = new Cookie("session_id", session.getId().toString());
