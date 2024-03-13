@@ -12,27 +12,22 @@ import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
-@WebServlet(urlPatterns = "/main-page")
-public class MainPageController extends HttpServlet {
-    private final String htmlPageMain = "pages/main-page";
+@WebServlet(urlPatterns = "/weather")
+public class MainPageLoggedController extends HttpServlet {
 
     private final SessionService sessionService = new SessionService();
+
+    private final String htmlPageLogged = "pages/main-page-logged";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        Optional<String> sessionId = CookieUtil.getSessionIdFromCookie(req.getCookies());
-        if (sessionId.isPresent()) {
-            if (!sessionService.isUserSessionExpired(UUID.fromString(sessionId.get())))
-                resp.sendRedirect("/WeatherApp-1.0/weather");
-            else {
-                CookieUtil.deleteSessionIdCookie(resp);
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
-            }
-        } else {
-            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
+        Optional<String> sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+        if (sessionIdFromCookie.isPresent()) {
+            String userLogin = sessionService.getUserLoginByHisSession(sessionIdFromCookie.get());
+            context.setVariable("login", userLogin);
         }
+        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogged, context, resp);
     }
 }

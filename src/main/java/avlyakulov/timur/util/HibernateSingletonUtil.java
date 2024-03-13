@@ -1,6 +1,7 @@
 package avlyakulov.timur.util;
 
 
+import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
@@ -39,6 +40,7 @@ public class HibernateSingletonUtil {
         if (sessionFactory == null) {
             sessionFactory = new Configuration()
                     .addAnnotatedClass(User.class)
+                    .addAnnotatedClass(Session.class)
                     .buildSessionFactory();
         }
     }

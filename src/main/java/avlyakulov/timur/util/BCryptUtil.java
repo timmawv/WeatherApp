@@ -1,10 +1,14 @@
 package avlyakulov.timur.util;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class BCryptUtil {
 
     public static String encryptPassword(String password) {
-        return BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public static boolean isPasswordCorrect(String candidatePassword, String userPassword) {
+        return BCrypt.checkpw(candidatePassword, userPassword);
     }
 }

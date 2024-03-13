@@ -12,7 +12,7 @@ import java.io.IOException;
 public class HibernateInitializeFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-//        HibernateSingletonUtil.initSessionFactory();
+        HibernateSingletonUtil.initSessionFactory();
         log.info("HibernateInitializeFilter filter was created and initialize Hibernate connection");
     }
 
