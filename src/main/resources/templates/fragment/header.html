@@ -8,7 +8,7 @@
             </a>
         </div>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="POST" action="/WeatherApp-1.0/weather/search">
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="GET" action="/WeatherApp-1.0/weather/search">
             <input type="search" name="city" class="form-control" placeholder="Search weather..." aria-label="Search"
                    th:disabled="${login == null}">
         </form>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="d-flex align-items-center" th:unless="${login == null}">
-            <h4 th:text="'User: ' + ${login}" style="margin-right: 30px">Login</h4>
+            <h4 th:text="'User: ' + ${login.getLogin()}" style="margin-right: 30px">Login</h4>
             <form action="/WeatherApp-1.0/logout" method="POST">
                 <button type="submit" class="btn btn-primary">Logout</button>
             </form>
