@@ -1,20 +1,20 @@
 function addToFavorite() {
     var buttons = document.querySelectorAll('.button');
 
-    buttons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            // Получаем данные из формы
-            var latitude = document.getElementById('latitudeId').value;
-            var longitude = document.getElementById('longitudeId').value;
-            var cityName = document.getElementById('cityNameId').value;
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
 
-            // Отправляем POST-запрос с использованием Fetch API
+            var form = button.closest('form');
+            var latitude = form.querySelector('#latitudeId').value;
+            var longitude = form.querySelector('#longitudeId').value;
+            var cityName = form.querySelector('#cityNameId').value;
+
             fetch('/WeatherApp-1.0/weather/search', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ latitude, longitude, cityName })
+                body: JSON.stringify({latitude, longitude, cityName})
             })
                 .then(response => {
                     console.log(response);
@@ -41,8 +41,7 @@ function addToFavorite() {
                     var isActive = button.classList.contains('active');
                     if (isActive) {
                         alert("Your location wasn't  removed!");
-                    }
-                    else {
+                    } else {
                         alert("Your location wasn't saved!");
                     }
                 });

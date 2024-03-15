@@ -49,14 +49,22 @@ public class WeatherSearchServlet extends HttpServlet {
 //        } catch (URISyntaxException | InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
-        GeoCityDto geoCityDto = new GeoCityDto(49.4441667, 34.87, "Ukraine", "Poltava Oblast", "Mashivka");
-        WeatherCityDto weatherCityDto = new WeatherCityDto(
+        GeoCityDto mashivkaGeoCityDto = new GeoCityDto(49.443, 34.867, "Ukraine", "Poltava Oblast", "Mashivka");
+        GeoCityDto karlovkaGeoCityDto = new GeoCityDto(49.457, 130, "Ukraine", "Poltava Oblast", "Karlovka");
+        WeatherCityDto mashivkaCityDto = new WeatherCityDto(
                 "Clouds", "Broken clouds", "https://openweathermap.org/img/wn/10d@2x.png",
                 "2°C", "-2°C", "4°C", "0°C", "87%", "10 km", "3 m/s",
                 currentTime,
-                "05:33", "19:23", geoCityDto
+                "05:33", "19:23", mashivkaGeoCityDto
         );
-        context.setVariable("weatherList", List.of(weatherCityDto, weatherCityDto, weatherCityDto, weatherCityDto, weatherCityDto));
+
+        WeatherCityDto karlovkaCityDto = new WeatherCityDto(
+                "Clouds", "Broken clouds", "https://openweathermap.org/img/wn/10d@2x.png",
+                "2°C", "-2°C", "4°C", "0°C", "87%", "10 km", "3 m/s",
+                currentTime,
+                "05:33", "19:23", karlovkaGeoCityDto
+        );
+        context.setVariable("weatherList", List.of(mashivkaCityDto, karlovkaCityDto));
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
     }
 
@@ -72,6 +80,7 @@ public class WeatherSearchServlet extends HttpServlet {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(sb.toString());
+
         System.out.println(jsonNode.toPrettyString());
         resp.setStatus(HttpServletResponse.SC_OK);
     }
