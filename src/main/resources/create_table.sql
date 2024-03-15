@@ -20,3 +20,5 @@ CREATE TABLE IF NOT EXISTS Sessions
     UserId    INT          NOT NULL REFERENCES Users (ID),
     ExpiresAt timestamp(6) NOT NULL
 );
+
+INSERT INTO Users(Login, Password) VALUES ('timur', '$2a$10$M55sGHCwyjyd6AuGcp0HKuu.LOjyA9kAIaPGIXy7mUQw.ByskwCjC')

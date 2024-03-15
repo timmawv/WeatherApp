@@ -19,8 +19,8 @@ import java.util.UUID;
 @NamedQueries({
         @NamedQuery(name = "HQL_DeleteSessionById",
                 query = "delete from Session where id = :sessionId"),
-        @NamedQuery(name = "HQL_GetUserLoginByHisSession",
-        query = "select user.login from Session where id = :sessionId")
+        @NamedQuery(name = "HQL_GetUserByHisSession",
+        query = "select user from Session where id = :sessionId")
 })
 public class Session {
 

@@ -31,7 +31,7 @@ public class OpenGeoService {
                 double lon = node.get("lon").asDouble();
                 String country = CountryCode.getByAlpha2Code(node.get("country").asText()).getName();
                 String state = node.get("state").asText();
-                GeoCityDto geoCityDto = new GeoCityDto(lat, lon, country, state);
+                GeoCityDto geoCityDto = new GeoCityDto(lat, lon, country, state, nameCity);
                 geoCityDtoList.add(geoCityDto);
             }
         }

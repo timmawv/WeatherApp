@@ -34,7 +34,7 @@ public class OpenWeatherService {
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
         List<GeoCityDto> cityCoordinateByName = openGeoService.getCityCoordinateByName(cityName);
         for (GeoCityDto geoCityDto : cityCoordinateByName) {
-            WeatherCityDto weatherCityDto = new WeatherCityDto(geoCityDto.getCountry(), geoCityDto.getState());
+            WeatherCityDto weatherCityDto = new WeatherCityDto(geoCityDto);
             urlWeather.append(latitude.append(geoCityDto.getLatitude()))
                     .append(longitude.append(geoCityDto.getLatitude()))
                     .append(appId);
@@ -67,7 +67,7 @@ public class OpenWeatherService {
             weather.setFeelsLikeWeather(weatherNode.get("feels_like").asText() + celsiusSign);
             weather.setMinTemperatureWeather(weatherNode.get("temp_min").asText() + celsiusSign);
             weather.setMaxTemperatureWeather(weatherNode.get("temp_max").asText() + celsiusSign);
-            weather.setHumidityWeather(weatherNode.get("humidity").asText());
+            weather.setHumidityWeather(weatherNode.get("humidity").asText() + "%");
         }
     }
 

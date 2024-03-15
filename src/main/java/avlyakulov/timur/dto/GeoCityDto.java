@@ -18,4 +18,6 @@ public class GeoCityDto {
     private String country;
 
     private String state;
+
+    private String city;
 }

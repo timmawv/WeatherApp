@@ -1,7 +1,9 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.dao.SessionDao;
+import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.model.Session;
+import avlyakulov.timur.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -15,8 +17,9 @@ public class SessionService {
         sessionDao.create(session);
     }
 
-    public String getUserLoginByHisSession(String sessionId) {
-        return sessionDao.getUserById(UUID.fromString(sessionId));
+    public UserDto getUserByHisSession(String sessionId) {
+        User userById = sessionDao.getUserById(UUID.fromString(sessionId));
+        return new UserDto(userById.getId(), userById.getLogin());
     }
 
     public void deleteSessionById(UUID sessionId) {

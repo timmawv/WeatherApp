@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlet;
 
+import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
@@ -25,7 +26,7 @@ public class MainPageLoggedController extends HttpServlet {
         Context context = new Context();
         Optional<String> sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
         if (sessionIdFromCookie.isPresent()) {
-            String userLogin = sessionService.getUserLoginByHisSession(sessionIdFromCookie.get());
+            UserDto userLogin = sessionService.getUserByHisSession(sessionIdFromCookie.get());
             context.setVariable("login", userLogin);
         }
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogged, context, resp);

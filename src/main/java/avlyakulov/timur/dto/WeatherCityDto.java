@@ -37,12 +37,29 @@ public class WeatherCityDto {
 
     private String sunsetWeather;
 
-    private String country;
+    private GeoCityDto geoCityDto;
 
-    private String state;
+    public WeatherCityDto(GeoCityDto geoCityDto) {
+        this.geoCityDto = geoCityDto;
+    }
 
-    public WeatherCityDto(String country, String state) {
-        this.country = country;
-        this.state = state;
+    public String getCountry() {
+        return geoCityDto.getCountry();
+    }
+
+    public String getState() {
+        return geoCityDto.getState();
+    }
+
+    public String getCity() {
+        return geoCityDto.getCity();
+    }
+
+    public double getLatitude() {
+        return geoCityDto.getLatitude();
+    }
+
+    public double getLongitude() {
+        return geoCityDto.getLongitude();
     }
 }

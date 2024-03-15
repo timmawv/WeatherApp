@@ -2,6 +2,7 @@ package avlyakulov.timur.dao;
 
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.model.Session;
+import avlyakulov.timur.model.User;
 import avlyakulov.timur.util.HibernateSingletonUtil;
 import jakarta.persistence.NoResultException;
 import org.hibernate.SessionFactory;
@@ -28,9 +29,9 @@ public class SessionDao {
         }
     }
 
-    public String getUserById(UUID sessionId) {
+    public User getUserById(UUID sessionId) {
         try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            return hibernateSession.createNamedQuery("HQL_GetUserLoginByHisSession", String.class)
+            return hibernateSession.createNamedQuery("HQL_GetUserByHisSession", User.class)
                     .setParameter("sessionId", sessionId)
                     .getSingleResult();
         } catch (NoResultException e) {
