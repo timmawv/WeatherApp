@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -39,6 +41,8 @@ public class WeatherCityDto {
 
     private GeoCityDto geoCityDto;
 
+    private boolean favorite;
+
     public WeatherCityDto(GeoCityDto geoCityDto) {
         this.geoCityDto = geoCityDto;
     }
@@ -55,11 +59,11 @@ public class WeatherCityDto {
         return geoCityDto.getCity();
     }
 
-    public double getLatitude() {
+    public BigDecimal getLatitude() {
         return geoCityDto.getLatitude();
     }
 
-    public double getLongitude() {
+    public BigDecimal getLongitude() {
         return geoCityDto.getLongitude();
     }
 }

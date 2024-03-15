@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 @NamedQueries({
         @NamedQuery(name = "HQL_FindUserByUsername",
-        query = "from User where login = :userLogin")
+                query = "from User where login = :userLogin")
 })
 public class User {
 
@@ -33,5 +33,9 @@ public class User {
     public User(String login, String password) {
         this.login = login;
         this.password = password;
+    }
+
+    public User(int id) {
+        this.id = id;
     }
 }

@@ -17,7 +17,7 @@ public class SessionService {
         sessionDao.create(session);
     }
 
-    public UserDto getUserByHisSession(String sessionId) {
+    public UserDto getUserDtoByHisSession(String sessionId) {
         User userById = sessionDao.getUserById(UUID.fromString(sessionId));
         return new UserDto(userById.getId(), userById.getLogin());
     }
@@ -34,5 +34,10 @@ public class SessionService {
         } else {
             return true;
         }
+    }
+
+    public User getUserWithIdByHisSessionId(String sessionId) {
+        User userById = sessionDao.getUserById(UUID.fromString(sessionId));
+        return new User(userById.getId());
     }
 }

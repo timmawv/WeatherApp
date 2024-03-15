@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,8 @@ public class OpenGeoService {
         JsonNode jsonNode = objectMapper.readTree(bodyOfResponse);
         for (JsonNode node : jsonNode) {
             if (node.has("lat") && node.has("lon") && node.has("country") && node.has("state")) {
-                double lat = node.get("lat").asDouble();
-                double lon = node.get("lon").asDouble();
+                BigDecimal lat = new BigDecimal(node.get("lat").asText());
+                BigDecimal lon = new BigDecimal(node.get("lon").asText());
                 String country = CountryCode.getByAlpha2Code(node.get("country").asText()).getName();
                 String state = node.get("state").asText();
                 GeoCityDto geoCityDto = new GeoCityDto(lat, lon, country, state, nameCity);

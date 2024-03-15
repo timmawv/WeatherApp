@@ -22,7 +22,8 @@
                     <input type="hidden" id="latitudeId" name="latitude" th:value="${weather.getLatitude()}">
                     <input type="hidden" id="longitudeId" name="longitude" th:value="${weather.getLongitude()}">
                     <input type="hidden" id="cityNameId" name="cityName" th:value="${weather.getCity()}">
-                    <div id="heart" class="button"></div>
+                    <input type="hidden" id="userId" name="userId" th:value="${login.getUserId()}">
+                    <div id="heart" th:class="${weather.isFavorite() == true} ? 'button active' : 'button'"></div>
                 </form>
                 <h3 th:text="${weather.getMainWeather()}"></h3>
                 <img th:src="${weather.getUrlIconWeather()}" alt="weather icon">
@@ -63,7 +64,7 @@
 </main>
 <div th:insert="~{fragment/footer :: footer}"></div>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         addToFavorite();
     });
 </script>

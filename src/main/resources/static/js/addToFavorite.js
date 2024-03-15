@@ -8,13 +8,14 @@ function addToFavorite() {
             var latitude = form.querySelector('#latitudeId').value;
             var longitude = form.querySelector('#longitudeId').value;
             var cityName = form.querySelector('#cityNameId').value;
+            var userId = form.querySelector('#userId').value;
 
             fetch('/WeatherApp-1.0/weather/search', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({latitude, longitude, cityName})
+                body: JSON.stringify({latitude, longitude, cityName, userId})
             })
                 .then(response => {
                     console.log(response);
@@ -40,9 +41,9 @@ function addToFavorite() {
                     console.error('Ошибка:', error);
                     var isActive = button.classList.contains('active');
                     if (isActive) {
-                        alert("Your location wasn't  removed!");
+                        alert(error);
                     } else {
-                        alert("Your location wasn't saved!");
+                        alert(error);
                     }
                 });
         });

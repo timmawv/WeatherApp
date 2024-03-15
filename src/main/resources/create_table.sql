@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS Locations
     Name      VARCHAR NOT NULL,
     UserId    INT     NOT NULL REFERENCES Users (ID),
     Latitude  DECIMAL NOT NULL,
-    Longitude DECIMAL NOT NULL
+    Longitude DECIMAL NOT NULL,
+    UNIQUE (Latitude, Longitude)
 );
 
 CREATE TABLE IF NOT EXISTS Sessions
@@ -21,4 +22,5 @@ CREATE TABLE IF NOT EXISTS Sessions
     ExpiresAt timestamp(6) NOT NULL
 );
 
-INSERT INTO Users(Login, Password) VALUES ('timur', '$2a$10$M55sGHCwyjyd6AuGcp0HKuu.LOjyA9kAIaPGIXy7mUQw.ByskwCjC')
+INSERT INTO Users(Login, Password)
+VALUES ('timur', '$2a$10$M55sGHCwyjyd6AuGcp0HKuu.LOjyA9kAIaPGIXy7mUQw.ByskwCjC')
