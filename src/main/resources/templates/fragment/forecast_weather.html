@@ -12,7 +12,7 @@
             </form>
 
             <h3 th:text="${weather.getMainWeather()}"></h3>
-            <img width="200px" height="200px" src="https://github.com/timmawv/WeatherApp/blob/main/img/animated/cloudy-day-1.svg?raw=true" alt="weather icon">
+            <img width="200px" height="200px" th:src="${weather.getUrlIconWeather()}" alt="weather icon">
             <div class="weather_wind">
                 <div class="weather">
                     <h3>Weather</h3>
@@ -25,8 +25,11 @@
                 </div>
                 <div class="wind">
                     <h3>Wind</h3>
-                    <p th:text="'Wind speed: ' + ${weather.getWindSpeedWeather()}"></p>
-                    <p th:text="'Visibility: ' + ${weather.getVisibilityKilometersWeather()}"></p>
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/windsock.svg?raw=true"
+                         alt="wind"><span th:text="'Wind speed: ' + ${weather.getWindSpeedWeather()}"></span>
+                    <br>
+                    <img width="28px" height="28px" src="https://cdn-icons-png.flaticon.com/512/5263/5263154.png"
+                         alt="visibility"><span th:text="'Visibility: ' + ${weather.getVisibilityKilometersWeather()}"></span>
                 </div>
                 <div>
                     <h3>Solar cycle</h3>
