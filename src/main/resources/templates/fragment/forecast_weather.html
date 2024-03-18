@@ -2,16 +2,19 @@
     <div class="forecast_wrapper">
         <div class="forecast" th:if="${weatherList}" th:each="weather : ${weatherList}">
             <h1 class="location_sign" th:text="${weather.getCity()} + ', ' + ${weather.getCountry()}"></h1>
-
             <form id="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
                 <input type="hidden" id="latitudeId" name="latitude" th:value="${weather.getLatitude()}">
                 <input type="hidden" id="longitudeId" name="longitude" th:value="${weather.getLongitude()}">
                 <input type="hidden" id="cityNameId" name="cityName" th:value="${weather.getCity()}">
                 <input type="hidden" id="userId" name="userId" th:value="${login.getUserId()}">
-                <div id="heart" th:class="${weather.isFavorite() == true} ? 'button active' : 'button'"></div>
+<!--                <div id="heart" th:class="${weather.isFavorite() == true} ? 'button active' : 'button'"></div>-->
+                <div class='large-font text-center top-20'>
+                    <ion-icon id="heart" name="heart" th:class="${weather.isFavorite() == true} ? 'button active' : 'button'">
+                        <div class='red-bg'></div>
+                    </ion-icon>
+                </div>
             </form>
-
-            <h3 th:text="${weather.getMainWeather()}"></h3>
+            <h3 th:text="${weather.getMainWeather()}  + ', ' + ${weather.getTemperatureWeather()}"></h3>
             <img width="200px" height="200px" th:src="${weather.getUrlIconWeather()}" alt="weather icon">
             <div class="weather_wind">
                 <div class="weather">

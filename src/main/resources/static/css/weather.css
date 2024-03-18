@@ -1,11 +1,11 @@
 .forecast_wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 35px;
+    grid-gap: 10px;
 }
 
 .forecast {
-    border: 2px solid black;
+    border: 3px solid black;
     border-radius: 25px;
     padding: 20px;
     margin: 15px;
@@ -14,53 +14,38 @@
 }
 
 .location_sign {
-    width: 80%;
+    width: 88%;
 }
 
 .weather_wind {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* повторяет 2 столбца с одинаковой шириной */
-    grid-gap: 35px; /* расстояние между контейнерами, на ваш выбор */
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
 }
 
-.button{
-    position: absolute;
+.large-font{
+    font-size:xxx-large;
+}
+.top-20{
+    position:absolute;
     top: 3%;
-    right: 3%;
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-    background: none;
-    cursor: pointer;
-    transition: background 0.5s ease;
+    right: 6%;
 }
-.button:hover{
+ion-icon.active{
+    animation:like 0.5s 1;
+    fill:red;
+    stroke:none;
+}
+ion-icon{
+    fill:transparent;
+    stroke:black;
+    stroke-width:30;
+    transition:all 0.5s;
+}
 
-}
-.active#heart:before,.active#heart:after{
-    background: red !important;
-}
-#heart {
-    width: 100px;
-    height: 90px;
-    transition: background 0.5s ease;
-}
-#heart:before,
-#heart:after {
-    transition: background 0.5s ease;
-    position: absolute;
-    content: "";
-    left: 50px;
-    top: 0;
-    width: 50px;
-    height: 80px;
-    background: dimgrey;
-    border-radius: 50px 50px 0 0;
-    transform: rotate(-45deg);
-    transform-origin: 0 100%;
-}
-#heart:after {
-    left: 0;
-    transform: rotate(45deg);
-    transform-origin :100% 100%;
+
+@-webkit-keyframes like {
+    0%   { transform: scale(1); }
+    90%   { transform: scale(1.2); }
+    100% { transform: scale(1.1); }
 }

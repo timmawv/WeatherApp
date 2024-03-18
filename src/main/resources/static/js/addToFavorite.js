@@ -30,8 +30,10 @@ function addToFavorite() {
                     })
                     .then(data => {
                         console.log('Successfully response:', data);
-                        button.classList.remove('active');
-                        alert("Your location was successfully removed!");
+                        button.classList.toggle('active');
+                        setTimeout(function() {
+                            alert("Your location was successfully removed!");
+                        }, 1000);
                     })
                     .catch(error => {
                         console.error('Ошибка:', error);
@@ -54,8 +56,10 @@ function addToFavorite() {
                     })
                     .then(data => {
                         console.log('Successfully response:', data);
-                        button.classList.add('active');
-                        alert("Your location was successfully saved!");
+                        button.classList.toggle('active');
+                        setTimeout(function() {
+                            alert("Your location was successfully saved!");
+                        }, 1000);
                     })
                     .catch(error => {
                         console.error('Ошибка:', error);

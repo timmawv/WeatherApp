@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -102,25 +104,27 @@ public class OpenWeatherService {
     private void setTemperatureWeather(WeatherCityDto weather, JsonNode jsonNode) {
         JsonNode temperatureNode = jsonNode.get("main");
         if (temperatureNode != null) {
-            weather.setTemperatureWeather(temperatureNode.get("temp").asText() + celsiusSign);
-            weather.setFeelsLikeWeather(temperatureNode.get("feels_like").asText() + celsiusSign);
-            weather.setMinTemperatureWeather(temperatureNode.get("temp_min").asText() + celsiusSign);
-            weather.setMaxTemperatureWeather(temperatureNode.get("temp_max").asText() + celsiusSign);
-            weather.setHumidityWeather(temperatureNode.get("humidity").asText() + "%");
+            BigDecimal temperature = new BigDecimal(temperatureNode.get("temp").asText());
+            BigDecimal roundedTemperature = temperature.setScale(0, RoundingMode.HALF_UP);
+            weather.setTemperatureWeather(roundedTemperature.toString().concat(celsiusSign));
+            weather.setFeelsLikeWeather(temperatureNode.get("feels_like").asText().concat(celsiusSign));
+            weather.setMinTemperatureWeather(temperatureNode.get("temp_min").asText().concat(celsiusSign));
+            weather.setMaxTemperatureWeather(temperatureNode.get("temp_max").asText().concat(celsiusSign));
+            weather.setHumidityWeather(temperatureNode.get("humidity").asText().concat("%"));
         }
     }
 
     private void setVisibilityInKilometres(WeatherCityDto weather, JsonNode jsonNode) {
         if (jsonNode.has("visibility")) {
             double visibility = jsonNode.get("visibility").asDouble() / 1000;
-            weather.setVisibilityKilometersWeather(visibility + " km");
+            weather.setVisibilityKilometersWeather(String.valueOf(visibility).concat(" km"));
         }
     }
 
     private void setWindWeather(WeatherCityDto weather, JsonNode jsonNode) {
         JsonNode windNode = jsonNode.get("wind");
         if (windNode != null) {
-            weather.setWindSpeedWeather(windNode.get("speed") + " m/s");
+            weather.setWindSpeedWeather(windNode.get("speed").asText().concat(" m/s"));
         }
     }
 

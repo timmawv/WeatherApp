@@ -1,6 +1,7 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
+import avlyakulov.timur.dto.GeoCityDto;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -9,6 +10,7 @@ import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.api.OpenWeatherService;
 import avlyakulov.timur.util.CookieUtil;
+import avlyakulov.timur.util.api.GetUrlIconOfWeatherByIcon;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
