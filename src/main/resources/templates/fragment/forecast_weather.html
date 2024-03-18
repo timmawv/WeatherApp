@@ -17,24 +17,23 @@
                 <div class="weather">
                     <h3>Weather</h3>
                     <p th:text="'Detailed weather: ' + ${weather.getDetailedWeather()}"></p>
-                    <img width="35px" height="35px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-celsius.svg?raw=true"
-                         alt="wind"><span th:text="'Temperature now: ' + ${weather.getTemperatureWeather()}"></span>
-                    <img width="35px" height="35px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-colder.svg?raw=true"
-                         alt="wind"><span th:text="'Min temperature: ' + ${weather.getMinTemperatureWeather()}"></span>
-                    <img width="35px" height="35px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-warmer.svg?raw=true"
-                         alt="wind"><span th:text="'Max temperature: ' + ${weather.getMaxTemperatureWeather()}"></span>
-                    <img width="35px" height="35px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-celsius.svg?raw=true"
-                         alt="wind"><span th:text="'Feels like: ' + ${weather.getFeelsLikeWeather()}"></span>
-                    <img width="35px" height="35px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/humidity.svg?raw=true"
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-celsius.svg?raw=true"
+                         alt="wind"><span th:text="'Temperature now: ' + ${weather.getTemperatureWeather()}"></span><br>
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-warmer.svg?raw=true"
+                         alt="wind"><span th:text="'Max temperature: ' + ${weather.getMaxTemperatureWeather()}"></span><br>
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-colder.svg?raw=true"
+                         alt="wind"><span th:text="'Min temperature: ' + ${weather.getMinTemperatureWeather()}"></span><br>
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-celsius.svg?raw=true"
+                         alt="wind"><span th:text="'Feels like: ' + ${weather.getFeelsLikeWeather()}"></span><br>
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/humidity.svg?raw=true"
                          alt="wind"><span th:text="'Humidity: ' + ${weather.getHumidityWeather()}"></span>
                 </div>
                 <div class="wind">
                     <h3>Wind</h3>
-                    <img width="35px" height="35px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/windsock.svg?raw=true"
+                    <img width="50px" height="40px" src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/windsock.svg?raw=true"
                          alt="wind"><span th:text="'Wind speed: ' + ${weather.getWindSpeedWeather()}"></span>
                     <br>
-                    <img width="28px" height="28px" src="https://cdn-icons-png.flaticon.com/512/5263/5263154.png"
-                         alt="visibility"><span th:text="'    Visibility: ' + ${weather.getVisibilityKilometersWeather()}"></span>
+                    <span th:text="'Visibility: ' + ${weather.getVisibilityKilometersWeather()}"></span>
                 </div>
                 <div>
                     <h3>Solar cycle</h3>
