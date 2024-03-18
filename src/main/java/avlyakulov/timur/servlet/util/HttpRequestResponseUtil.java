@@ -12,7 +12,7 @@ public class HttpRequestResponseUtil {
     public static String getBodyOfResponse(String urlWeather) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlWeather))
-                .version(HttpClient.Version.HTTP_2)
+                .version(HttpClient.Version.HTTP_1_1)
                 .GET()
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient()

@@ -1,6 +1,7 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
+import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -49,5 +51,14 @@ public class MainPageLoggedController extends HttpServlet {
             resp.sendRedirect("/WeatherApp-1.0/main-page");
         }
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogged, context, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String latitude = req.getParameter("latitude");
+        String longitude = req.getParameter("longitude");
+        LocationDto location = new LocationDto(new BigDecimal(latitude), new BigDecimal(longitude));
+        locationService.deleteLocationByCoordinate(location);
+        resp.sendRedirect("/WeatherApp-1.0/weather");
     }
 }

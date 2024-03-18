@@ -13,12 +13,14 @@ import com.neovisionaries.i18n.CountryCode;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OpenWeatherService {
@@ -37,7 +39,7 @@ public class OpenWeatherService {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<WeatherCityDto> getWeatherList(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
+    public List<WeatherCityDto> getWeatherListFromHttpRequest(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
         List<Location> locationList = locationService.getAllLocationByUserId(userDto.getUserId());
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
         List<GeoCityDto> cityCoordinateByName = openGeoService.getCityCoordinateByName(cityName);
@@ -126,11 +128,16 @@ public class OpenWeatherService {
     private void setTimeAndSunriseAndSunsetToWeather(WeatherCityDto weather, JsonNode jsonNode) {
         long currentTimeEpoch = jsonNode.get("dt").asLong();
         if (currentTimeEpoch != 0) {
-            Instant instant = Instant.ofEpochMilli(currentTimeEpoch);
-            LocalDateTime currentTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            String currentTimeStr = currentTime.format(formatter);
-            weather.setCurrentTimeWeather(currentTimeStr);
+            Date date = new Date(currentTimeEpoch * 1000L);
+
+            // Форматирование даты и времени
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            String formattedDate = sdf.format(date);
+//            Instant instant = Instant.ofEpochMilli(currentTimeEpoch);
+//            LocalDateTime currentTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//            String currentTimeStr = currentTime.format(formatter);
+            weather.setCurrentTimeWeather(formattedDate);
         }
         JsonNode sysNode = jsonNode.get("sys");
         if (sysNode != null) {

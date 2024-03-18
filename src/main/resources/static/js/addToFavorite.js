@@ -4,6 +4,8 @@ function addToFavorite() {
     buttons.forEach(function (button) {
         button.addEventListener('click', function () {
 
+            event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
             var form = button.closest('form');
             var latitude = form.querySelector('#latitudeId').value;
             var longitude = form.querySelector('#longitudeId').value;

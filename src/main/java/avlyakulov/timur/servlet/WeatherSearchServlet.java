@@ -80,7 +80,7 @@ public class WeatherSearchServlet extends HttpServlet {
                 currentTime,
                 "05:33", "19:23", karlovkaGeoCityDto, true
         );
-        context.setVariable("weatherList", List.of(mashivkaCityDto, karlovkaCityDto));
+        context.setVariable("weatherList", List.of(mashivkaCityDto, karlovkaCityDto, karlovkaCityDto));
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
     }
 
@@ -104,7 +104,7 @@ public class WeatherSearchServlet extends HttpServlet {
             LocationDto location = getLocationFromRequestJsonFileForDelete(req);
             locationService.deleteLocationByCoordinate(location);
             resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (JsonParseException | TooManyLocationsException e) {
+        } catch (JsonParseException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             PrintWriter out = resp.getWriter();
             out.println(e.getMessage());
