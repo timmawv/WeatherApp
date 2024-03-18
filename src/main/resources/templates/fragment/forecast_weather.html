@@ -1,7 +1,7 @@
 <div th:fragment="forecast_block" th:if="${weatherList.size() != 0}" class="container">
     <div class="forecast_wrapper">
         <div class="forecast" th:if="${weatherList}" th:each="weather : ${weatherList}">
-            <h1 th:text="${weather.getCity()} + ', ' + ${weather.getCountry()}"></h1>
+            <h1 class="location_sign" th:text="${weather.getCity()} + ', ' + ${weather.getCountry()}"></h1>
 
             <form id="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
                 <input type="hidden" id="latitudeId" name="latitude" th:value="${weather.getLatitude()}">
@@ -12,7 +12,7 @@
             </form>
 
             <h3 th:text="${weather.getMainWeather()}"></h3>
-            <img th:src="${weather.getUrlIconWeather()}" alt="weather icon">
+            <img width="200px" height="200px" th:src="${weather.getUrlIconWeather()}" alt="weather icon">
             <div class="weather_wind">
                 <div class="weather">
                     <h3>Weather</h3>

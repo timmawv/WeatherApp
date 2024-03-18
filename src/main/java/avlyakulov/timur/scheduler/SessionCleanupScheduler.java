@@ -12,30 +12,30 @@ import java.util.concurrent.TimeUnit;
 
 public class SessionCleanupScheduler {
 
-    //todo make work scheduler
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-    @PostLoad
-    public void init() {
-        scheduler.scheduleAtFixedRate(this::cleanupExpiredDates, 0, 1, TimeUnit.MINUTES);
-    }
-
-    @Transactional
-    public void cleanupExpiredDates() {
-        try {
-            LocalDateTime currentDateTime = LocalDateTime.now();
-
-            int deletedEntities = entityManager.createQuery("DELETE FROM Session WHERE expiresAt < :currentDateTime")
-                    .setParameter("currentDateTime", currentDateTime)
-                    .executeUpdate();
-
-            System.out.println(deletedEntities + " records were deleted.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    //todo make work scheduler
+//
+//    @PersistenceContext
+//    private EntityManager entityManager;
+//
+//    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//
+//    @PostLoad
+//    public void init() {
+//        scheduler.scheduleAtFixedRate(this::cleanupExpiredDates, 0, 1, TimeUnit.MINUTES);
+//    }
+//
+//    @Transactional
+//    public void cleanupExpiredDates() {
+//        try {
+//            LocalDateTime currentDateTime = LocalDateTime.now();
+//
+//            int deletedEntities = entityManager.createQuery("DELETE FROM Session WHERE expiresAt < :currentDateTime")
+//                    .setParameter("currentDateTime", currentDateTime)
+//                    .executeUpdate();
+//
+//            System.out.println(deletedEntities + " records were deleted.");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

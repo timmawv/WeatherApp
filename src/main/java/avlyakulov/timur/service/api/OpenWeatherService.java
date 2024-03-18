@@ -17,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,8 +113,10 @@ public class OpenWeatherService {
     }
 
     private void setVisibilityInKilometres(WeatherCityDto weather, JsonNode jsonNode) {
-        double visibility = jsonNode.get("visibility").asDouble() / 1000;
-        weather.setVisibilityKilometersWeather(visibility + " km");
+        if (jsonNode.has("visibility")) {
+            double visibility = jsonNode.get("visibility").asDouble() / 1000;
+            weather.setVisibilityKilometersWeather(visibility + " km");
+        }
     }
 
     private void setWindWeather(WeatherCityDto weather, JsonNode jsonNode) {

@@ -13,27 +13,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OpenGeoService {
-    private final StringBuilder urlGeo = new StringBuilder("http://api.openweathermap.org/geo/1.0/direct?limit=5");
+    private final String urlGeo = "http://api.openweathermap.org/geo/1.0/direct?limit=3";
 
-    private final StringBuilder city = new StringBuilder("&q=");
+    private final String city = "&q=";
 
     private final String appId = "&appid=" + System.getProperty("API_WEATHER_KEY");
 
     public List<GeoCityDto> getCityCoordinateByName(String nameCity) throws URISyntaxException, IOException, InterruptedException {
         List<GeoCityDto> geoCityDtoList = new ArrayList<>();
-        city.append(nameCity);
-        urlGeo.append(city).append(appId);
-        String bodyOfResponse = HttpRequestResponseUtil.getBodyOfResponse(urlGeo.toString());
+        String urlGeoFull = urlGeo.concat(city.concat(nameCity)).concat(appId);
+        String bodyOfResponse = HttpRequestResponseUtil.getBodyOfResponse(urlGeoFull);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(bodyOfResponse);
         for (JsonNode node : jsonNode) {
-            if (node.has("lat") && node.has("lon") && node.has("country") && node.has("state")) {
+            if (node.has("lat") && node.has("lon") && node.has("country")) {
                 BigDecimal lat = new BigDecimal(node.get("lat").asText());
                 BigDecimal lon = new BigDecimal(node.get("lon").asText());
                 String country = CountryCode.getByAlpha2Code(node.get("country").asText()).getName();
-                String state = node.get("state").asText();
-                GeoCityDto geoCityDto = new GeoCityDto(lat, lon, country, state, nameCity);
-                geoCityDtoList.add(geoCityDto);
+                if (node.has("state") && node.has("name")) {
+                    String state = node.get("state").asText();
+                    String city = node.get("name").asText();
+                    GeoCityDto geoCityDto = new GeoCityDto(lat, lon, country, state, city);
+                    geoCityDtoList.add(geoCityDto);
+                } else {
+                    GeoCityDto geoCityDto = new GeoCityDto(lat, lon, country, nameCity);
+                    geoCityDtoList.add(geoCityDto);
+                }
             }
         }
         return geoCityDtoList;

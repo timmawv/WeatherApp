@@ -4,7 +4,6 @@ import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.JsonParseException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
-import avlyakulov.timur.dto.GeoCityDto;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -28,10 +27,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = "/weather/search")
 public class WeatherSearchServlet extends HttpServlet {
@@ -47,7 +44,7 @@ public class WeatherSearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        UserDto userLogin;
+        UserDto userLogin = null;
         try {
             String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
             userLogin = sessionService.getUserDtoByHisSession(sessionIdFromCookie);
@@ -55,32 +52,14 @@ public class WeatherSearchServlet extends HttpServlet {
         } catch (CookieNotExistException e) {
             resp.sendRedirect("/WeatherApp-1.0/main-page");
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String currentTime = LocalDateTime.now().format(formatter);
 
         String cityName = req.getParameter("city");
-//        try {
-//            List<WeatherCityDto> weatherList = openWeatherService.getWeatherList(cityName);
-//            context.setVariable("weatherList", weatherList);
-//        } catch (URISyntaxException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-        GeoCityDto mashivkaGeoCityDto = new GeoCityDto(new BigDecimal("49.443"), new BigDecimal("34.867"), "Ukraine", "Poltava Oblast", "Mashivka");
-        GeoCityDto karlovkaGeoCityDto = new GeoCityDto(new BigDecimal("49.457"), new BigDecimal("35.130"), "Ukraine", "Poltava Oblast", "Karlovka");
-        WeatherCityDto mashivkaCityDto = new WeatherCityDto(
-                "Clouds", "Broken clouds", "https://openweathermap.org/img/wn/10d@2x.png",
-                "2°C", "-2°C", "4°C", "0°C", "87%", "10 km", "3 m/s",
-                currentTime,
-                "05:33", "19:23", mashivkaGeoCityDto, false
-        );
-
-        WeatherCityDto karlovkaCityDto = new WeatherCityDto(
-                "Clouds", "Broken clouds", "https://openweathermap.org/img/wn/10d@2x.png",
-                "2°C", "-2°C", "4°C", "0°C", "87%", "10 km", "3 m/s",
-                currentTime,
-                "05:33", "19:23", karlovkaGeoCityDto, true
-        );
-        context.setVariable("weatherList", List.of(mashivkaCityDto, karlovkaCityDto, karlovkaCityDto));
+        try {
+            List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromHttpRequest(cityName, userLogin);
+            context.setVariable("weatherList", weatherList);
+        } catch (URISyntaxException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
     }
 
