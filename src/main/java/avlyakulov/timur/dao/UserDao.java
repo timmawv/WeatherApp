@@ -1,6 +1,6 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.custom_exception.UserAlreadyExistsException;
+import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.util.HibernateSingletonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class UserDao {
             session.getTransaction().commit();//закрываем транзакцию
         } catch (ConstraintViolationException e) {
             log.error("User with such login name {} already exists", user.getLogin());
-            throw new UserAlreadyExistsException("User with such login name already exists");
+            throw new ModelAlreadyExistsException("User with such login name already exists");
         }
     }
 

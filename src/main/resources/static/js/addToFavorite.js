@@ -10,42 +10,56 @@ function addToFavorite() {
             var cityName = form.querySelector('#cityNameId').value;
             var userId = form.querySelector('#userId').value;
 
-            fetch('/WeatherApp-1.0/weather/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({latitude, longitude, cityName, userId})
-            })
-                .then(response => {
-                    console.log(response);
-                    if (!response.ok) {
-                        throw new Error('error HTTP: ' + response.status);
-                    }
+            var isActive = button.classList.contains('active')
+
+            if (isActive) {
+                fetch('/WeatherApp-1.0/weather/search', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({latitude, longitude})
                 })
-                .then(data => {
-                    console.log('Successfully response:', data);
-                    var isActive = button.classList.contains('active');
-                    // Если класс active уже есть, удаляем его
-                    if (isActive) {
+                    .then(response => {
+                        console.log(response);
+                        if (!response.ok) {
+                            throw new Error('error HTTP: ' + response.status);
+                        }
+                    })
+                    .then(data => {
+                        console.log('Successfully response:', data);
                         button.classList.remove('active');
                         alert("Your location was successfully removed!");
-                    }
-                    // Иначе добавляем класс active
-                    else {
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        alert(error.message || 'Something went wrong');
+                    });
+            } else {
+
+                fetch('/WeatherApp-1.0/weather/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({latitude, longitude, cityName, userId})
+                })
+                    .then(response => {
+                        console.log(response);
+                        if (!response.ok) {
+                            throw new Error('error HTTP: ' + response.status);
+                        }
+                    })
+                    .then(data => {
+                        console.log('Successfully response:', data);
                         button.classList.add('active');
                         alert("Your location was successfully saved!");
-                    }
-                })
-                .catch(error => {
-                    console.error('Ошибка:', error);
-                    var isActive = button.classList.contains('active');
-                    if (isActive) {
-                        alert(error);
-                    } else {
-                        alert(error);
-                    }
-                });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        alert(error.message || 'This location was already saved');
+                    });
+            }
         });
     });
 }

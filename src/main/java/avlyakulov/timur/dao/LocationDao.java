@@ -1,5 +1,6 @@
 package avlyakulov.timur.dao;
 
+import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.model.Location;
 import avlyakulov.timur.util.HibernateSingletonUtil;
 import org.hibernate.Session;
@@ -29,13 +30,13 @@ public class LocationDao {
         }
     }
 
-    public void deleteLocation(Location location) {
+    public void deleteLocation(LocationDto locationDto) {
         try (Session hibernateSession = sessionFactory.openSession()) {
             hibernateSession.beginTransaction();//открываем транзакцию
 
             hibernateSession.createQuery("delete from Location where latitude = :latitude and longitude = :longitude")
-                    .setParameter("latitude", location.getLatitude())
-                    .setParameter("longitude", location.getLongitude())
+                    .setParameter("latitude", locationDto.getLatitude())
+                    .setParameter("longitude", locationDto.getLongitude())
                     .executeUpdate();
 
             hibernateSession.getTransaction().commit();//закрываем транзакцию

@@ -1,6 +1,6 @@
 package avlyakulov.timur.servlet.auth;
 
-import avlyakulov.timur.custom_exception.UserAlreadyExistsException;
+import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.UserService;
 import avlyakulov.timur.util.BCryptUtil;
@@ -9,14 +9,12 @@ import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @WebServlet(urlPatterns = "/registration")
 public class RegisterController extends HttpServlet {
@@ -43,7 +41,7 @@ public class RegisterController extends HttpServlet {
                 User user = new User(login, BCryptUtil.encryptPassword(password));
                 try {
                     userService.createUser(user);
-                } catch (UserAlreadyExistsException e) {
+                } catch (ModelAlreadyExistsException e) {
                     ContextUtil.setErrorToContext(context, e.getMessage());
                     ThymeleafUtilRespondHtmlView.respondHtmlPage("auth/register", context, resp);
                     return;

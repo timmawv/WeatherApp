@@ -2,8 +2,10 @@ package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.JsonParseException;
+import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
 import avlyakulov.timur.dto.GeoCityDto;
+import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
@@ -69,14 +71,14 @@ public class WeatherSearchServlet extends HttpServlet {
                 "Clouds", "Broken clouds", "https://openweathermap.org/img/wn/10d@2x.png",
                 "2°C", "-2°C", "4°C", "0°C", "87%", "10 km", "3 m/s",
                 currentTime,
-                "05:33", "19:23", mashivkaGeoCityDto, true
+                "05:33", "19:23", mashivkaGeoCityDto, false
         );
 
         WeatherCityDto karlovkaCityDto = new WeatherCityDto(
                 "Clouds", "Broken clouds", "https://openweathermap.org/img/wn/10d@2x.png",
                 "2°C", "-2°C", "4°C", "0°C", "87%", "10 km", "3 m/s",
                 currentTime,
-                "05:33", "19:23", karlovkaGeoCityDto, false
+                "05:33", "19:23", karlovkaGeoCityDto, true
         );
         context.setVariable("weatherList", List.of(mashivkaCityDto, karlovkaCityDto));
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
@@ -88,16 +90,29 @@ public class WeatherSearchServlet extends HttpServlet {
             Location locationFromRequestJsonFile = getLocationFromRequestJsonFile(req);
             locationService.createLocation(locationFromRequestJsonFile);
             resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (JsonParseException | TooManyLocationsException e) {
+        } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.setCharacterEncoding("UTF-8");
             PrintWriter out = resp.getWriter();
             out.println(e.getMessage());
             out.close();
         }
     }
 
-    private Location getLocationFromRequestJsonFile(HttpServletRequest req) throws IOException {
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            LocationDto location = getLocationFromRequestJsonFileForDelete(req);
+            locationService.deleteLocationByCoordinate(location);
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } catch (JsonParseException | TooManyLocationsException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            PrintWriter out = resp.getWriter();
+            out.println(e.getMessage());
+            out.close();
+        }
+    }
+
+    private JsonNode readJsonFileFromRequest(HttpServletRequest req) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader reader = req.getReader();
         String line;
@@ -106,13 +121,29 @@ public class WeatherSearchServlet extends HttpServlet {
         }
         reader.close();
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(sb.toString());
+        return objectMapper.readTree(sb.toString());
+    }
+
+    private Location getLocationFromRequestJsonFile(HttpServletRequest req) throws IOException {
+        JsonNode jsonNode = readJsonFileFromRequest(req);
         if (jsonNode.has("latitude") && jsonNode.has("longitude") && jsonNode.has("cityName") && jsonNode.has("userId")) {
             return new Location(
                     jsonNode.get("cityName").asText(),
                     new BigDecimal(jsonNode.get("latitude").asText()),
                     new BigDecimal(jsonNode.get("longitude").asText()),
                     new User(jsonNode.get("userId").asInt())
+            );
+        } else {
+            throw new JsonParseException("One or more fields didn't parse");
+        }
+    }
+
+    private LocationDto getLocationFromRequestJsonFileForDelete(HttpServletRequest req) throws IOException {
+        JsonNode jsonNode = readJsonFileFromRequest(req);
+        if (jsonNode.has("latitude") && jsonNode.has("longitude")) {
+            return new LocationDto(
+                    new BigDecimal(jsonNode.get("latitude").asText()),
+                    new BigDecimal(jsonNode.get("longitude").asText())
             );
         } else {
             throw new JsonParseException("One or more fields didn't parse");

@@ -14,7 +14,7 @@
 <header th:insert="~{fragment/header :: header}"></header>
 
 <main>
-    <div th:if="${weatherList}" class="container">
+    <div th:if="${weatherList.size() != 0}" class="container">
         <div class="forecast_wrapper">
             <div class="forecast" th:if="${weatherList}" th:each="weather : ${weatherList}">
                 <h1 th:text="${weather.getCity()} + ', ' + ${weather.getCountry()}"></h1>
@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <div th:unless="${weatherList}" class="wrapper_sign">
+    <div th:if="${weatherList.size() == 0}" class="wrapper_sign">
         <h1>You didn't save any locations...</h1>
     </div>
 
