@@ -1,7 +1,7 @@
 .forecast_wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 50px;
+    grid-gap: 15px;
 }
 
 .forecast {
@@ -33,10 +33,6 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
-.wind {
-
-}
-
 .weather {
     grid-column-start: 1;
     grid-column-end: 3;
@@ -56,7 +52,7 @@
 .top-20 {
     position: absolute;
     top: 3%;
-    right: 6%;
+    right: 8%;
 }
 
 ion-icon.active {
