@@ -16,7 +16,8 @@
             </form>
             <h3 th:text="${weather.getMainWeather()}"></h3>
             <div class="img_city_info">
-                <img class="img_weather" width="200px" height="200px" th:src="${weather.getUrlIconWeather()}" alt="weather icon">
+                <img class="img_weather" width="200px" height="200px" th:src="${weather.getUrlIconWeather()}"
+                     alt="weather icon">
                 <div class="city_info">
                     <h3>City info</h3>
                     <p th:text="'Country: ' + ${weather.getCountry()}"></p>
@@ -50,8 +51,8 @@
                     <h3>Wind</h3>
                     <img width="50px" height="40px"
                          src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/windsock.svg?raw=true"
-                         alt="wind"><span th:text="'Speed: ' + ${weather.getWindSpeedWeather()}"></span>
-                    <br>
+                         alt="wind"><span th:text="'Speed: ' + ${weather.getWindSpeedWeather()}"></span><br>
+                    <img src="../../../../../img/weather/vis.png" alt="visibility" width="50px" height="40px">
                     <span th:text="'Visibility: ' + ${weather.getVisibilityKilometersWeather()}"></span>
                 </div>
                 <div class="solar_cycle">
