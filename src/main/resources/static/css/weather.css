@@ -1,7 +1,7 @@
 .forecast_wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
+    grid-gap: 50px;
 }
 
 .forecast {
@@ -14,38 +14,72 @@
 }
 
 .location_sign {
-    width: 88%;
+    width: 82%;
+}
+
+.img_weather {
+    grid-column-start: 1;
+    grid-column-end: 3;
+
+}
+
+.img_city_info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .weather_wind {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
 }
 
-.large-font{
-    font-size:xxx-large;
+.wind {
+
 }
-.top-20{
-    position:absolute;
+
+.weather {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+
+.solar_cycle {
+    margin-top: 29px;
+
+}
+
+.large-font {
+    font-size: xxx-large;
+}
+
+.top-20 {
+    position: absolute;
     top: 3%;
     right: 6%;
 }
-ion-icon.active{
-    animation:like 0.5s 1;
-    fill:red;
-    stroke:none;
-}
-ion-icon{
-    fill:transparent;
-    stroke:black;
-    stroke-width:30;
-    transition:all 0.5s;
+
+ion-icon.active {
+    animation: like 0.5s 1;
+    fill: red;
+    stroke: none;
 }
 
+ion-icon {
+    fill: transparent;
+    stroke: black;
+    stroke-width: 30;
+    transition: all 0.5s;
+}
 
 @-webkit-keyframes like {
-    0%   { transform: scale(1); }
-    90%   { transform: scale(1.2); }
-    100% { transform: scale(1.1); }
+    0% {
+        transform: scale(1);
+    }
+    90% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1.1);
+    }
 }

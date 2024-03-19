@@ -91,9 +91,13 @@ public class OpenWeatherService {
 
     private void setWeather(WeatherCityDto weather, JsonNode jsonNode) {
         JsonNode jsonWeather = jsonNode.get("weather");
+        JsonNode temperatureNode = jsonNode.get("main");
         if (jsonWeather != null) {
             JsonNode jsonWeatherNode = jsonWeather.get(0);
-            weather.setMainWeather(jsonWeatherNode.get("main").asText());
+            BigDecimal temperature = new BigDecimal(temperatureNode.get("temp").asText());
+            temperature = temperature.setScale(0, RoundingMode.HALF_UP);
+            weather.setMainWeather(jsonWeatherNode.get("main").asText()
+                    .concat(", ".concat(temperature.toString()).concat(celsiusSign)));
             weather.setDetailedWeather(jsonWeatherNode.get("description").asText());
             String icon = jsonWeatherNode.get("icon").asText();
             String urlIcon = GetUrlIconOfWeatherByIcon.getUrlWeatherIcon(icon);
@@ -104,9 +108,7 @@ public class OpenWeatherService {
     private void setTemperatureWeather(WeatherCityDto weather, JsonNode jsonNode) {
         JsonNode temperatureNode = jsonNode.get("main");
         if (temperatureNode != null) {
-            BigDecimal temperature = new BigDecimal(temperatureNode.get("temp").asText());
-            BigDecimal roundedTemperature = temperature.setScale(0, RoundingMode.HALF_UP);
-            weather.setTemperatureWeather(roundedTemperature.toString().concat(celsiusSign));
+            weather.setTemperatureWeather(temperatureNode.get("temp").asText().concat(celsiusSign));
             weather.setFeelsLikeWeather(temperatureNode.get("feels_like").asText().concat(celsiusSign));
             weather.setMinTemperatureWeather(temperatureNode.get("temp_min").asText().concat(celsiusSign));
             weather.setMaxTemperatureWeather(temperatureNode.get("temp_max").asText().concat(celsiusSign));
@@ -129,17 +131,6 @@ public class OpenWeatherService {
     }
 
     private void setTimeAndSunriseAndSunsetToWeather(WeatherCityDto weather, JsonNode jsonNode) {
-        long currentTimeEpoch = jsonNode.get("dt").asLong();
-        if (currentTimeEpoch != 0) {
-
-            LocalDateTime sunriseDateTime = Instant.ofEpochSecond(currentTimeEpoch)
-                    .atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            String formattedCurrentTime = sunriseDateTime.format(formatter);
-
-            weather.setCurrentTimeWeather(formattedCurrentTime);
-        }
         JsonNode sysNode = jsonNode.get("sys");
         if (sysNode != null) {
             long sunriseEpoch = sysNode.get("sunrise").asLong();
@@ -155,7 +146,6 @@ public class OpenWeatherService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String formattedSunrise = sunriseDateTime.format(formatter);
             String formattedSunset = sunsetDateTime.format(formatter);
-
 
             weather.setSunriseWeather(formattedSunrise);
             weather.setSunsetWeather(formattedSunset);

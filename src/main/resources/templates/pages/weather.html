@@ -14,7 +14,14 @@
 
 <header th:insert="~{fragment/header :: header}"></header>
 
-<main th:insert="~{fragment/forecast_weather :: forecast_block}"></main>
+<main>
+    <div th:insert="~{fragment/forecast_weather :: forecast_block}"></div>
+
+    <div th:if="${weatherList.size() == 0}" class="wrapper_sign">
+        <h1>No locations were found...</h1>
+    </div>
+
+</main>
 
 <footer th:insert="~{fragment/footer :: footer}"></footer>
 

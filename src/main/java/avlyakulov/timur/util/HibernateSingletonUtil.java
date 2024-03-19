@@ -21,10 +21,11 @@ public class HibernateSingletonUtil {
 
     public static void initEnvironments() {
         String url = System.getenv("DB_URL");
+        String username = System.getenv("DB_USERNAME");
         String password = System.getenv("DB_PASSWORD");
-        String port = System.getenv("DB_PORT");
+        String apiKey = System.getenv("API_WEATHER_KEY");
 
-        if (isAnyParameterNull(url, password, port)) {
+        if (isAnyParameterNull(url, username, password, apiKey)) {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             Properties properties = new Properties();
             try {
@@ -33,6 +34,11 @@ public class HibernateSingletonUtil {
                 log.error("We can't initialize environments for hibernate");
             }
             properties.forEach((key, value) -> System.setProperty(key.toString(), value.toString()));
+        } else {
+            System.setProperty("DB_URL", url);
+            System.setProperty("DB_USERNAME", username);
+            System.setProperty("DB_PASSWORD", password);
+            System.setProperty("API_WEATHER_KEY", apiKey);
         }
     }
 

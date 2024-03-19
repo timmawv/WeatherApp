@@ -33,8 +33,6 @@ public class WeatherCityDto {
 
     private String windSpeedWeather;
 
-    private String currentTimeWeather;
-
     private String sunriseWeather;
 
     private String sunsetWeather;
