@@ -14,8 +14,8 @@ public class GetUrlIconOfWeatherByIcon {
             "03d", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/cloudy_scattered.svg?raw=true",
             "03n", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/cloudy_scattered.svg?raw=true",
 
-            "04d", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/overcast.svg?raw=true",
-            "04n", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/overcast.svg?raw=true",
+            "04d", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/overcast-day.svg?raw=true",
+            "04n", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/overcast-night.svg?raw=true",
 
             "09d", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/rainy-6.svg?raw=true",
             "09n", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/rainy-6.svg?raw=true"
