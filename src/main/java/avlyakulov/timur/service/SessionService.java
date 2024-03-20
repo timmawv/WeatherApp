@@ -39,21 +39,15 @@ public class SessionService {
         return new UserDto(user.getId(), user.getLogin());
     }
 
-    public void deleteSessionById(UUID sessionId) {
-        sessionDao.delete(sessionId);
+    public void deleteSessionById(String sessionId) {
+        sessionDao.delete(UUID.fromString(sessionId));
     }
 
     public void deleteSessionByUserId(int userId) {
         sessionDao.deleteByUserid(userId);
     }
 
-    public boolean isUserSessionExpired(UUID sessionId) {
-        Optional<Session> session = sessionDao.getById(sessionId);
-        if (session.isPresent()) {
-            LocalDateTime now = LocalDateTime.now();
-            return now.isAfter(session.get().getExpiresAt());
-        } else {
-            return true;
-        }
+    public boolean isUserSessionValid(String sessionId) {
+        return sessionDao.isSessionValid(UUID.fromString(sessionId));
     }
 }

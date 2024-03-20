@@ -1,4 +1,4 @@
-<div th:fragment="forecast_block" th:if="${weatherList.size() != 0}" class="container">
+<div th:fragment="forecast_block" th:if="${weatherList.size() > 0}" class="container">
     <div class="forecast_wrapper">
         <div class="forecast" th:if="${weatherList}" th:each="weather : ${weatherList}">
             <h1 class="location_sign" th:text="${weather.getCity()} + ', ' + ${weather.getCountry()}"></h1>

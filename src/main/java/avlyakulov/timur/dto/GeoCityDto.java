@@ -1,5 +1,7 @@
 package avlyakulov.timur.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,24 +11,27 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 public class GeoCityDto {
 
-    private BigDecimal latitude;
+    @JsonProperty(value = "name")
+    private String cityName;
 
-    private BigDecimal longitude;
+    @JsonProperty(value = "lat")
+    private String latitude;
+
+    @JsonProperty(value = "lon")
+    private String longitude;
 
     private String country;
 
     private String state;
 
-    private String city;
-
-    public GeoCityDto(BigDecimal latitude, BigDecimal longitude, String country, String city) {
+    public GeoCityDto(String cityName, String latitude, String longitude, String country) {
+        this.cityName = cityName;
         this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
-        this.city = city;
     }
 }

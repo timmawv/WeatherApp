@@ -1,6 +1,5 @@
 package avlyakulov.timur.servlet;
 
-import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.JsonParseException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
@@ -14,6 +13,8 @@ import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.api.OpenWeatherService;
 import avlyakulov.timur.util.CookieUtil;
+import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
+import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/weather/search")
@@ -51,13 +53,19 @@ public class WeatherSearchServlet extends HttpServlet {
         userLogin = sessionService.getUserDtoByHisSession(userSession);
         context.setVariable("login", userLogin);
         String cityName = req.getParameter("city");
-        try {
-            List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromHttpRequest(cityName, userLogin);
+        if (LoginRegistrationValidation.isCityNameValid(cityName, context)) {
+            try {
+                List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromHttpRequest(cityName, userLogin);
+                context.setVariable("weatherList", weatherList);
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
+            } catch (URISyntaxException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            List<WeatherCityDto> weatherList = new ArrayList<>();
             context.setVariable("weatherList", weatherList);
-        } catch (URISyntaxException | InterruptedException e) {
-            throw new RuntimeException(e);
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
         }
-        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
     }
 
     @Override

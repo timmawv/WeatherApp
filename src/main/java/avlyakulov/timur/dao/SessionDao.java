@@ -10,7 +10,6 @@ import java.util.UUID;
 public class SessionDao {
     private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
 
-
     public void create(Session session) {
         try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
             hibernateSession.beginTransaction();//открываем транзакцию
@@ -48,6 +47,14 @@ public class SessionDao {
                     .executeUpdate();
 
             hibernateSession.getTransaction().commit();//закрываем транзакцию
+        }
+    }
+
+    public boolean isSessionValid(UUID sessionId) {
+        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
+            return hibernateSession.createNamedQuery("HQL_IsSessionValid", Boolean.class)
+                    .setParameter("sessionId", sessionId)
+                    .getSingleResult();
         }
     }
 }

@@ -14,8 +14,8 @@ public class ThymeleafUtil {
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setTemplateMode(TemplateMode.HTML);
-//        resolver.setCacheable(true);
         resolver.setCacheTTLMs(0L);
+//        resolver.setCacheable(true);
 //        resolver.setCacheTTLMs(3600000L);
         resolver.setCharacterEncoding("UTF-8");
         resolver.setPrefix("/templates/");

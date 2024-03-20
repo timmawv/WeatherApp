@@ -25,11 +25,11 @@ public class MainPageController extends HttpServlet {
         Context context = new Context();
         try {
             String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            if (sessionService.isUserSessionExpired(UUID.fromString(sessionIdFromCookie))) {
+            if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
+                resp.sendRedirect("/WeatherApp-1.0/weather");
+            } else {
                 CookieUtil.deleteSessionIdCookie(resp);
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
-            } else {
-                resp.sendRedirect("/WeatherApp-1.0/weather");
             }
         } catch (CookieNotExistException e) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);

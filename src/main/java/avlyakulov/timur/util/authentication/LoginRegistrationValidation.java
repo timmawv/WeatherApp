@@ -11,6 +11,8 @@ public class LoginRegistrationValidation {
 
     private static final String loginRegex = "[a-z]*";
 
+    private static final String cityNameRegex = ".*\\d+.*";
+
     private static final String nameFieldError = "error_field";
 
     public static boolean isFieldEmpty(Context context, String... parameters) {
@@ -72,6 +74,15 @@ public class LoginRegistrationValidation {
         } else {
             setErrorToContext(context, "Your login should only be in small letters and in Latin. Your length has to be from 2 to 10 symbols.");
             return false;
+        }
+    }
+
+    public static boolean isCityNameValid(String cityName, Context context) {
+        if (cityName.isBlank() || cityName.contains(" ") || cityName.matches(cityNameRegex)) {
+            setErrorToContext(context, "Don't enter numbers, blank name, spaces in name.");
+            return false;
+        } else {
+            return true;
         }
     }
 

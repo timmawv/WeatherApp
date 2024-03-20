@@ -82,11 +82,11 @@ public class OpenWeatherService {
     }
 
     private GeoCityDto getGeoInfoWeather(Location location, JsonNode jsonNode) {
-        return new GeoCityDto(location.getLatitude(), location.getLongitude(),
-                CountryCode.getByAlpha2Code(jsonNode.get("sys").get("country").asText()).getName(),
-                location.getName()
+        return new GeoCityDto(location.getName(),
+                location.getLatitude().toString(),
+                location.getLongitude().toString(),
+                CountryCode.getByAlpha2Code(jsonNode.get("sys").get("country").asText()).getName()
         );
-
     }
 
     private void setWeather(WeatherCityDto weather, JsonNode jsonNode) {

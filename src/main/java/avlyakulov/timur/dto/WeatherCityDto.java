@@ -54,14 +54,14 @@ public class WeatherCityDto {
     }
 
     public String getCity() {
-        return geoCityDto.getCity();
+        return geoCityDto.getCityName();
     }
 
     public BigDecimal getLatitude() {
-        return geoCityDto.getLatitude();
+        return new BigDecimal(geoCityDto.getLatitude());
     }
 
     public BigDecimal getLongitude() {
-        return geoCityDto.getLongitude();
+        return new BigDecimal(geoCityDto.getLongitude());
     }
 }
