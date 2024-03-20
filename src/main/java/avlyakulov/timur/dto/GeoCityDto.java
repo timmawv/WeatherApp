@@ -19,16 +19,16 @@ public class GeoCityDto {
     private String cityName;
 
     @JsonProperty(value = "lat")
-    private String latitude;
+    private BigDecimal latitude;
 
     @JsonProperty(value = "lon")
-    private String longitude;
+    private BigDecimal longitude;
 
     private String country;
 
     private String state;
 
-    public GeoCityDto(String cityName, String latitude, String longitude, String country) {
+    public GeoCityDto(String cityName, BigDecimal latitude, BigDecimal longitude, String country) {
         this.cityName = cityName;
         this.latitude = latitude;
         this.longitude = longitude;

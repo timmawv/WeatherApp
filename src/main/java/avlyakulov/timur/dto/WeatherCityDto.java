@@ -33,6 +33,8 @@ public class WeatherCityDto {
 
     private String windSpeedWeather;
 
+    private String windDirectionWeather;
+
     private String sunriseWeather;
 
     private String sunsetWeather;
@@ -58,10 +60,10 @@ public class WeatherCityDto {
     }
 
     public BigDecimal getLatitude() {
-        return new BigDecimal(geoCityDto.getLatitude());
+        return geoCityDto.getLatitude();
     }
 
     public BigDecimal getLongitude() {
-        return new BigDecimal(geoCityDto.getLongitude());
+        return geoCityDto.getLongitude();
     }
 }

@@ -7,6 +7,7 @@ import avlyakulov.timur.model.Location;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
 import avlyakulov.timur.util.api.GetUrlIconOfWeatherByIcon;
+import avlyakulov.timur.util.api.SetDirectionWind;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
@@ -83,8 +84,8 @@ public class OpenWeatherService {
 
     private GeoCityDto getGeoInfoWeather(Location location, JsonNode jsonNode) {
         return new GeoCityDto(location.getName(),
-                location.getLatitude().toString(),
-                location.getLongitude().toString(),
+                location.getLatitude(),
+                location.getLongitude(),
                 CountryCode.getByAlpha2Code(jsonNode.get("sys").get("country").asText()).getName()
         );
     }
@@ -127,6 +128,8 @@ public class OpenWeatherService {
         JsonNode windNode = jsonNode.get("wind");
         if (windNode != null) {
             weather.setWindSpeedWeather(windNode.get("speed").asText().concat(" m/s"));
+            int deg = windNode.get("deg").asInt();
+            weather.setWindDirectionWeather(SetDirectionWind.setDirectionWindByDegree(deg));
         }
     }
 
