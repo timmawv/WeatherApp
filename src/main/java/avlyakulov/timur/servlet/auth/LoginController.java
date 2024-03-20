@@ -6,6 +6,7 @@ import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.UserService;
 import avlyakulov.timur.util.ContextUtil;
+import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
@@ -49,14 +50,9 @@ public class LoginController extends HttpServlet {
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
                 return;
             }
-            if (user.getSession() != null) {
-                sessionService.deleteSessionById(user.getSession().getId());
-            }
-            Session session = new Session(UUID.randomUUID(), user);
-            sessionService.createSession(session);
-            Cookie cookie = new Cookie("session_id", session.getId().toString());
-            cookie.setMaxAge(30 * 60);
-            resp.addCookie(cookie);
+            sessionService.deleteSessionByUserId(user.getId());
+            Session session = sessionService.createSession(user);
+            CookieUtil.createCookie(session.getId().toString(), resp);
             resp.sendRedirect("/WeatherApp-1.0/weather");
         }
     }

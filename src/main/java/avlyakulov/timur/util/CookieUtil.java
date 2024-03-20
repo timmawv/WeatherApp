@@ -6,9 +6,16 @@ import avlyakulov.timur.service.SessionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class CookieUtil {
+
+    public static void createCookie(String sessionId, HttpServletResponse resp) throws IOException {
+        Cookie cookie = new Cookie("session_id", sessionId);
+        cookie.setMaxAge(30 * 60);
+        resp.addCookie(cookie);
+    }
 
     public static String getSessionIdFromCookie(Cookie[] cookies) {
         if (cookies == null) {

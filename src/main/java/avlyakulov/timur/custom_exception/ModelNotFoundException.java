@@ -17,7 +17,4 @@ public class ModelNotFoundException extends RuntimeException {
         super(cause);
     }
 
-    protected ModelNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

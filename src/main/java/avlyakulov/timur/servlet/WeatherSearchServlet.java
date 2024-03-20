@@ -8,6 +8,7 @@ import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
+import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
@@ -44,15 +45,11 @@ public class WeatherSearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        UserDto userLogin = null;
-        try {
-            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            userLogin = sessionService.getUserDtoByHisSession(sessionIdFromCookie);
-            context.setVariable("login", userLogin);
-        } catch (CookieNotExistException e) {
-            resp.sendRedirect("/WeatherApp-1.0/main-page");
-        }
-
+        UserDto userLogin;
+        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+        Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
+        userLogin = sessionService.getUserDtoByHisSession(userSession);
+        context.setVariable("login", userLogin);
         String cityName = req.getParameter("city");
         try {
             List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromHttpRequest(cityName, userLogin);

@@ -1,16 +1,15 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
-import avlyakulov.timur.dto.GeoCityDto;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
+import avlyakulov.timur.model.Session;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.api.OpenWeatherService;
 import avlyakulov.timur.util.CookieUtil;
-import avlyakulov.timur.util.api.GetUrlIconOfWeatherByIcon;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,19 +37,16 @@ public class MainPageLoggedController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
+        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+        Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
+        UserDto userLogin = sessionService.getUserDtoByHisSession(userSession);
+        context.setVariable("login", userLogin);
         try {
-            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            UserDto userLogin = sessionService.getUserDtoByHisSession(sessionIdFromCookie);
-            context.setVariable("login", userLogin);
-            try {
-                List<Location> locationList = locationService.getAllLocationByUserId(userLogin.getUserId());
-                List<WeatherCityDto> weatherList = openWeatherService.getWeatherByUserLocations(locationList);
-                context.setVariable("weatherList", weatherList);
-            } catch (URISyntaxException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (CookieNotExistException e) {
-            resp.sendRedirect("/WeatherApp-1.0/main-page");
+            List<Location> locationList = locationService.getAllLocationByUserId(userLogin.getUserId());
+            List<WeatherCityDto> weatherList = openWeatherService.getWeatherByUserLocations(locationList);
+            context.setVariable("weatherList", weatherList);
+        } catch (URISyntaxException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogged, context, resp);
     }

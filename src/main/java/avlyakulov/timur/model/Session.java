@@ -15,12 +15,14 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString()
 @NamedQueries({
         @NamedQuery(name = "HQL_DeleteSessionById",
                 query = "delete from Session where id = :sessionId"),
         @NamedQuery(name = "HQL_GetUserByHisSession",
-        query = "select user from Session where id = :sessionId")
+        query = "select user from Session where id = :sessionId"),
+        @NamedQuery(name = "HQL_DeleteSessionByUserId",
+        query = "delete from Session where user.id = :userId")
 })
 public class Session {
 

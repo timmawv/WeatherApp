@@ -16,8 +16,4 @@ public class JsonParseException extends RuntimeException {
     public JsonParseException(Throwable cause) {
         super(cause);
     }
-
-    protected JsonParseException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

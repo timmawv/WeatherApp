@@ -17,7 +17,4 @@ public class ModelAlreadyExistsException extends RuntimeException {
         super(cause);
     }
 
-    protected ModelAlreadyExistsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
