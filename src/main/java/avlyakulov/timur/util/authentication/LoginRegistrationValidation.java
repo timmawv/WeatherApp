@@ -7,6 +7,10 @@ import org.thymeleaf.context.Context;
 public class LoginRegistrationValidation {
     private static final String passwordRegex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$";
 
+    private static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
+    private static final String loginRegex = "[a-z]*";
+
     private static final String nameFieldError = "error_field";
 
     public static boolean isFieldEmpty(Context context, String... parameters) {
@@ -49,6 +53,24 @@ public class LoginRegistrationValidation {
             return true;
         } else {
             setErrorToContext(context, "The passwords aren't same. Please enter the same passwords");
+            return false;
+        }
+    }
+
+    public static boolean isUserLoginValid(String login, Context context) {
+        if (login.matches(emailRegex)) {
+            return true;
+        } else {
+            return isLoginValid(login, context);
+        }
+    }
+
+
+    private static boolean isLoginValid(String login, Context context) {
+        if (login.matches(loginRegex) && (login.length() >= 2 && login.length() <= 10)) {
+            return true;
+        } else {
+            setErrorToContext(context, "Your login should only be in small letters and in Latin. Your length has to be from 2 to 10 symbols.");
             return false;
         }
     }

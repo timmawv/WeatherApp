@@ -15,10 +15,6 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@NamedQueries(
-//        @NamedQuery(name = "HQL_GetLocationsByUserId",
-//        query = )
-//)
 public class Location {
 
     @Id
@@ -28,10 +24,11 @@ public class Location {
     private String name;
 
     private BigDecimal latitude;
+
     private BigDecimal longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Location(String name, BigDecimal latitude, BigDecimal longitude, User user) {

@@ -30,10 +30,11 @@ public class Session {
     @JdbcTypeCode(SqlTypes.VARCHAR) // hibernate 6 way
     private UUID id;
 
+    @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
     @OneToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Session(UUID id, User user) {

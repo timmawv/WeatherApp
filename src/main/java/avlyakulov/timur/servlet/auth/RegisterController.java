@@ -37,7 +37,8 @@ public class RegisterController extends HttpServlet {
         if (LoginRegistrationValidation.isFieldEmpty(context, login, password, confirmPassword)) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
         } else {
-            if (LoginRegistrationValidation.isPasswordTheSameAndStrong(password, confirmPassword, context)) {
+            if (LoginRegistrationValidation.isUserLoginValid(login, context)
+                    && LoginRegistrationValidation.isPasswordTheSameAndStrong(password, confirmPassword, context)) {
                 User user = new User(login, BCryptUtil.encryptPassword(password));
                 try {
                     userService.createUser(user);

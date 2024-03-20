@@ -23,13 +23,16 @@ public class MainPageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-        if (sessionService.isUserSessionExpired(UUID.fromString(sessionIdFromCookie))) {
-            CookieUtil.deleteSessionIdCookie(resp);
+        try {
+            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+            if (sessionService.isUserSessionExpired(UUID.fromString(sessionIdFromCookie))) {
+                CookieUtil.deleteSessionIdCookie(resp);
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
+            } else {
+                resp.sendRedirect("/WeatherApp-1.0/weather");
+            }
+        } catch (CookieNotExistException e) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
-        } else {
-            resp.sendRedirect("/WeatherApp-1.0/weather");
         }
-        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
     }
 }
