@@ -2,7 +2,8 @@ package avlyakulov.timur.util.api;
 
 public class SetDirectionWind {
 
-    private static final String[] directions = {"N", "NE", "EN", "E", "ES", "SE", "S", "SW", "WS", "W", "WN", "NW"};
+    private static final String[] directions = {"North", "North-East", "East-North", "East", "East-South",
+            "South-East", "South", "South-West", "West-South", "West", "West-North", "North-West"};
 
     public static String setDirectionWindByDegree(int degree) {
         if (degree >= 345 && degree <= 360) {
