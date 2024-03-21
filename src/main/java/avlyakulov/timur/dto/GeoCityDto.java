@@ -1,8 +1,9 @@
 package avlyakulov.timur.dto;
 
+import avlyakulov.timur.util.api.converter.CountryCodeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +12,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GeoCityDto {
 
     @JsonProperty(value = "name")
@@ -24,6 +25,7 @@ public class GeoCityDto {
     @JsonProperty(value = "lon")
     private BigDecimal longitude;
 
+    @JsonDeserialize(converter = CountryCodeConverter.class)
     private String country;
 
     private String state;
