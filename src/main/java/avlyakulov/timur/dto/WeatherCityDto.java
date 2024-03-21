@@ -1,69 +1,50 @@
 package avlyakulov.timur.dto;
 
+import avlyakulov.timur.dto.api.SolarCycle;
+import avlyakulov.timur.dto.api.Temperature;
+import avlyakulov.timur.dto.api.Weather;
+import avlyakulov.timur.dto.api.Wind;
+import avlyakulov.timur.util.api.converter.VisibilityConverter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherCityDto {
 
-    private String mainWeather;
+    private Weather weather;
 
-    private String detailedWeather;
+    @JsonProperty(value = "main")
+    private Temperature temperature;
 
-    private String urlIconWeather;
+    @JsonDeserialize(converter = VisibilityConverter.class)
+    private String visibility;
 
-    private String temperatureWeather;
+    private Wind wind;
 
-    private String minTemperatureWeather;
+    @JsonProperty(value = "sys")
+    private SolarCycle solarCycle;
 
-    private String maxTemperatureWeather;
-
-    private String feelsLikeWeather;
-
-    private String humidityWeather;
-
-    private String visibilityKilometersWeather;
-
-    private String windSpeedWeather;
-
-    private String windDirectionWeather;
-
-    private String sunriseWeather;
-
-    private String sunsetWeather;
-
-    private GeoCityDto geoCityDto;
+    private GeoCityDto cityInformation;
 
     private boolean favorite;
 
-    public WeatherCityDto(GeoCityDto geoCityDto) {
-        this.geoCityDto = geoCityDto;
+    @JsonProperty(value = "weather")
+    public void setWeather(List<Weather> weatherList) {
+        this.weather = weatherList.get(0);
     }
 
-    public String getCountry() {
-        return geoCityDto.getCountry();
-    }
-
-    public String getState() {
-        return geoCityDto.getState();
-    }
-
-    public String getCity() {
-        return geoCityDto.getCityName();
-    }
-
-    public BigDecimal getLatitude() {
-        return geoCityDto.getLatitude();
-    }
-
-    public BigDecimal getLongitude() {
-        return geoCityDto.getLongitude();
+    public void setMainWeather(String mainWeather) {
+        this.weather.setMain(mainWeather);
     }
 }

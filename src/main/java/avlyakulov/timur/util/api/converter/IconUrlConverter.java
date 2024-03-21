@@ -1,9 +1,12 @@
-package avlyakulov.timur.util.api;
+package avlyakulov.timur.util.api.converter;
+
+import com.fasterxml.jackson.databind.util.StdConverter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetUrlIconOfWeatherByIcon {
+public class IconUrlConverter extends StdConverter<String, String> {
+
     private static Map<String, String> iconUrls = new HashMap<>(Map.of(
             "01d", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/day.svg?raw=true",
             "01n", "https://github.com/timmawv/WeatherApp/blob/main/img/animated/night.svg?raw=true",
@@ -37,8 +40,8 @@ public class GetUrlIconOfWeatherByIcon {
         ));
     }
 
-
-    public static String getUrlWeatherIcon(String iconCode) {
+    @Override
+    public String convert(String iconCode) {
         return iconUrls.get(iconCode);
     }
 }
