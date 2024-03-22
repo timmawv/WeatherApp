@@ -13,9 +13,11 @@ import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.api.OpenWeatherService;
 import avlyakulov.timur.util.CookieUtil;
+import avlyakulov.timur.util.HttpRequestJsonReader;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -42,15 +44,16 @@ public class WeatherSearchServlet extends HttpServlet {
 
     private final LocationService locationService = new LocationService();
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     private final String htmlPageWeather = "pages/weather";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        UserDto userLogin;
         String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
         Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
-        userLogin = sessionService.getUserDtoByHisSession(userSession);
+        UserDto userLogin = sessionService.getUserDtoByHisSession(userSession);
         context.setVariable("login", userLogin);
         String cityName = req.getParameter("city");
         if (LoginRegistrationValidation.isCityNameValid(cityName, context)) {
@@ -62,6 +65,7 @@ public class WeatherSearchServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         } else {
+            //todo get rid of this creating List
             List<WeatherCityDto> weatherList = new ArrayList<>();
             context.setVariable("weatherList", weatherList);
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
@@ -71,8 +75,10 @@ public class WeatherSearchServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            Location locationFromRequestJsonFile = getLocationFromRequestJsonFile(req);
-            locationService.createLocation(locationFromRequestJsonFile);
+            String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
+            Location location = objectMapper.readValue(locationJson, new TypeReference<>() {
+            });
+            locationService.createLocation(location);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -85,7 +91,9 @@ public class WeatherSearchServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            LocationDto location = getLocationFromRequestJsonFileForDelete(req);
+            String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
+            LocationDto location = objectMapper.readValue(locationJson, new TypeReference<>() {
+            });
             locationService.deleteLocationByCoordinate(location);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException e) {
@@ -96,41 +104,5 @@ public class WeatherSearchServlet extends HttpServlet {
         }
     }
 
-    private JsonNode readJsonFileFromRequest(HttpServletRequest req) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = req.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-        reader.close();
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readTree(sb.toString());
-    }
 
-    private Location getLocationFromRequestJsonFile(HttpServletRequest req) throws IOException {
-        JsonNode jsonNode = readJsonFileFromRequest(req);
-        if (jsonNode.has("latitude") && jsonNode.has("longitude") && jsonNode.has("cityName") && jsonNode.has("userId")) {
-            return new Location(
-                    jsonNode.get("cityName").asText(),
-                    new BigDecimal(jsonNode.get("latitude").asText()),
-                    new BigDecimal(jsonNode.get("longitude").asText()),
-                    new User(jsonNode.get("userId").asInt())
-            );
-        } else {
-            throw new JsonParseException("One or more fields didn't parse");
-        }
-    }
-
-    private LocationDto getLocationFromRequestJsonFileForDelete(HttpServletRequest req) throws IOException {
-        JsonNode jsonNode = readJsonFileFromRequest(req);
-        if (jsonNode.has("latitude") && jsonNode.has("longitude")) {
-            return new LocationDto(
-                    new BigDecimal(jsonNode.get("latitude").asText()),
-                    new BigDecimal(jsonNode.get("longitude").asText())
-            );
-        } else {
-            throw new JsonParseException("One or more fields didn't parse");
-        }
-    }
 }
