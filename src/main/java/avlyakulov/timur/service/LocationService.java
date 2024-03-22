@@ -16,19 +16,20 @@ public class LocationService {
 
     public void createLocation(LocationDto locationDto) {
         List<Location> locationList = locationDao.findAllByUserId(locationDto.getUserId());
+        locationList.forEach(l -> {
+            if (locationDto.getLatitude().equals(l.getLatitude()) && locationDto.getLongitude().equals(l.getLongitude())) {
+                throw new ModelAlreadyExistsException("This location was already saved!");
+            }
+        });
         if (locationList.size() >= 3) {
             throw new TooManyLocationsException("You can't have more than 3 locations");
         } else {
-            try {
-                locationDao.create(new Location(
-                        locationDto.getName(),
-                        locationDto.getLatitude(),
-                        locationDto.getLongitude(),
-                        new User(locationDto.getUserId())
-                ));
-            } catch (ConstraintViolationException e) {
-                throw new ModelAlreadyExistsException("This location was already saved!");
-            }
+            locationDao.create(new Location(
+                    locationDto.getName(),
+                    locationDto.getLatitude(),
+                    locationDto.getLongitude(),
+                    new User(locationDto.getUserId())
+            ));
         }
     }
 

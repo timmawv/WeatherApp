@@ -25,19 +25,21 @@ function addToFavorite() {
                     .then(response => {
                         console.log(response);
                         if (!response.ok) {
-                            throw new Error('error HTTP: ' + response.status);
+                            return response.json().then(errorData => {
+                                throw new Error("Error: " + errorData);
+                            });
                         }
                     })
                     .then(data => {
                         console.log('Successfully response:', data);
                         button.classList.toggle('active');
-                        setTimeout(function() {
+                        setTimeout(function () {
                             alert("Your location was successfully removed!");
                         }, 1000);
                     })
                     .catch(error => {
                         console.error('Ошибка:', error);
-                        alert(error.message || 'Something went wrong');
+                        alert(error.message);
                     });
             } else {
 
@@ -51,19 +53,22 @@ function addToFavorite() {
                     .then(response => {
                         console.log(response);
                         if (!response.ok) {
-                            throw new Error('error HTTP: ' + response.status);
+                            return response.json().then(errorData => {
+                                console.log(errorData);
+                                throw new Error("Error: " + errorData);
+                            });
                         }
                     })
                     .then(data => {
                         console.log('Successfully response:', data);
                         button.classList.toggle('active');
-                        setTimeout(function() {
+                        setTimeout(function () {
                             alert("Your location was successfully saved!");
                         }, 1000);
                     })
                     .catch(error => {
                         console.error('Ошибка:', error);
-                        alert(error.message || 'This location was already saved');
+                        alert(error.message);
                     });
             }
         });

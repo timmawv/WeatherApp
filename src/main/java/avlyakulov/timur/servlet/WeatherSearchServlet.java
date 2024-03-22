@@ -76,9 +76,9 @@ public class WeatherSearchServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.setContentType("application/json");
             PrintWriter out = resp.getWriter();
-            out.println(e.getMessage());
-            out.close();
+            out.print(objectMapper.writeValueAsString(e.getMessage()));
         }
     }
 
