@@ -1,6 +1,7 @@
 package avlyakulov.timur.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,17 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LocationDto {
 
+    @JsonProperty(value = "cityName")
+    private String name;
+
     private BigDecimal latitude;
 
     private BigDecimal longitude;
+
+    private int userId;
+
+    public LocationDto(BigDecimal latitude, BigDecimal longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

@@ -6,19 +6,15 @@ import avlyakulov.timur.custom_exception.TooManyLocationsException;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
-import avlyakulov.timur.model.Location;
 import avlyakulov.timur.model.Session;
-import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.api.OpenWeatherService;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.HttpRequestJsonReader;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
-import avlyakulov.timur.util.thymeleaf.ThymeleafUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,10 +23,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,9 +70,9 @@ public class WeatherSearchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
-            Location location = objectMapper.readValue(locationJson, new TypeReference<>() {
+            LocationDto locationDto = objectMapper.readValue(locationJson, new TypeReference<>() {
             });
-            locationService.createLocation(location);
+            locationService.createLocation(locationDto);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -103,6 +97,4 @@ public class WeatherSearchServlet extends HttpServlet {
             out.close();
         }
     }
-
-
 }

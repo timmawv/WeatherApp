@@ -1,6 +1,5 @@
 package avlyakulov.timur.servlet;
 
-import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
