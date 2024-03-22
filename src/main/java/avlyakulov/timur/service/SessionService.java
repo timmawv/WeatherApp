@@ -7,6 +7,7 @@ import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,8 +15,11 @@ public class SessionService {
 
     private final SessionDao sessionDao = new SessionDao();
 
+    private final int minutesSessionExist = 30;
+
     public Session createSession(User user) {
         Session session = new Session(UUID.randomUUID(), user);
+        session.setExpiresAt(LocalDateTime.now().plus(minutesSessionExist, ChronoUnit.MINUTES));
         sessionDao.create(session);
         return session;
     }

@@ -12,6 +12,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/logout")
 public class LogoutController extends HttpServlet {
+
     private final SessionService sessionService = new SessionService();
 
     @Override

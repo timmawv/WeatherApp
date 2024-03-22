@@ -41,7 +41,6 @@ public class Session {
 
     public Session(UUID id, User user) {
         this.id = id;
-        this.expiresAt = LocalDateTime.now().plus(30, ChronoUnit.MINUTES);
         this.user = user;
     }
 }

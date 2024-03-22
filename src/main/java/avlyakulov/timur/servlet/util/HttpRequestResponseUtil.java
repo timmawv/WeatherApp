@@ -18,8 +18,10 @@ public class HttpRequestResponseUtil {
                 .version(HttpClient.Version.HTTP_1_1)
                 .GET()
                 .build();
+
         HttpResponse<String> response = HttpClient.newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofString());
+
         log.info("One request to API was made");
         return response.body();
     }

@@ -19,7 +19,7 @@ public class HibernateSingletonUtil {
     private HibernateSingletonUtil() {
     }
 
-    public static void initEnvironments() {
+    private static void initEnvironments(DeployConfigurationType deployConfigurationType) {
         String url = System.getenv("DB_URL");
         String username = System.getenv("DB_USERNAME");
         String password = System.getenv("DB_PASSWORD");
@@ -42,10 +42,18 @@ public class HibernateSingletonUtil {
         }
     }
 
-    public static void initSessionFactory() {
-        initEnvironments();
+    public static void initSessionFactory(DeployConfigurationType deployConfigurationType) {
+        initEnvironments(deployConfigurationType);
         if (sessionFactory == null) {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            Properties hibernateProperty = new Properties();
+            try {
+                hibernateProperty.load(classLoader.getResourceAsStream(deployConfigurationType.getPropertyFileName()));
+            } catch (IOException e) {
+                log.error("Error with configure file for hibernate");
+            }
             sessionFactory = new Configuration()
+                    .addProperties(hibernateProperty)
                     .addAnnotatedClass(User.class)
                     .addAnnotatedClass(Session.class)
                     .addAnnotatedClass(Location.class)
@@ -55,7 +63,15 @@ public class HibernateSingletonUtil {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            initSessionFactory();
+            log.error("You are trying to get session factory which wasn't initialized");
+            throw new RuntimeException("Session factory is not created");
+        }
+        return sessionFactory;
+    }
+
+    public static SessionFactory getSessionFactory(DeployConfigurationType deployConfigurationType) {
+        if (sessionFactory == null) {
+            initSessionFactory(deployConfigurationType);
         }
         return sessionFactory;
     }

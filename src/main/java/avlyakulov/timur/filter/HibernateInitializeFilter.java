@@ -1,5 +1,6 @@
 package avlyakulov.timur.filter;
 
+import avlyakulov.timur.util.DeployConfigurationType;
 import avlyakulov.timur.util.HibernateSingletonUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class HibernateInitializeFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        HibernateSingletonUtil.initSessionFactory();
+        HibernateSingletonUtil.initSessionFactory(DeployConfigurationType.PROD);
         log.info("HibernateInitializeFilter filter was created and initialize Hibernate connection");
     }
 

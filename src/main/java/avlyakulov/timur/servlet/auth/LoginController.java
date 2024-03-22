@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlet.auth;
 
+import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
+
     private final String htmlPageLogin = "auth/login";
 
     private final UserService userService = new UserService();
@@ -31,7 +33,17 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+        try {
+            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+            if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
+                resp.sendRedirect("/WeatherApp-1.0/weather");
+            } else {
+                CookieUtil.deleteSessionIdCookie(resp);
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+            }
+        } catch (CookieNotExistException e) {
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+        }
     }
 
     @Override
