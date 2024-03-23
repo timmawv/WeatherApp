@@ -59,9 +59,7 @@ public class WeatherSearchServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         } else {
-            //todo get rid of this creating List
-            List<WeatherCityDto> weatherList = new ArrayList<>();
-            context.setVariable("weatherList", weatherList);
+
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
         }
     }

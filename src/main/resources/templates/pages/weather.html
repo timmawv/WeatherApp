@@ -17,7 +17,7 @@
 <main>
     <div th:insert="~{fragment/forecast_weather :: forecast_block}"></div>
 
-    <div th:if="${weatherList.size() == 0}" class="wrapper_sign">
+    <div th:if="${weatherList == null or weatherList.size() == 0}" class="wrapper_sign">
         <h1>No locations were found...</h1>
     </div>
 
