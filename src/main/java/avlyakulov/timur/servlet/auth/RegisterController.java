@@ -54,7 +54,7 @@ public class RegisterController extends HttpServlet {
         } else {
             if (LoginRegistrationValidation.isUserLoginValid(login, context)
                     && LoginRegistrationValidation.isPasswordTheSameAndStrong(password, confirmPassword, context)) {
-                User user = new User(login, BCryptUtil.encryptPassword(password));
+                User user = new User(login,password);
                 try {
                     userService.createUser(user);
                 } catch (ModelAlreadyExistsException e) {

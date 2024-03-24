@@ -8,10 +8,18 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.util.List;
+
 @Slf4j
 public class UserDao {
 
     private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
+
+    public List<User> findAll() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from User", User.class).getResultList();
+        }
+    }
 
     public void create(User user) {
         try (Session session = sessionFactory.openSession()) {
@@ -23,12 +31,6 @@ public class UserDao {
         } catch (ConstraintViolationException e) {
             log.error("User with such login name {} already exists", user.getLogin());
             throw new ModelAlreadyExistsException("User with such login name already exists");
-        }
-    }
-
-    public User getById(int userId) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(User.class, userId);
         }
     }
 

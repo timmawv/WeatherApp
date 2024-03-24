@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS Locations
     name      VARCHAR NOT NULL,
     user_id   INT     NOT NULL REFERENCES Users (id),
     latitude  DECIMAL NOT NULL,
-    longitude DECIMAL NOT NULL
+    longitude DECIMAL NOT NULL,
+    UNIQUE (user_id, latitude, longitude)
 );
 
 CREATE TABLE IF NOT EXISTS Sessions

@@ -30,6 +30,14 @@ public class LocationDao {
         }
     }
 
+    public Long findNumberUserLocations(int userId) {
+        try (Session hibernateSession = sessionFactory.openSession()) {
+            return hibernateSession.createQuery("select count(*) from Location where user.id = :userId", Long.class)
+                    .setParameter("userId", userId)
+                    .getSingleResult();
+        }
+    }
+
     public void deleteLocation(LocationDto locationDto) {
         try (Session hibernateSession = sessionFactory.openSession()) {
             hibernateSession.beginTransaction();//открываем транзакцию
