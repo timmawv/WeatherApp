@@ -15,7 +15,7 @@ public class SessionService {
 
     private final SessionDao sessionDao = new SessionDao();
 
-    private final int minutesSessionExist = 30;
+    private int minutesSessionExist = 30;
 
     public Session createSession(User user) {
         Session session = new Session(UUID.randomUUID(), user);
@@ -53,5 +53,9 @@ public class SessionService {
 
     public boolean isUserSessionValid(String sessionId) {
         return sessionDao.isSessionValid(UUID.fromString(sessionId));
+    }
+
+    public void setMinutesSessionExist(int minutesSessionExist) {
+        this.minutesSessionExist = minutesSessionExist;
     }
 }

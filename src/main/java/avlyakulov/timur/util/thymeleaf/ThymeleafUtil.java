@@ -11,7 +11,6 @@ public class ThymeleafUtil {
     }
 
     private static ClassLoaderTemplateResolver configureHtmlResolver() {
-
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCacheTTLMs(0L);

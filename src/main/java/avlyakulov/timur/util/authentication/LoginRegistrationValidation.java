@@ -79,7 +79,7 @@ public class LoginRegistrationValidation {
 
     public static boolean isCityNameValid(String cityName, Context context) {
         if (cityName.isBlank() || cityName.contains(" ") || cityName.matches(cityNameRegex)) {
-            setErrorToContext(context, "Don't enter numbers, blank name, spaces in name.");
+            context.setVariable("error_city_name", "Don't enter numbers, blank name, spaces in name.");
             return false;
         } else {
             return true;

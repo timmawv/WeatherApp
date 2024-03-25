@@ -19,7 +19,7 @@ public class HibernateSingletonUtil {
     private HibernateSingletonUtil() {
     }
 
-    private static void initEnvironments(DeployConfigurationType deployConfigurationType) {
+    private static void initEnvironments() {
         String url = System.getenv("DB_URL");
         String username = System.getenv("DB_USERNAME");
         String password = System.getenv("DB_PASSWORD");
@@ -43,7 +43,7 @@ public class HibernateSingletonUtil {
     }
 
     public static void initSessionFactory(DeployConfigurationType deployConfigurationType) {
-        initEnvironments(deployConfigurationType);
+        initEnvironments();
         if (sessionFactory == null) {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             Properties hibernateProperty = new Properties();

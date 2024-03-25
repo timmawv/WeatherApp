@@ -9,3 +9,14 @@
 .container.main form {
     width: 30%;
 }
+
+.success_register {
+    background-color: lightgreen;
+    width: 50%;
+    min-height: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}

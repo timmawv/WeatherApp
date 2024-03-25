@@ -14,7 +14,7 @@
 <header th:insert="~{fragment/header :: header}"></header>
 
 <main>
-    <div class="container main">
+    <div th:if="${success_registration} == false" class="container main">
         <form action="/WeatherApp-1.0/register" method="POST">
             <div class="mb-3">
                 <label for="exampleInputEmail" class="form-label">Username or Email</label>
@@ -31,10 +31,17 @@
                 <input type="password" name="confirm_password" class="form-control" id="exampleInputPassword2" required>
                 <div style="color: red" th:if="${error_field}" th:utext="${error_field}"></div>
             </div>
-            <button type="submit" class="btn btn-primary">Register Account</button>
+            <button type="submit" class="btn btn-primary">
+                Register Account
+            </button>
         </form>
     </div>
 
+    <div th:if="${success_registration} == true" class="success_register">
+        <h1>You were successfully registered!</h1>
+        <a href="/WeatherApp-1.0/main-page">Go to main page</a>
+        <a href="/WeatherApp-1.0/login">Go to login page</a>
+    </div>
 </main>
 
 <div th:insert="~{fragment/footer :: footer}"></div>

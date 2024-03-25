@@ -13,7 +13,7 @@
 
             <input type="search" name="city" class="form-control" placeholder="Search weather..." aria-label="Search"
                    th:disabled="${login == null}">
-            <div style="color: red;margin-bottom: -30px" th:if="${error_field}" th:text="${error_field}"></div>
+            <div style="color: red;margin-bottom: -30px" th:if="${error_city_name}" th:text="${error_city_name}"></div>
         </form>
 
         <div class="col-md-3 text-end" th:if="${login == null}">

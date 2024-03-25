@@ -30,6 +30,7 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
+        context.setVariable("success_registration", false);
         try {
             String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
             if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
@@ -49,12 +50,13 @@ public class RegisterController extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm_password");
+        context.setVariable("success_registration", false);
         if (LoginRegistrationValidation.isFieldEmpty(context, login, password, confirmPassword)) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
         } else {
             if (LoginRegistrationValidation.isUserLoginValid(login, context)
                     && LoginRegistrationValidation.isPasswordTheSameAndStrong(password, confirmPassword, context)) {
-                User user = new User(login,password);
+                User user = new User(login, password);
                 try {
                     userService.createUser(user);
                 } catch (ModelAlreadyExistsException e) {
@@ -62,7 +64,8 @@ public class RegisterController extends HttpServlet {
                     ThymeleafUtilRespondHtmlView.respondHtmlPage("auth/register", context, resp);
                     return;
                 }
-                resp.sendRedirect("/WeatherApp-1.0/main-page");
+                context.setVariable("success_registration", true);
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
             } else {
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
             }
