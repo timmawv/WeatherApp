@@ -4,8 +4,9 @@ import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
-import avlyakulov.timur.util.DeployConfigurationType;
-import avlyakulov.timur.util.HibernateSingletonUtil;
+import avlyakulov.timur.util.BCryptUtil;
+import avlyakulov.timur.util.hibernate.DeployConfigurationType;
+import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -17,8 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -27,6 +27,7 @@ public class UserServiceTest {
 
     private final UserDao userDao = new UserDao();
 
+    private final BCryptUtil bCryptUtil = new BCryptUtil();
 
     private UserService userService = new UserService();
 
@@ -55,11 +56,16 @@ public class UserServiceTest {
     @Test
     public void createUser_userWasCreated_ValidCredentials() {
         User user = new User("timur", "111");
+
         userService.createUser(user);
+
         User userCreated = userDao.getUserByLogin("timur");
-        assertEquals(user.getId(), userCreated.getId());
-        assertEquals(user.getLogin(), userCreated.getLogin());
-        assertEquals(user.getPassword(), userCreated.getPassword());
+        List<User> users = userDao.findAll();
+
+        assertNotNull(userCreated.getId());
+        assertEquals("timur", userCreated.getLogin());
+        assertTrue(bCryptUtil.isPasswordCorrect("111", user.getPassword()));
+        assertEquals(1, users.size());
     }
 
     @Test
@@ -100,5 +106,6 @@ public class UserServiceTest {
 
         ModelNotFoundException modelNotFoundException = assertThrows(ModelNotFoundException.class, () -> userService.logUserByCredentials("timur", "122"));
         assertEquals("Login or password isn't correct", modelNotFoundException.getMessage());
+
     }
 }

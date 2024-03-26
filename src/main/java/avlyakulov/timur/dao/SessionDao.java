@@ -1,14 +1,22 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.model.Session;
-import avlyakulov.timur.util.HibernateSingletonUtil;
+import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
 import org.hibernate.SessionFactory;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class SessionDao {
     private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
+
+    public List<Session> findAll() {
+        try (org.hibernate.Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Session", Session.class).getResultList();
+        }
+    }
+
 
     public void create(Session session) {
         try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {

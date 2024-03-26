@@ -14,8 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString()
+@ToString
 @NamedQueries({
         @NamedQuery(name = "HQL_DeleteSessionById",
                 query = "delete from Session where id = :sessionId"),

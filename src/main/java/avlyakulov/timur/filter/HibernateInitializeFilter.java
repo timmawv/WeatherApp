@@ -1,7 +1,7 @@
 package avlyakulov.timur.filter;
 
-import avlyakulov.timur.util.DeployConfigurationType;
-import avlyakulov.timur.util.HibernateSingletonUtil;
+import avlyakulov.timur.util.hibernate.DeployConfigurationType;
+import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package avlyakulov.timur.dao;
 
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.model.Location;
-import avlyakulov.timur.util.HibernateSingletonUtil;
+import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 

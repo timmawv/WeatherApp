@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Sessions
 (
     id         VARCHAR,
     user_id    INT          NOT NULL REFERENCES Users (id),
-    expires_at timestamp(6) NOT NULL
+    expires_at timestamp NOT NULL
 );
 
 INSERT INTO Users(login, password)

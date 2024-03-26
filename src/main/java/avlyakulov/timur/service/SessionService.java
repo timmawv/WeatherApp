@@ -28,10 +28,10 @@ public class SessionService {
         Optional<Session> session = sessionDao.getById(UUID.fromString(sessionId));
         if (session.isPresent()) {
             LocalDateTime now = LocalDateTime.now();
-            if (now.isAfter(session.get().getExpiresAt())) {
-                throw new SessionNotValid("User session was expired");
-            } else {
+            if (now.isBefore(session.get().getExpiresAt())) {
                 return session.get();
+            } else {
+                throw new SessionNotValid("User session was expired");
             }
         } else {
             throw new SessionNotValid("User session was expired or it doesn't exits");

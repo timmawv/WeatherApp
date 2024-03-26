@@ -1,4 +1,4 @@
-package avlyakulov.timur.util;
+package avlyakulov.timur.util.hibernate;
 
 public enum DeployConfigurationType {
 

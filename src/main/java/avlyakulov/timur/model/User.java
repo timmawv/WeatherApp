@@ -1,16 +1,15 @@
 package avlyakulov.timur.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @NamedQueries({
         @NamedQuery(name = "HQL_FindUserByUsername",
@@ -20,7 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(unique = true)
     private String login;
@@ -32,7 +31,7 @@ public class User {
         this.password = password;
     }
 
-    public User(int id) {
+    public User(Integer id) {
         this.id = id;
     }
 }
