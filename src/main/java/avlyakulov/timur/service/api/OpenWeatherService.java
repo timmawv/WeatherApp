@@ -42,9 +42,7 @@ public class OpenWeatherService {
         try {
             List<GeoCityDto> cityCoordinateByName = openGeoService.getCityCoordinateByName(cityName);
             for (GeoCityDto geoCityDto : cityCoordinateByName) {
-                String urlWeatherFull = urlWeather.concat(latitude.concat(geoCityDto.getLatitude().toString()))
-                        .concat(longitude.concat(geoCityDto.getLongitude().toString()))
-                        .concat(appId);
+                String urlWeatherFull = concatenateUrlWeather(geoCityDto);
                 String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
                 WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
                 });
@@ -62,9 +60,7 @@ public class OpenWeatherService {
     public List<WeatherCityDto> getWeatherByUserLocations(List<Location> locationList) throws URISyntaxException, IOException, InterruptedException {
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
         for (Location location : locationList) {
-            String urlWeatherFull = urlWeather.concat(latitude.concat(location.getLatitude().toString()))
-                    .concat(longitude.concat(location.getLongitude().toString()))
-                    .concat(appId);
+            String urlWeatherFull = concatenateUrlWeather(location);
             String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
             WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
             });
@@ -87,5 +83,17 @@ public class OpenWeatherService {
                         weather.setFavorite(true);
                     }
                 });
+    }
+
+    public String concatenateUrlWeather(GeoCityDto geoCityDto) {
+        return urlWeather.concat(latitude.concat(geoCityDto.getLatitude().toString()))
+                .concat(longitude.concat(geoCityDto.getLongitude().toString()))
+                .concat(appId);
+    }
+
+    public String concatenateUrlWeather(Location location) {
+        return urlWeather.concat(latitude.concat(location.getLatitude().toString()))
+                .concat(longitude.concat(location.getLongitude().toString()))
+                .concat(appId);
     }
 }

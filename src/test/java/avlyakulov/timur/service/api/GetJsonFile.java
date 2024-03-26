@@ -37,7 +37,7 @@ public class GetJsonFile {
                 "  \"visibility\" : 10000,\n" +
                 "  \"wind\" : {\n" +
                 "    \"speed\" : 4.73,\n" +
-                "    \"deg\" : 99,\n" +
+                "    \"deg\" : 90,\n" +
                 "    \"gust\" : 6.21\n" +
                 "  },\n" +
                 "  \"clouds\" : {\n" +
