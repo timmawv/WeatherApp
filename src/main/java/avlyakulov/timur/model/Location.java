@@ -23,14 +23,17 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private BigDecimal latitude;
 
+    @Column(nullable = false)
     private BigDecimal longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Location(String name, BigDecimal latitude, BigDecimal longitude, User user) {

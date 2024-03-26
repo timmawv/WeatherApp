@@ -19,11 +19,11 @@ import java.util.UUID;
         @NamedQuery(name = "HQL_DeleteSessionById",
                 query = "delete from Session where id = :sessionId"),
         @NamedQuery(name = "HQL_GetUserByHisSession",
-        query = "select user from Session where id = :sessionId"),
+                query = "select user from Session where id = :sessionId"),
         @NamedQuery(name = "HQL_DeleteSessionByUserId",
-        query = "delete from Session where user.id = :userId"),
+                query = "delete from Session where user.id = :userId"),
         @NamedQuery(name = "HQL_IsSessionValid",
-        query = "select (now() < expiresAt) as is_session_valid from Session where id = :sessionId")
+                query = "select (now() < expiresAt) as is_session_valid from Session where id = :sessionId")
 })
 public class Session {
 
@@ -31,11 +31,11 @@ public class Session {
     @JdbcTypeCode(SqlTypes.VARCHAR) // hibernate 6 way
     private UUID id;
 
-    @Column(name = "expires_at")
+    @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Session(UUID id, User user) {

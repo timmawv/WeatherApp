@@ -32,7 +32,7 @@ public class LocationService {
         }
     }
 
-    public List<Location> getAllLocationByUserId(int userId) {
+    public List<Location> getAllLocationByUserId(Integer userId) {
         return locationDao.findAllByUserId(userId);
     }
 
