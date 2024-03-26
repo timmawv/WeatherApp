@@ -2,7 +2,6 @@ FROM maven:3.8.4-openjdk-17-slim AS builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-COPY credentials.env ./src/main/resources
 RUN mvn clean package -Dmaven.test.skip
 
 FROM tomcat:10.1.18-jdk17

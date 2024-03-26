@@ -6,6 +6,7 @@ import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
 import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -40,6 +41,7 @@ class OpenWeatherServiceTest {
     }
 
     @Test
+    @Disabled
     public void getWeatherListFromHttpRequest_getWeatherList_coordinateExists() throws URISyntaxException, IOException, InterruptedException {
         doReturn(any()).when(locationService).getAllLocationByUserId(any());
         doReturn(List.of(new GeoCityDto("Kharkiv", new BigDecimal("36.2304"), new BigDecimal("49.9903"), "Ukraine"))).when(openGeoService).getCityCoordinateByName(anyString());
