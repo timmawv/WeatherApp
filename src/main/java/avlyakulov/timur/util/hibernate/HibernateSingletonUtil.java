@@ -19,7 +19,7 @@ public class HibernateSingletonUtil {
     private HibernateSingletonUtil() {
     }
 
-    private static void initEnvironments() {
+    public static void initEnvironments() {
         String url = System.getenv("DB_URL");
         String username = System.getenv("DB_USERNAME");
         String password = System.getenv("DB_PASSWORD");

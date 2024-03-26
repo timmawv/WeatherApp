@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlet;
 
+import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.JsonParseException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
@@ -55,11 +56,11 @@ public class WeatherSearchServlet extends HttpServlet {
                 List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromHttpRequest(cityName, userLogin);
                 context.setVariable("weatherList", weatherList);
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
-            } catch (URISyntaxException | InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
+                context.setVariable("error_city_name", e.getMessage());
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
             }
         } else {
-
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
         }
     }
