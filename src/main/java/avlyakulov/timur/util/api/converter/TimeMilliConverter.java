@@ -13,7 +13,7 @@ public class TimeMilliConverter extends StdConverter<String, String> {
         long time = Long.parseLong(timeMilli);
 
         LocalDateTime dateTime = Instant.ofEpochSecond(time)
-                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+                .atZone(ZoneId.of("Europe/Kiev")).toLocalDateTime();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return dateTime.format(formatter);
