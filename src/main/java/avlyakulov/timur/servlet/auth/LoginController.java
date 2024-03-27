@@ -10,6 +10,7 @@ import avlyakulov.timur.util.ContextUtil;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
+import jakarta.persistence.NoResultException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -35,9 +36,14 @@ public class LoginController extends HttpServlet {
         Context context = new Context();
         try {
             String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
-                resp.sendRedirect("/WeatherApp-1.0/weather");
-            } else {
+            try {
+                if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
+                    resp.sendRedirect("/WeatherApp-1.0/weather");
+                } else {
+                    CookieUtil.deleteSessionIdCookie(resp);
+                    ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+                }
+            } catch (NoResultException e) {
                 CookieUtil.deleteSessionIdCookie(resp);
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
             }
