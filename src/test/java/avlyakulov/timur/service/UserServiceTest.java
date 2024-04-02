@@ -25,6 +25,8 @@ public class UserServiceTest {
 
     private static SessionFactory sessionFactory;
 
+    private Session session;
+
     private final UserDao userDao = new UserDao();
 
     private final BCryptUtil bCryptUtil = new BCryptUtil();
@@ -34,6 +36,11 @@ public class UserServiceTest {
     @BeforeAll
     static void setUp() {
         sessionFactory = HibernateSingletonUtil.getSessionFactory(DeployConfigurationType.TEST);
+    }
+
+    @AfterAll
+    static void tear() {
+        HibernateSingletonUtil.closeSessionFactory();
     }
 
     @AfterEach
@@ -47,10 +54,6 @@ public class UserServiceTest {
         }
     }
 
-    @AfterAll
-    static void tear() {
-        HibernateSingletonUtil.closeSessionFactory();
-    }
 
     //MethodName_ExpectedBehavior_StateUnderTest
     @Test

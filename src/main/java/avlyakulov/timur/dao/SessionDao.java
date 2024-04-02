@@ -1,68 +1,41 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.model.Session;
-import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
-import org.hibernate.SessionFactory;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SessionDao {
-    private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
+public class SessionDao extends HibernateDao {
 
     public List<Session> findAll() {
-        try (org.hibernate.Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Session", Session.class).getResultList();
-        }
+        return executeNotInTransaction(session -> session.createQuery("from Session", Session.class).getResultList());
     }
 
 
-    public void create(Session session) {
-        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();//открываем транзакцию
-
-            hibernateSession.persist(session);
-
-            hibernateSession.getTransaction().commit();//закрываем транзакцию
-        }
+    public void create(Session sessionUser) {
+        executeInTransaction(session -> session.persist(sessionUser));
     }
 
     public Optional<Session> getById(UUID sessionId) {
-        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            return Optional.ofNullable(hibernateSession.get(Session.class, sessionId));
-        }
+        return executeNotInTransaction(session -> Optional.ofNullable(session.get(Session.class, sessionId)));
     }
 
     public void delete(UUID sessionId) {
-        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();//открываем транзакцию
-
-            hibernateSession.createNamedQuery("HQL_DeleteSessionById")
-                    .setParameter("sessionId", sessionId)
-                    .executeUpdate();
-
-            hibernateSession.getTransaction().commit();//закрываем транзакцию
-        }
+        executeInTransaction(session -> session.createNamedQuery("HQL_DeleteSessionById")
+                .setParameter("sessionId", sessionId)
+                .executeUpdate());
     }
 
-    public void deleteByUserid(int userId) {
-        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();//открываем транзакцию
-
-            hibernateSession.createNamedQuery("HQL_DeleteSessionByUserId")
-                    .setParameter("userId", userId)
-                    .executeUpdate();
-
-            hibernateSession.getTransaction().commit();//закрываем транзакцию
-        }
+    public void deleteSessionByUserid(int userId) {
+        executeInTransaction(session -> session.createNamedQuery("HQL_DeleteSessionByUserId")
+                .setParameter("userId", userId)
+                .executeUpdate());
     }
 
     public boolean isSessionValid(UUID sessionId) {
-        try (org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            return hibernateSession.createNamedQuery("HQL_IsSessionValid", Boolean.class)
-                    .setParameter("sessionId", sessionId)
-                    .getSingleResult();
-        }
+        return executeNotInTransaction(session -> session.createNamedQuery("HQL_IsSessionValid", Boolean.class)
+                .setParameter("sessionId", sessionId)
+                .getSingleResult());
     }
 }

@@ -11,23 +11,16 @@ import org.hibernate.exception.ConstraintViolationException;
 import java.util.List;
 
 @Slf4j
-public class UserDao {
+public class UserDao extends HibernateDao {
 
-    private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
 
     public List<User> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from User", User.class).getResultList();
-        }
+        return executeNotInTransaction(session -> session.createQuery("from User", User.class).getResultList());
     }
 
     public void create(User user) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();//открываем транзакцию
-
-            session.persist(user);
-
-            session.getTransaction().commit();//закрываем транзакцию
+        try {
+            executeInTransaction(session -> session.persist(user));
         } catch (ConstraintViolationException e) {
             log.error("User with such login name {} already exists", user.getLogin());
             throw new ModelAlreadyExistsException("User with such login name already exists");
@@ -35,10 +28,8 @@ public class UserDao {
     }
 
     public User getUserByLogin(String login) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createNamedQuery("HQL_FindUserByUsername", User.class)
-                    .setParameter("userLogin", login)
-                    .getSingleResult();
-        }
+        return executeNotInTransaction(session -> session.createNamedQuery("HQL_FindUserByUsername", User.class)
+                .setParameter("userLogin", login)
+                .getSingleResult());
     }
 }

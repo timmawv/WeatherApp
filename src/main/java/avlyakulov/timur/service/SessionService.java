@@ -5,7 +5,6 @@ import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
-import jakarta.persistence.NoResultException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -49,7 +48,7 @@ public class SessionService {
     }
 
     public void deleteSessionByUserId(int userId) {
-        sessionDao.deleteByUserid(userId);
+        sessionDao.deleteSessionByUserid(userId);
     }
 
     public boolean isUserSessionValid(String sessionId) {
