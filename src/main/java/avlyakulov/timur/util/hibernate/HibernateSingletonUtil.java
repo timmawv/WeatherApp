@@ -1,6 +1,5 @@
 package avlyakulov.timur.util.hibernate;
 
-
 import avlyakulov.timur.model.Location;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
@@ -31,7 +30,7 @@ public class HibernateSingletonUtil {
             try {
                 properties.load(classLoader.getResourceAsStream("credentials.env"));
             } catch (IOException e) {
-                log.error("We can't initialize environments for hibernate");
+                log.error("Credentials.env isn't in resources");
             }
             properties.forEach((key, value) -> System.setProperty(key.toString(), value.toString()));
         } else {
