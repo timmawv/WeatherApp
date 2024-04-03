@@ -17,6 +17,18 @@ public class CookieUtil {
         resp.addCookie(cookie);
     }
 
+    public static Optional<String> getSessionExpireCookie(Cookie[] cookies) {
+        if (cookies == null ) {
+            return Optional.empty();
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("unauthorized_request")) {
+                return Optional.of(cookie.getValue());
+            }
+        }
+        return Optional.empty();
+    }
+
     public static String getSessionIdFromCookie(Cookie[] cookies) {
         if (cookies == null) {
             throw new CookieNotExistException("Cookie doesn't exist");

@@ -25,8 +25,6 @@ public class UserServiceTest {
 
     private static SessionFactory sessionFactory;
 
-    private Session session;
-
     private final UserDao userDao = new UserDao();
 
     private final BCryptUtil bCryptUtil = new BCryptUtil();
@@ -109,6 +107,5 @@ public class UserServiceTest {
 
         ModelNotFoundException modelNotFoundException = assertThrows(ModelNotFoundException.class, () -> userService.logUserByCredentials("timur", "122"));
         assertEquals("Login or password isn't correct", modelNotFoundException.getMessage());
-
     }
 }

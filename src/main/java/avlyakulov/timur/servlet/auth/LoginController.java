@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @WebServlet(urlPatterns = "/login")
@@ -31,24 +32,32 @@ public class LoginController extends HttpServlet {
 
     private final SessionService sessionService = new SessionService();
 
+    private final String SESSION_EXPIRE_MESSAGE = "Your session was expired. You need to authorize again";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        try {
-            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+        Optional<String> sessionExpireCookie = CookieUtil.getSessionExpireCookie(req.getCookies());
+        if (sessionExpireCookie.isPresent()) {
+            context.setVariable("error_field", SESSION_EXPIRE_MESSAGE);
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+        } else {
             try {
-                if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
-                    resp.sendRedirect("/WeatherApp-1.0/weather");
-                } else {
+                String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+                try {
+                    if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
+                        resp.sendRedirect("/WeatherApp-1.0/weather");
+                    } else {
+                        CookieUtil.deleteSessionIdCookie(resp);
+                        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
+                    }
+                } catch (NoResultException e) {
                     CookieUtil.deleteSessionIdCookie(resp);
                     ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
                 }
-            } catch (NoResultException e) {
-                CookieUtil.deleteSessionIdCookie(resp);
+            } catch (CookieNotExistException e) {
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
             }
-        } catch (CookieNotExistException e) {
-            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         }
     }
 
