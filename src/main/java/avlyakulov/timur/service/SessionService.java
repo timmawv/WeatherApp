@@ -3,6 +3,7 @@ package avlyakulov.timur.service;
 import avlyakulov.timur.custom_exception.SessionNotValid;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dto.UserDto;
+import avlyakulov.timur.mapper.UserMapper;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 
@@ -40,7 +41,7 @@ public class SessionService {
 
     public UserDto getUserDtoByHisSession(Session session) {
         User user = session.getUser();
-        return new UserDto(user.getId(), user.getLogin());
+        return UserMapper.INSTANCE.mapUserToUserDto(user);
     }
 
     public void deleteSessionById(String sessionId) {

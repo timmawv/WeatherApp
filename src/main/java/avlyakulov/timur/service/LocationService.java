@@ -4,6 +4,7 @@ import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
 import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dto.LocationDto;
+import avlyakulov.timur.mapper.LocationMapper;
 import avlyakulov.timur.model.Location;
 import avlyakulov.timur.model.User;
 import org.hibernate.exception.ConstraintViolationException;
@@ -19,13 +20,9 @@ public class LocationService {
         if (numberUserLocations >= 3) {
             throw new TooManyLocationsException("You can't have more than 3 locations");
         } else {
+            Location location = LocationMapper.INSTANCE.mapLocationDtoToLocation(locationDto);
             try {
-                locationDao.create(new Location(
-                        locationDto.getName(),
-                        locationDto.getLatitude(),
-                        locationDto.getLongitude(),
-                        new User(locationDto.getUserId())
-                ));
+                locationDao.create(location);
             } catch (ConstraintViolationException e) {
                 throw new ModelAlreadyExistsException("This location was already saved");
             }

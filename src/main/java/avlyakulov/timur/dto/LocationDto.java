@@ -23,7 +23,7 @@ public class LocationDto {
 
     private BigDecimal longitude;
 
-    private int userId;
+    private Integer userId;
 
     public LocationDto(BigDecimal latitude, BigDecimal longitude) {
         this.latitude = latitude;
