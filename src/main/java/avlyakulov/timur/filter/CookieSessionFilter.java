@@ -1,7 +1,7 @@
 package avlyakulov.timur.filter;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
-import avlyakulov.timur.custom_exception.SessionNotValid;
+import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.util.CookieUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -25,14 +25,14 @@ public class CookieSessionFilter implements Filter {
         } catch (CookieNotExistException e) {
             log.warn("Unauthorized request");
             Cookie cookie = new Cookie("unauthorized_request", "");
-            cookie.setMaxAge(60);
+            cookie.setMaxAge(1);
             resp.addCookie(cookie);
             resp.sendRedirect("/WeatherApp-1.0/login");
-        } catch (SessionNotValid e) {
+        } catch (SessionNotValidException e) {
             log.warn("Unauthorized request");
             CookieUtil.deleteSessionIdCookie(resp);
             Cookie cookie = new Cookie("unauthorized_request", "");
-            cookie.setMaxAge(60);
+            cookie.setMaxAge(1);
             resp.addCookie(cookie);
             resp.sendRedirect("/WeatherApp-1.0/login");
         }

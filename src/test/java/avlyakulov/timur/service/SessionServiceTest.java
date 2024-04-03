@@ -1,6 +1,6 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.custom_exception.SessionNotValid;
+import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.dto.UserDto;
@@ -90,8 +90,8 @@ public class SessionServiceTest {
         userDao.create(user);
         UUID id = UUID.randomUUID();
 
-        SessionNotValid sessionNotValid = assertThrows(SessionNotValid.class, () -> sessionService.getUserSessionIfItNotExpired(id.toString()));
-        assertEquals("User session was expired or it doesn't exits", sessionNotValid.getMessage());
+        SessionNotValidException sessionNotValidException = assertThrows(SessionNotValidException.class, () -> sessionService.getUserSessionIfItNotExpired(id.toString()));
+        assertEquals("User session was expired or it doesn't exits", sessionNotValidException.getMessage());
     }
 
     @Test
@@ -102,8 +102,8 @@ public class SessionServiceTest {
         avlyakulov.timur.model.Session session = sessionService.createSession(user);
         UUID id = session.getId();
 
-        SessionNotValid sessionNotValid = assertThrows(SessionNotValid.class, () -> sessionService.getUserSessionIfItNotExpired(id.toString()));
-        assertEquals("User session was expired", sessionNotValid.getMessage());
+        SessionNotValidException sessionNotValidException = assertThrows(SessionNotValidException.class, () -> sessionService.getUserSessionIfItNotExpired(id.toString()));
+        assertEquals("User session was expired", sessionNotValidException.getMessage());
     }
 
     @Test

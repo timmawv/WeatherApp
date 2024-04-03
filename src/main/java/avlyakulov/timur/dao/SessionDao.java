@@ -33,9 +33,9 @@ public class SessionDao extends HibernateDao {
                 .executeUpdate());
     }
 
-    public boolean isSessionValid(UUID sessionId) {
+    public Boolean isSessionValid(UUID sessionId) {
         return executeNotInTransaction(session -> session.createNamedQuery("HQL_IsSessionValid", Boolean.class)
                 .setParameter("sessionId", sessionId)
-                .getSingleResult());
+                .getSingleResultOrNull());
     }
 }

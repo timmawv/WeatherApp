@@ -2,6 +2,7 @@ package avlyakulov.timur.servlet.auth;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
+import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.UserService;
@@ -34,17 +35,15 @@ public class RegisterController extends HttpServlet {
         context.setVariable("success_registration", false);
         try {
             String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            try {
-                if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
-                    resp.sendRedirect("/WeatherApp-1.0/weather");
-                } else {
-                    CookieUtil.deleteSessionIdCookie(resp);
-                    ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
-                }
-            } catch (NoResultException e) {
+            if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
+                resp.sendRedirect("/WeatherApp-1.0/weather");
+            } else {
                 CookieUtil.deleteSessionIdCookie(resp);
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
             }
+        } catch (SessionNotValidException e) {
+            CookieUtil.deleteSessionIdCookie(resp);
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
         } catch (CookieNotExistException e) {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
         }

@@ -1,6 +1,6 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.custom_exception.SessionNotValid;
+import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.mapper.UserMapper;
@@ -32,10 +32,10 @@ public class SessionService {
             if (now.isBefore(session.get().getExpiresAt())) {
                 return session.get();
             } else {
-                throw new SessionNotValid("User session was expired");
+                throw new SessionNotValidException("User session was expired");
             }
         } else {
-            throw new SessionNotValid("User session was expired or it doesn't exits");
+            throw new SessionNotValidException("User session was expired or it doesn't exits");
         }
     }
 
@@ -52,8 +52,13 @@ public class SessionService {
         sessionDao.deleteSessionByUserid(userId);
     }
 
-    public boolean isUserSessionValid(String sessionId) {
-        return sessionDao.isSessionValid(UUID.fromString(sessionId));
+    public Boolean isUserSessionValid(String sessionId) {
+        Boolean isSessionValid = sessionDao.isSessionValid(UUID.fromString(sessionId));
+        if (isSessionValid == null) {
+            throw new SessionNotValidException();
+        } else {
+            return isSessionValid;
+        }
     }
 
     public void setMinutesSessionExist(int minutesSessionExist) {
