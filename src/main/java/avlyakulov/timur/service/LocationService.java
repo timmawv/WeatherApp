@@ -1,13 +1,10 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
 import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.mapper.LocationMapper;
 import avlyakulov.timur.model.Location;
-import avlyakulov.timur.model.User;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 
@@ -21,16 +18,12 @@ public class LocationService {
             throw new TooManyLocationsException("You can't have more than 3 locations");
         } else {
             Location location = LocationMapper.INSTANCE.mapLocationDtoToLocation(locationDto);
-            try {
-                locationDao.create(location);
-            } catch (ConstraintViolationException e) {
-                throw new ModelAlreadyExistsException("This location was already saved");
-            }
+            locationDao.create(location);
         }
     }
 
     public List<Location> getAllLocationByUserId(Integer userId) {
-        return locationDao.findAllByUserId(userId);
+        return locationDao.findLocationsByUserId(userId);
     }
 
     public void deleteLocationByCoordinate(LocationDto locationDto) {

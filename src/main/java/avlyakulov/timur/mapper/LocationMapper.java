@@ -12,4 +12,7 @@ public interface LocationMapper {
 
     @Mapping(source = "userId", target = "user.id")
     Location mapLocationDtoToLocation(LocationDto locationDto);
+
+    @Mapping(source = "user.id", target = "userId")
+    LocationDto mapLocationToLocationDto(Location location);
 }

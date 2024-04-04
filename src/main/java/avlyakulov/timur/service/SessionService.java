@@ -9,7 +9,6 @@ import avlyakulov.timur.model.User;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SessionService {
@@ -26,16 +25,16 @@ public class SessionService {
     }
 
     public Session getUserSessionIfItNotExpired(String sessionId) {
-        Optional<Session> session = sessionDao.getById(UUID.fromString(sessionId));
-        if (session.isPresent()) {
+        Session session = sessionDao.getById(UUID.fromString(sessionId));
+        if (session == null) {
+            throw new SessionNotValidException("User session was expired or it doesn't exist");
+        } else {
             LocalDateTime now = LocalDateTime.now();
-            if (now.isBefore(session.get().getExpiresAt())) {
-                return session.get();
+            if (now.isBefore(session.getExpiresAt())) {
+                return session;
             } else {
                 throw new SessionNotValidException("User session was expired");
             }
-        } else {
-            throw new SessionNotValidException("User session was expired or it doesn't exits");
         }
     }
 
@@ -49,7 +48,7 @@ public class SessionService {
     }
 
     public void deleteSessionByUserId(int userId) {
-        sessionDao.deleteSessionByUserid(userId);
+        sessionDao.deleteSessionByUserId(userId);
     }
 
     public Boolean isUserSessionValid(String sessionId) {

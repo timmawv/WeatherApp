@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS Locations
 CREATE TABLE IF NOT EXISTS Sessions
 (
     id         VARCHAR,
-    user_id    INT          NOT NULL REFERENCES Users (id),
-    expires_at timestamp NOT NULL
+    user_id    INT       NOT NULL REFERENCES Users (id),
+    expires_at timestamp(9) NOT NULL
 );
 
 INSERT INTO Users(login, password)

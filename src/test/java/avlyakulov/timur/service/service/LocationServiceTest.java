@@ -1,4 +1,4 @@
-package avlyakulov.timur.service;
+package avlyakulov.timur.service.service;
 
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
@@ -7,13 +7,8 @@ import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.model.Location;
 import avlyakulov.timur.model.User;
-import avlyakulov.timur.util.hibernate.DeployConfigurationType;
-import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import avlyakulov.timur.IntegrationTestBase;
+import avlyakulov.timur.service.LocationService;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -21,37 +16,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LocationServiceTest {
-
-    private static SessionFactory sessionFactory;
+class LocationServiceTest extends IntegrationTestBase {
 
     private LocationService locationService = new LocationService();
 
     private LocationDao locationDao = new LocationDao();
 
     private UserDao userDao = new UserDao();
-
-    @BeforeAll
-    static void setUp() {
-        sessionFactory = HibernateSingletonUtil.getSessionFactory(DeployConfigurationType.TEST);
-    }
-
-    @AfterEach
-    void tearTables() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-
-            session.createQuery("delete from Location ").executeUpdate();
-            session.createQuery("delete from User ").executeUpdate();
-
-            session.getTransaction().commit();
-        }
-    }
-
-    @AfterAll
-    static void tear() {
-        HibernateSingletonUtil.closeSessionFactory();
-    }
 
     @Test
     public void createLocation_locationCreated_userNotHaveAnyLocations() {
@@ -61,7 +32,7 @@ class LocationServiceTest {
 
         locationService.createLocation(locationDto);
 
-        List<Location> locationList = locationDao.findAllByUserId(user.getId());
+        List<Location> locationList = locationDao.findLocationsByUserId(user.getId());
         Location location = locationList.get(0);
         assertEquals(1, locationList.size());
         assertEquals("Mashivka", location.getName());
@@ -84,7 +55,7 @@ class LocationServiceTest {
 
         TooManyLocationsException tooManyLocationsException = assertThrows(TooManyLocationsException.class, () -> locationService.createLocation(locationDto4));
         assertEquals("You can't have more than 3 locations", tooManyLocationsException.getMessage());
-        List<Location> locationList = locationDao.findAllByUserId(user.getId());
+        List<Location> locationList = locationDao.findLocationsByUserId(user.getId());
         assertEquals(3, locationList.size());
     }
 
@@ -100,7 +71,7 @@ class LocationServiceTest {
 
         ModelAlreadyExistsException locationAlreadyExistsException = assertThrows(ModelAlreadyExistsException.class, () -> locationService.createLocation(locationDto2));
         assertEquals("This location was already saved", locationAlreadyExistsException.getMessage());
-        List<Location> locationList = locationDao.findAllByUserId(user.getId());
+        List<Location> locationList = locationDao.findLocationsByUserId(user.getId());
         assertEquals(1, locationList.size());
     }
 

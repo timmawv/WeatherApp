@@ -43,7 +43,7 @@ public class HibernateSingletonUtil {
 
     public static void initSessionFactory(DeployConfigurationType deployConfigurationType) {
         initEnvironments();
-        if (sessionFactory == null) {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             Properties hibernateProperty = new Properties();
             try {
@@ -61,7 +61,7 @@ public class HibernateSingletonUtil {
     }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
             log.error("You are trying to get session factory which wasn't initialized");
             throw new RuntimeException("Session factory is not created");
         }
@@ -69,7 +69,7 @@ public class HibernateSingletonUtil {
     }
 
     public static SessionFactory getSessionFactory(DeployConfigurationType deployConfigurationType) {
-        if (sessionFactory == null) {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
             initSessionFactory(deployConfigurationType);
         }
         return sessionFactory;

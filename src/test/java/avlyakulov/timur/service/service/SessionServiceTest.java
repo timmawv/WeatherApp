@@ -1,17 +1,13 @@
-package avlyakulov.timur.service;
+package avlyakulov.timur.service.service;
 
 import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.model.User;
-import avlyakulov.timur.util.hibernate.DeployConfigurationType;
-import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
-import org.hibernate.Session;
+import avlyakulov.timur.IntegrationTestBase;
+import avlyakulov.timur.service.SessionService;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -22,7 +18,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SessionServiceTest {
+public class SessionServiceTest extends IntegrationTestBase {
 
     private static SessionFactory sessionFactory;
 
@@ -34,28 +30,6 @@ public class SessionServiceTest {
 
     private SessionService sessionService = new SessionService();
 
-    @BeforeAll
-    static void setUp() {
-        sessionFactory = HibernateSingletonUtil.getSessionFactory(DeployConfigurationType.TEST);
-    }
-
-    @AfterEach
-    void tearTables() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-
-            session.createQuery("delete from Session ").executeUpdate();
-            session.createQuery("delete from User ").executeUpdate();
-
-            session.getTransaction().commit();
-        }
-        sessionService = new SessionService();
-    }
-
-    @AfterAll
-    static void tear() {
-        HibernateSingletonUtil.closeSessionFactory();
-    }
 
     @Test
     public void createSession_sessionWasCreated_validData() {

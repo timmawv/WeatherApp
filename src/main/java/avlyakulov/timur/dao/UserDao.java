@@ -13,7 +13,6 @@ import java.util.List;
 @Slf4j
 public class UserDao extends HibernateDao {
 
-
     public List<User> findAll() {
         return executeNotInTransaction(session -> session.createQuery("from User", User.class).getResultList());
     }
@@ -30,6 +29,6 @@ public class UserDao extends HibernateDao {
     public User getUserByLogin(String login) {
         return executeNotInTransaction(session -> session.createNamedQuery("HQL_FindUserByUsername", User.class)
                 .setParameter("userLogin", login)
-                .getSingleResult());
+                .getSingleResultOrNull());
     }
 }

@@ -1,17 +1,13 @@
-package avlyakulov.timur.service;
+package avlyakulov.timur.service.service;
 
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
+import avlyakulov.timur.IntegrationTestBase;
+import avlyakulov.timur.service.UserService;
 import avlyakulov.timur.util.BCryptUtil;
-import avlyakulov.timur.util.hibernate.DeployConfigurationType;
-import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class UserServiceTest extends IntegrationTestBase {
 
     private static SessionFactory sessionFactory;
 
@@ -30,27 +26,6 @@ public class UserServiceTest {
     private final BCryptUtil bCryptUtil = new BCryptUtil();
 
     private UserService userService = new UserService();
-
-    @BeforeAll
-    static void setUp() {
-        sessionFactory = HibernateSingletonUtil.getSessionFactory(DeployConfigurationType.TEST);
-    }
-
-    @AfterAll
-    static void tear() {
-        HibernateSingletonUtil.closeSessionFactory();
-    }
-
-    @AfterEach
-    void tearTables() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-
-            session.createQuery("delete from User ").executeUpdate();
-
-            session.getTransaction().commit();
-        }
-    }
 
 
     //MethodName_ExpectedBehavior_StateUnderTest

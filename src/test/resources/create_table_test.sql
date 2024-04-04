@@ -19,5 +19,5 @@ CREATE TABLE IF NOT EXISTS Sessions
 (
     id         VARCHAR PRIMARY KEY,
     user_id    INT       NOT NULL REFERENCES Users (id),
-    expires_at TIMESTAMP NOT NULL
+    expires_at TIMESTAMP(9) NOT NULL
 );

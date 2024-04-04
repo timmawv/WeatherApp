@@ -1,17 +1,23 @@
 package avlyakulov.timur.dao;
 
+import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.model.Location;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 
 public class LocationDao extends HibernateDao {
 
     public void create(Location location) {
-        executeInTransaction(session -> session.persist(location));
+        try {
+            executeInTransaction(session -> session.persist(location));
+        } catch (ConstraintViolationException e) {
+            throw new ModelAlreadyExistsException("This location was already saved");
+        }
     }
 
-    public List<Location> findAllByUserId(int userId) {
+    public List<Location> findLocationsByUserId(int userId) {
         return executeNotInTransaction(session -> session.createQuery("from Location where user.id = :userId", Location.class)
                 .setParameter("userId", userId)
                 .getResultList());
