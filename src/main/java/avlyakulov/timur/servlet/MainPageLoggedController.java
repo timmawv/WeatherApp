@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlet;
 
+import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -27,11 +28,15 @@ public class MainPageLoggedController extends HttpServlet {
 
     private final SessionService sessionService = new SessionService();
 
-    private final LocationService locationService = new LocationService();
-
-    private final String htmlPageLogged = "pages/main-page-logged";
+    private LocationService locationService;
 
     private final OpenWeatherService openWeatherService = new OpenWeatherService();
+    private final String htmlPageLogged = "pages/main-page-logged";
+
+    @Override
+    public void init() throws ServletException {
+        locationService = new LocationService(new LocationDao());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -10,7 +10,11 @@ import java.util.List;
 
 public class LocationService {
 
-    private final LocationDao locationDao = new LocationDao();
+    private LocationDao locationDao;
+
+    public LocationService(LocationDao locationDao) {
+        this.locationDao = locationDao;
+    }
 
     public void createLocation(LocationDto locationDto) {
         long numberUserLocations = locationDao.findNumberUserLocations(locationDto.getUserId());

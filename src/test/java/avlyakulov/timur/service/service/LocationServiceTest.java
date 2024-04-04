@@ -10,6 +10,8 @@ import avlyakulov.timur.model.User;
 import avlyakulov.timur.IntegrationTestBase;
 import avlyakulov.timur.service.LocationService;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,9 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LocationServiceTest extends IntegrationTestBase {
 
-    private LocationService locationService = new LocationService();
+    @Mock
+    private LocationDao locationDao;
 
-    private LocationDao locationDao = new LocationDao();
+    @InjectMocks
+    private LocationService locationService;
 
     private UserDao userDao = new UserDao();
 

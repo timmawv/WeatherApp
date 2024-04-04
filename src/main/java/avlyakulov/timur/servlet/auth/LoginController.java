@@ -3,6 +3,7 @@ package avlyakulov.timur.servlet.auth;
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.SessionNotValidException;
+import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
@@ -27,13 +28,20 @@ import java.util.UUID;
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
 
+    private UserService userService;
+
+    private SessionService sessionService;
+
     private final String htmlPageLogin = "auth/login";
 
-    private final UserService userService = new UserService();
-
-    private final SessionService sessionService = new SessionService();
-
     private final String SESSION_EXPIRE_MESSAGE = "Your session was expired. You need to authorize again";
+
+    @Override
+    public void init() throws ServletException {
+        userService = new UserService(new UserDao());
+        sessionService = new SessionService();
+    }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

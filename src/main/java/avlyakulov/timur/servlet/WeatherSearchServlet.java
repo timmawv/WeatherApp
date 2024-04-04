@@ -4,6 +4,7 @@ import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.JsonParseException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
+import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -37,11 +38,16 @@ public class WeatherSearchServlet extends HttpServlet {
 
     private final SessionService sessionService = new SessionService();
 
-    private final LocationService locationService = new LocationService();
+    private LocationService locationService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final String htmlPageWeather = "pages/weather";
+
+    @Override
+    public void init() throws ServletException {
+        locationService = new LocationService(new LocationDao());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
