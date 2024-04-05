@@ -5,6 +5,7 @@ import avlyakulov.timur.custom_exception.JsonParseException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
 import avlyakulov.timur.dao.LocationDao;
+import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -36,17 +37,18 @@ public class WeatherSearchServlet extends HttpServlet {
 
     private final OpenWeatherService openWeatherService = new OpenWeatherService();
 
-    private final SessionService sessionService = new SessionService();
+    private SessionService sessionService;
 
     private LocationService locationService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     private final String htmlPageWeather = "pages/weather";
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void init() throws ServletException {
         locationService = new LocationService(new LocationDao());
+        sessionService = new SessionService(new SessionDao());
     }
 
     @Override

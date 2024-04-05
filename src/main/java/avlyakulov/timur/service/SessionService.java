@@ -13,19 +13,20 @@ import java.util.UUID;
 
 public class SessionService {
 
-    private final SessionDao sessionDao = new SessionDao();
+    private final SessionDao sessionDao;
 
-    private int minutesSessionExist = 30;
+    public SessionService(SessionDao sessionDao) {
+        this.sessionDao = sessionDao;
+    }
 
-    public Session createSession(User user) {
-        Session session = new Session(UUID.randomUUID(), user);
-        session.setExpiresAt(LocalDateTime.now().plus(minutesSessionExist, ChronoUnit.MINUTES));
+    public String createSessionAndGetItsId(User user) {
+        Session session = new Session(UUID.randomUUID().toString(), user);
         sessionDao.create(session);
-        return session;
+        return session.getId();
     }
 
     public Session getUserSessionIfItNotExpired(String sessionId) {
-        Session session = sessionDao.getById(UUID.fromString(sessionId));
+        Session session = sessionDao.getById(sessionId);
         if (session == null) {
             throw new SessionNotValidException("User session was expired or it doesn't exist");
         } else {
@@ -44,7 +45,7 @@ public class SessionService {
     }
 
     public void deleteSessionById(String sessionId) {
-        sessionDao.delete(UUID.fromString(sessionId));
+        sessionDao.delete(sessionId);
     }
 
     public void deleteSessionByUserId(int userId) {
@@ -52,15 +53,11 @@ public class SessionService {
     }
 
     public Boolean isUserSessionValid(String sessionId) {
-        Boolean isSessionValid = sessionDao.isSessionValid(UUID.fromString(sessionId));
+        Boolean isSessionValid = sessionDao.isSessionValid(sessionId);
         if (isSessionValid == null) {
             throw new SessionNotValidException();
         } else {
             return isSessionValid;
         }
-    }
-
-    public void setMinutesSessionExist(int minutesSessionExist) {
-        this.minutesSessionExist = minutesSessionExist;
     }
 }

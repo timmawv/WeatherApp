@@ -1,6 +1,7 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.dao.LocationDao;
+import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -26,7 +27,7 @@ import java.util.List;
 @WebServlet(urlPatterns = "/weather")
 public class MainPageLoggedController extends HttpServlet {
 
-    private final SessionService sessionService = new SessionService();
+    private SessionService sessionService;
 
     private LocationService locationService;
 
@@ -36,6 +37,7 @@ public class MainPageLoggedController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         locationService = new LocationService(new LocationDao());
+        sessionService = new SessionService(new SessionDao());
     }
 
     @Override

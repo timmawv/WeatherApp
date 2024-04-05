@@ -3,8 +3,8 @@ package avlyakulov.timur.servlet.auth;
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.SessionNotValidException;
+import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
-import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.UserService;
@@ -12,10 +12,8 @@ import avlyakulov.timur.util.ContextUtil;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
-import jakarta.persistence.NoResultException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +21,6 @@ import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
@@ -39,7 +36,7 @@ public class LoginController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         userService = new UserService(new UserDao());
-        sessionService = new SessionService();
+        sessionService = new SessionService(new SessionDao());
     }
 
 
@@ -85,8 +82,8 @@ public class LoginController extends HttpServlet {
                 return;
             }
             sessionService.deleteSessionByUserId(user.getId());
-            Session session = sessionService.createSession(user);
-            CookieUtil.createCookie(session.getId().toString(), resp);
+            String sessionId = sessionService.createSessionAndGetItsId(user);
+            CookieUtil.createCookie(sessionId, resp);
             resp.sendRedirect("/WeatherApp-1.0/weather");
         }
     }

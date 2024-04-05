@@ -3,6 +3,7 @@ package avlyakulov.timur.servlet.auth;
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.SessionNotValidException;
+import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
@@ -34,7 +35,7 @@ public class RegisterController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         userService = new UserService(new UserDao());
-        sessionService = new SessionService();
+        sessionService = new SessionService(new SessionDao());
     }
 
     @Override
