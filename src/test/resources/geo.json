@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Poltava",
+    "local_names": {
+      "ku": "Poltava",
+      "cs": "Poltava",
+      "fi": "Pultava",
+      "ko": "폴타바",
+      "eo": "Poltavo",
+      "nl": "Poltava",
+      "uk": "Полтава",
+      "zh": "波尔塔瓦",
+      "hr": "Poltava",
+      "es": "Poltava",
+      "fr": "Poltava",
+      "de": "Poltawa",
+      "it": "Poltava",
+      "pl": "Połtawa",
+      "he": "פולטבה",
+      "et": "Poltava",
+      "hu": "Poltava",
+      "en": "Poltava",
+      "ru": "Полтава",
+      "ja": "ポルタヴァ",
+      "sr": "Полтава"
+    },
+    "lat": 49.5897423,
+    "lon": 34.5507948,
+    "country": "UA",
+    "state": "Poltava Oblast"
+  }
+]

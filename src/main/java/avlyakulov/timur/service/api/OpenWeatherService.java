@@ -3,7 +3,6 @@ package avlyakulov.timur.service.api;
 import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.ServerErrorException;
-import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dto.GeoCityDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -47,7 +46,7 @@ public class OpenWeatherService {
         List<Location> locationList = locationService.getAllLocationByUserId(userDto.getUserId());
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
         try {
-            List<GeoCityDto> cityCoordinateByName = openGeoService.getCityCoordinateByName(cityName);
+            List<GeoCityDto> cityCoordinateByName = openGeoService.getCitiesDtoByName(cityName);
             for (GeoCityDto geoCityDto : cityCoordinateByName) {
                 String urlWeatherFull = concatenateUrlWeather(geoCityDto);
                 String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
@@ -71,9 +70,10 @@ public class OpenWeatherService {
             String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
             WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
             });
-            GeoCityDto cityInformation = new GeoCityDto(location.getName(),
+            GeoCityDto cityInformation = new GeoCityDto(
                     location.getLatitude(), location.getLongitude(),
-                    weatherCityDto.getSolarCycle().getCountry()
+                    weatherCityDto.getSolarCycle().getCountry(),
+                    location.getName()
             );
             weatherCityDto.setCityInformation(cityInformation);
             SetMainWeatherUtil.setMainWeather(weatherCityDto);

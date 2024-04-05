@@ -16,9 +16,6 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeoCityDto {
 
-    @JsonProperty(value = "name")
-    private String cityName;
-
     @JsonProperty(value = "lat")
     private BigDecimal latitude;
 
@@ -30,10 +27,13 @@ public class GeoCityDto {
 
     private String state;
 
-    public GeoCityDto(String cityName, BigDecimal latitude, BigDecimal longitude, String country) {
-        this.cityName = cityName;
+    @JsonProperty(value = "name")
+    private String cityName;
+
+    public GeoCityDto(BigDecimal latitude, BigDecimal longitude, String country, String cityName) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
+        this.cityName = cityName;
     }
 }
