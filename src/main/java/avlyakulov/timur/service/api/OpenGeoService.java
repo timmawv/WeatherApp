@@ -24,7 +24,11 @@ public class OpenGeoService {
 
     private final String appId = "&appid=".concat(System.getProperty("API_WEATHER_KEY"));
 
-    private HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
+    private HttpRequestResponseUtil httpRequestResponseUtil;
+
+    public OpenGeoService(HttpRequestResponseUtil httpRequestResponseUtil) {
+        this.httpRequestResponseUtil = httpRequestResponseUtil;
+    }
 
     public List<GeoCityDto> getCityCoordinateByName(String nameCity) throws URISyntaxException, IOException, InterruptedException {
         ObjectMapper objectMapper = new ObjectMapper();

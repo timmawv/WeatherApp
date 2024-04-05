@@ -29,13 +29,19 @@ public class OpenWeatherService {
 
     private final String appId = "&appid=".concat(System.getProperty("API_WEATHER_KEY"));
 
-    private final OpenGeoService openGeoService = new OpenGeoService();
+    private OpenGeoService openGeoService;
 
-    private final LocationService locationService = new LocationService(new LocationDao());
+    private LocationService locationService;
 
-    private final HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
+    private HttpRequestResponseUtil httpRequestResponseUtil;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public OpenWeatherService(OpenGeoService openGeoService, LocationService locationService, HttpRequestResponseUtil httpRequestResponseUtil) {
+        this.openGeoService = openGeoService;
+        this.locationService = locationService;
+        this.httpRequestResponseUtil = httpRequestResponseUtil;
+    }
 
     public List<WeatherCityDto> getWeatherListFromHttpRequest(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
         List<Location> locationList = locationService.getAllLocationByUserId(userDto.getUserId());

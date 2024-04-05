@@ -9,7 +9,9 @@ import avlyakulov.timur.model.Location;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
+import avlyakulov.timur.service.api.OpenGeoService;
 import avlyakulov.timur.service.api.OpenWeatherService;
+import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
@@ -27,17 +29,21 @@ import java.util.List;
 @WebServlet(urlPatterns = "/weather")
 public class MainPageLoggedController extends HttpServlet {
 
+    private final HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
+
     private SessionService sessionService;
 
     private LocationService locationService;
 
-    private final OpenWeatherService openWeatherService = new OpenWeatherService();
+    private OpenWeatherService openWeatherService;
     private final String htmlPageLogged = "pages/main-page-logged";
 
     @Override
     public void init() throws ServletException {
         locationService = new LocationService(new LocationDao());
         sessionService = new SessionService(new SessionDao());
+        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponseUtil),
+                locationService, httpRequestResponseUtil);
     }
 
     @Override
