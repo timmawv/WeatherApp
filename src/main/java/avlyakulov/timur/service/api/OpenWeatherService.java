@@ -42,7 +42,7 @@ public class OpenWeatherService {
         this.httpRequestResponseUtil = httpRequestResponseUtil;
     }
 
-    public List<WeatherCityDto> getWeatherListFromHttpRequest(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
+    public List<WeatherCityDto> getWeatherListFromCityName(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
         List<Location> locationList = locationService.getAllLocationByUserId(userDto.getUserId());
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
         try {

@@ -1,7 +1,6 @@
 package avlyakulov.timur;
 
 import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -17,6 +16,8 @@ public abstract class JsonLoadTestBase {
 
     private static String geoJson;
 
+    private static String weatherJson;
+
     private static String emptyJson = "[]";
 
     @BeforeAll
@@ -24,6 +25,7 @@ public abstract class JsonLoadTestBase {
         HibernateSingletonUtil.initEnvironments();
         geoJson = fillJsonFile("geo.json");
         geosJson = fillJsonFile("geos.json");
+        weatherJson = fillJsonFile("weather.json");
     }
 
     private static String fillJsonFile(String fileNameJson) {
@@ -52,5 +54,9 @@ public abstract class JsonLoadTestBase {
 
     public String getEmptyJson() {
         return emptyJson;
+    }
+
+    public String getWeatherJson() {
+        return weatherJson;
     }
 }

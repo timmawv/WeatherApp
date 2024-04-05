@@ -31,7 +31,6 @@ import org.thymeleaf.context.Context;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/weather/search")
@@ -67,7 +66,7 @@ public class WeatherSearchServlet extends HttpServlet {
         String cityName = req.getParameter("city");
         if (LoginRegistrationValidation.isCityNameValid(cityName, context)) {
             try {
-                List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromHttpRequest(cityName, userLogin);
+                List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromCityName(cityName, userLogin);
                 context.setVariable("weatherList", weatherList);
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
             } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
