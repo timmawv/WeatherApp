@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 public class SessionDao extends HibernateDao {
@@ -24,11 +23,11 @@ public class SessionDao extends HibernateDao {
         }
     }
 
-    public Session getById(UUID sessionId) {
+    public Session getById(String sessionId) {
         return executeNotInTransaction(session -> session.get(Session.class, sessionId));
     }
 
-    public void delete(UUID sessionId) {
+    public void delete(String sessionId) {
         executeInTransaction(session -> session.createNamedQuery("HQL_DeleteSessionById")
                 .setParameter("sessionId", sessionId)
                 .executeUpdate());
@@ -40,7 +39,7 @@ public class SessionDao extends HibernateDao {
                 .executeUpdate());
     }
 
-    public Boolean isSessionValid(UUID sessionId) {
+    public Boolean isSessionValid(String sessionId) {
         return executeNotInTransaction(session -> session.createNamedQuery("HQL_IsSessionValid", Boolean.class)
                 .setParameter("sessionId", sessionId)
                 .getSingleResultOrNull());

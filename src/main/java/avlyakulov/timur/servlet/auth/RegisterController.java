@@ -3,6 +3,8 @@ package avlyakulov.timur.servlet.auth;
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.SessionNotValidException;
+import avlyakulov.timur.dao.SessionDao;
+import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.UserService;
@@ -24,10 +26,17 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/register")
 public class RegisterController extends HttpServlet {
 
-    private final UserService userService = new UserService();
+    private UserService userService;
 
-    private final SessionService sessionService = new SessionService();
+    private SessionService sessionService;
+
     private final String htmlPageRegister = "auth/register";
+
+    @Override
+    public void init() throws ServletException {
+        userService = new UserService(new UserDao());
+        sessionService = new SessionService(new SessionDao());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

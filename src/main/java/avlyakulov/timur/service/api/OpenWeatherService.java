@@ -3,6 +3,7 @@ package avlyakulov.timur.service.api;
 import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.ServerErrorException;
+import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dto.GeoCityDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -30,7 +31,7 @@ public class OpenWeatherService {
 
     private final OpenGeoService openGeoService = new OpenGeoService();
 
-    private final LocationService locationService = new LocationService();
+    private final LocationService locationService = new LocationService(new LocationDao());
 
     private final HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
 

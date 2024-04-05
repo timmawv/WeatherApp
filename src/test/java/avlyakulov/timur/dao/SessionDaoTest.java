@@ -19,7 +19,7 @@ public class SessionDaoTest extends IntegrationTestBase {
 
     private static User TIMUR;
 
-    private UUID sessionId = UUID.fromString("4f49f711-cc3f-459e-a9f3-8a6e1656befc");
+    private String sessionId = "4f49f711-cc3f-459e-a9f3-8a6e1656befc";
 
     private static Session sessionUser;
 
@@ -34,7 +34,6 @@ public class SessionDaoTest extends IntegrationTestBase {
         userDao.create(TIMUR);
         sessionDao = new SessionDao();
         sessionUser = new Session(sessionId, TIMUR);
-        sessionUser.setExpiresAt(LocalDateTime.now().plus(30, ChronoUnit.MINUTES));
     }
 
     @Test
@@ -42,9 +41,13 @@ public class SessionDaoTest extends IntegrationTestBase {
         sessionDao.create(sessionUser);
 
         List<Session> sessions = sessionDao.findAll();
+
         assertThat(sessions).hasSize(1);
+
         Session maybeSessionUser = sessions.get(0);
+
         assertThat(maybeSessionUser.getId()).isEqualTo(sessionUser.getId());
+        assertThat(maybeSessionUser.getExpiresAt().isAfter(LocalDateTime.now())).isTrue();
         assertThat(maybeSessionUser.getExpiresAt()).isEqualTo(sessionUser.getExpiresAt());
         assertThat(maybeSessionUser.getUser()).isEqualTo(sessionUser.getUser());
     }
@@ -67,7 +70,7 @@ public class SessionDaoTest extends IntegrationTestBase {
     void getSessionById_sessionExistInDB() {
         sessionDao.create(sessionUser);
 
-        Session session = sessionDao.getById(sessionId);
+        Session session = sessionDao.getById(sessionId.toString());
 
         assertThat(session.getId()).isEqualTo(sessionUser.getId());
         assertThat(session.getExpiresAt()).isEqualTo(sessionUser.getExpiresAt());
@@ -76,7 +79,7 @@ public class SessionDaoTest extends IntegrationTestBase {
 
     @Test
     void getSessionById_getNull_sessionNotExistInDB() {
-        Session session = sessionDao.getById(sessionId);
+        Session session = sessionDao.getById(sessionId.toString());
         assertThat(session).isNull();
     }
 
@@ -84,7 +87,7 @@ public class SessionDaoTest extends IntegrationTestBase {
     void deleteSessionById_sessionExistsInDB() {
         sessionDao.create(sessionUser);
 
-        sessionDao.delete(sessionUser.getId());
+        sessionDao.delete(sessionUser.getId().toString());
 
         List<Session> sessions = sessionDao.findAll();
         assertThat(sessions).hasSize(0);
@@ -104,24 +107,24 @@ public class SessionDaoTest extends IntegrationTestBase {
     void isUserSessionValid_returnTrue_sessionValidAndExistsInDB() {
         sessionDao.create(sessionUser);
 
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId());
+        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
 
         assertThat(isSessionValid).isTrue();
     }
 
     @Test
     void isUserSessionValid_returnFalse_sessionIsExpiredAndExistsInDB() {
-        sessionUser.setExpiresAt(LocalDateTime.now().minusDays(100));
+        sessionUser.setMinutesSessionExist(0);
         sessionDao.create(sessionUser);
 
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId());
+        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
 
         assertThat(isSessionValid).isFalse();
     }
 
     @Test
     void isUserSessionValid_returnNull_sessionNotExistInDB() {
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId());
+        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
 
         assertThat(isSessionValid).isNull();
     }

@@ -2,6 +2,7 @@ package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.SessionNotValidException;
+import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
@@ -18,7 +19,8 @@ import java.io.IOException;
 public class MainPageController extends HttpServlet {
     private final String htmlPageMain = "pages/main-page";
 
-    private final SessionService sessionService = new SessionService();
+    private final SessionService sessionService = new SessionService(new SessionDao());
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

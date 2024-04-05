@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlet.auth;
 
+import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.util.CookieUtil;
 import jakarta.servlet.ServletException;
@@ -13,7 +14,7 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/logout")
 public class LogoutController extends HttpServlet {
 
-    private final SessionService sessionService = new SessionService();
+    private final SessionService sessionService = new SessionService(new SessionDao());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
