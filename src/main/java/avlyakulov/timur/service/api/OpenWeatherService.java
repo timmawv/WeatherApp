@@ -42,7 +42,26 @@ public class OpenWeatherService {
         this.httpRequestResponseUtil = httpRequestResponseUtil;
     }
 
-    public List<WeatherCityDto> getWeatherListFromCityName(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
+    public List<WeatherCityDto> getWeatherListFromCityNameNoLoggedUser(String cityName) throws URISyntaxException, IOException, InterruptedException {
+        List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
+        try {
+            List<GeoCityDto> cityCoordinateByName = openGeoService.getCitiesDtoByName(cityName);
+            for (GeoCityDto geoCityDto : cityCoordinateByName) {
+                String urlWeatherFull = concatenateUrlWeather(geoCityDto);
+                String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
+                WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
+                });
+                weatherCityDto.setCityInformation(geoCityDto);
+                SetMainWeatherUtil.setMainWeather(weatherCityDto);
+                weatherCityDtoList.add(weatherCityDto);
+            }
+            return weatherCityDtoList;
+        } catch (ModelNotFoundException | ServerErrorException e) {
+            throw new GlobalApiException(e.getMessage());
+        }
+    }
+
+    public List<WeatherCityDto> getWeatherListFromCityNameLoggedUser(String cityName, UserDto userDto) throws URISyntaxException, IOException, InterruptedException {
         List<Location> locationList = locationService.getAllLocationByUserId(userDto.getUserId());
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
         try {

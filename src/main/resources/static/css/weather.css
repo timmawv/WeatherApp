@@ -23,6 +23,14 @@
 
 }
 
+.sign_save {
+    text-align: center;
+    background-color: lightblue;
+    border-radius: 25px;
+    display: inline-block;
+    padding: 20px 80px;
+}
+
 .img_city_info {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

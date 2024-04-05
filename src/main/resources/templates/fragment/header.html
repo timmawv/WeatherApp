@@ -9,7 +9,7 @@
         </div>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="GET"
-              action="/WeatherApp-1.0/weather/search">
+              th:action="${login == null ? '/WeatherApp-1.0/main-page/search' : '/WeatherApp-1.0/weather/search'}">
 
             <input type="search" name="city" class="form-control" placeholder="Search weather..." aria-label="Search">
             <div style="color: red;margin-bottom: -30px" th:if="${error_city_name}" th:text="${error_city_name}"></div>

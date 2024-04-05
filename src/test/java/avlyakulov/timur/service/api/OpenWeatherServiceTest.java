@@ -55,7 +55,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
         doReturn(getWeatherJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
-        List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityName(POLTAVA.getCityName(), TIMUR);
+        List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
 
         assertThat(weatherListFromCityName).hasSize(1);
 
@@ -98,7 +98,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
         doReturn(getWeatherJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
-        List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityName(POLTAVA.getCityName(), TIMUR);
+        List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
 
         assertThat(weatherListFromCityName).hasSize(1);
 
@@ -111,7 +111,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getZeroWeather_cityNotFound() throws URISyntaxException, IOException, InterruptedException {
         doReturn(emptyLocationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(anyString());
 
-        List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityName("Dummy", TIMUR);
+        List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser("Dummy", TIMUR);
 
         assertThat(weatherListFromCityName).isEmpty();
     }

@@ -2,7 +2,7 @@
     <div class="forecast_wrapper">
         <div class="forecast" th:each="weather : ${weatherList}">
             <h1 class="location_sign" th:text="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}"></h1>
-            <form id="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
+            <form th:if="${login != null}" id="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
                 <input type="hidden" id="latitudeId" name="latitude" th:value="${weather.getCityInformation().getLatitude()}">
                 <input type="hidden" id="longitudeId" name="longitude" th:value="${weather.getCityInformation().getLongitude()}">
                 <input type="hidden" id="cityNameId" name="cityName" th:value="${weather.getCityInformation().getCityName()}">
