@@ -7,6 +7,7 @@ src/main/java/avlyakulov/timur/other
 mvnw
 mvnw.cmd
 .mvn
+commands.txt
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -25,14 +25,23 @@ public class HibernateSingletonUtil {
         String apiKey = System.getenv("API_WEATHER_KEY");
 
         if (isAnyParameterNull(url, username, password, apiKey)) {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            Properties properties = new Properties();
-            try {
-                properties.load(classLoader.getResourceAsStream("credentials.env"));
-            } catch (IOException e) {
-                log.error("Credentials.env isn't in resources");
-            }
-            properties.forEach((key, value) -> System.setProperty(key.toString(), value.toString()));
+            //good way to initialize env from file
+            /*ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream resourceFile = classLoader.getResourceAsStream("credentials.env");
+            if (resourceFile != null) {
+                Properties properties = new Properties();
+                try {
+                    properties.load(resourceFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                properties.forEach((key, value) -> System.setProperty(key.toString(), value.toString()));
+            } else {
+                log.error("credentials.env isn't in resources");
+                throw new RuntimeException("You don't have env file to launch an app");
+            }*/
+            log.error("The environment variables weren't initialized");
+            throw new RuntimeException("You didn't initialized the environment variables");
         } else {
             System.setProperty("DB_URL", url);
             System.setProperty("DB_USERNAME", username);
