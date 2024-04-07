@@ -27,7 +27,7 @@ public class UserService {
         User user = userDao.getUserByLogin(login);
         if (user == null) {
             log.info("Invalid login");
-            throw new ModelNotFoundException("Login or password isn't correct");
+            throw new UserCredentialsException("Login or password isn't correct");
         } else {
             if (BCryptUtil.isPasswordCorrect(password, user.getPassword())) {
                 return user;

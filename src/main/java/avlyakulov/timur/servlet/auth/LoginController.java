@@ -3,6 +3,7 @@ package avlyakulov.timur.servlet.auth;
 import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.SessionNotValidException;
+import avlyakulov.timur.custom_exception.UserCredentialsException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
@@ -76,7 +77,7 @@ public class LoginController extends HttpServlet {
         } else {
             try {
                 user = userService.logUserByCredentials(login, password);
-            } catch (ModelNotFoundException e) {
+            } catch (UserCredentialsException e) {
                 ContextUtil.setErrorToContext(context, e.getMessage());
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
                 return;
