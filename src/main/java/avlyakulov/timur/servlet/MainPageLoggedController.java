@@ -36,6 +36,7 @@ public class MainPageLoggedController extends HttpServlet {
     private LocationService locationService;
 
     private OpenWeatherService openWeatherService;
+
     private final String htmlPageLogged = "pages/main-page-logged";
 
     @Override

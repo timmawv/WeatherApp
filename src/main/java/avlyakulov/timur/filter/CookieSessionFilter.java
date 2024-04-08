@@ -23,13 +23,13 @@ public class CookieSessionFilter implements Filter {
         try {
             filterChain.doFilter(req, resp);
         } catch (CookieNotExistException e) {
-            log.warn("Unauthorized request");
+            log.warn("User doesn't have active cookie");
             Cookie cookie = new Cookie("unauthorized_request", "");
             cookie.setMaxAge(1);
             resp.addCookie(cookie);
             resp.sendRedirect("/WeatherApp-1.0/login");
         } catch (SessionNotValidException e) {
-            log.warn("Unauthorized request");
+            log.warn("User's session was expired");
             CookieUtil.deleteSessionIdCookie(resp);
             Cookie cookie = new Cookie("unauthorized_request", "");
             cookie.setMaxAge(1);

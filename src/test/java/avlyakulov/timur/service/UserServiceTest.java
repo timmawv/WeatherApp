@@ -58,10 +58,10 @@ public class UserServiceTest {
     void logUserByCredentials_userWasNotLogged_invalidLogin() {
         doReturn(null).when(userDao).getUserByLogin(INVALID_USER.getLogin());
 
-        ModelNotFoundException modelNotFoundException = assertThrows(ModelNotFoundException.class, () -> userService.logUserByCredentials(INVALID_USER.getLogin(), INVALID_USER.getPassword()));
+        UserCredentialsException userCredentialsException = assertThrows(UserCredentialsException.class, () -> userService.logUserByCredentials(INVALID_USER.getLogin(), INVALID_USER.getPassword()));
 
         verify(userDao, times(1)).getUserByLogin(INVALID_USER.getLogin());
-        assertThat(modelNotFoundException.getMessage()).isEqualTo("Login or password isn't correct");
+        assertThat(userCredentialsException.getMessage()).isEqualTo("Login or password isn't correct");
     }
 
     @Test

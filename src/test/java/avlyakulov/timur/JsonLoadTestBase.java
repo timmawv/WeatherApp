@@ -4,43 +4,152 @@ import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 @Slf4j
 public abstract class JsonLoadTestBase {
 
-    protected static String geosJson;
-
-    protected static String geoJson;
-
-    protected static String weatherJson;
-
     protected static String emptyJson = "[]";
+
+    protected static String geoJson = """
+            [
+              {
+                "name": "Poltava",
+                "local_names": {
+                  "ku": "Poltava",
+                  "cs": "Poltava",
+                  "fi": "Pultava",
+                  "ko": "폴타바",
+                  "eo": "Poltavo",
+                  "nl": "Poltava",
+                  "uk": "Полтава",
+                  "zh": "波尔塔瓦",
+                  "hr": "Poltava",
+                  "es": "Poltava",
+                  "fr": "Poltava",
+                  "de": "Poltawa",
+                  "it": "Poltava",
+                  "pl": "Połtawa",
+                  "he": "פולטבה",
+                  "et": "Poltava",
+                  "hu": "Poltava",
+                  "en": "Poltava",
+                  "ru": "Полтава",
+                  "ja": "ポルタヴァ",
+                  "sr": "Полтава"
+                },
+                "lat": 49.5897423,
+                "lon": 34.5507948,
+                "country": "UA",
+                "state": "Poltava Oblast"
+              }
+            ]
+            """;
+
+    protected static String geosJson = """
+            [
+               {
+                 "name": "Poltava",
+                 "local_names": {
+                   "ku": "Poltava",
+                   "cs": "Poltava",
+                   "fi": "Pultava",
+                   "ko": "폴타바",
+                   "eo": "Poltavo",
+                   "nl": "Poltava",
+                   "uk": "Полтава",
+                   "zh": "波尔塔瓦",
+                   "hr": "Poltava",
+                   "es": "Poltava",
+                   "fr": "Poltava",
+                   "de": "Poltawa",
+                   "it": "Poltava",
+                   "pl": "Połtawa",
+                   "he": "פולטבה",
+                   "et": "Poltava",
+                   "hu": "Poltava",
+                   "en": "Poltava",
+                   "ru": "Полтава",
+                   "ja": "ポルタヴァ",
+                   "sr": "Полтава"
+                 },
+                 "lat": 49.5897423,
+                 "lon": 34.5507948,
+                 "country": "UA",
+                 "state": "Poltava Oblast"
+               },
+               {
+                 "name": "Poltava",
+                 "local_names": {
+                   "ru": "Полтава",
+                   "uk": "Полтава",
+                   "en": "Poltava"
+                 },
+                 "lat": 49.5590361,
+                 "lon": 37.2511612,
+                 "country": "UA",
+                 "state": "Kharkiv Oblast"
+               },
+               {
+                 "name": "Poltava",
+                 "local_names": {
+                   "ru": "Полтава",
+                   "uk": "Полтава",
+                   "en": "Poltava"
+                 },
+                 "lat": 49.6316829,
+                 "lon": 38.1134204,
+                 "country": "UA",
+                 "state": "Luhansk Oblast"
+               }
+             ]
+            """;
+
+    protected static String weatherJson = """
+            {
+              "coord" : {
+                "lon" : 34.5407,
+                "lat" : 49.5937
+              },
+              "weather" : [ {
+                "id" : 802,
+                "main" : "Clouds",
+                "description" : "scattered clouds",
+                "icon" : "03d"
+              } ],
+              "base" : "stations",
+              "main" : {
+                "temp" : 10.53,
+                "feels_like" : 8.74,
+                "temp_min" : 10.53,
+                "temp_max" : 10.53,
+                "pressure" : 1020,
+                "humidity" : 42,
+                "sea_level" : 1020,
+                "grnd_level" : 1005
+              },
+              "visibility" : 10000,
+              "wind" : {
+                "speed" : 2.94,
+                "deg" : 341,
+                "gust" : 3.15
+              },
+              "clouds" : {
+                "all" : 28
+              },
+              "dt" : 1712310500,
+              "sys" : {
+                "country" : "UA",
+                "sunrise" : 1712286583,
+                "sunset" : 1712333929
+              },
+              "timezone" : 10800,
+              "id" : 696643,
+              "name" : "Poltava",
+              "cod" : 200
+            }
+            """;
 
     @BeforeAll
     static void setUp() {
         HibernateSingletonUtil.initEnvironments();
-        geoJson = fillJsonFile("geo.json");
-        geosJson = fillJsonFile("geos.json");
-        weatherJson = fillJsonFile("weather.json");
-    }
-
-    private static String fillJsonFile(String fileNameJson) {
-        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileNameJson);
-        assert resourceAsStream != null;
-        String fileJson = "";
-        String line;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream))) {
-            while ((line = reader.readLine()) != null) {
-                fileJson = fileJson.concat(line);
-            }
-        } catch (IOException e) {
-            log.error("File wasn't found");
-            throw new RuntimeException();
-        }
-        return fileJson;
     }
 }

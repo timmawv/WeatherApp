@@ -13,6 +13,7 @@ import avlyakulov.timur.service.api.OpenWeatherService;
 import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
+import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -52,21 +53,8 @@ public class MainPageWeatherSearchController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
         String cityName = req.getParameter("city");
-        try {
-            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
-                resp.sendRedirect("/WeatherApp-1.0/weather");
-            } else {
-                CookieUtil.deleteSessionIdCookie(resp);
-                printPage(cityName, context, resp);
-            }
-        } catch (SessionNotValidException e) {
-            CookieUtil.deleteSessionIdCookie(resp);
-            printPage(cityName, context, resp);
-        } catch (CookieNotExistException e) {
-            printPage(cityName, context, resp);
-        }
-
+        UserSessionCheck.validateUserSession(sessionService, resp, req.getCookies());
+        printPage(cityName, context, resp);
     }
 
     private void printPage(String cityName, Context context, HttpServletResponse resp) throws IOException {

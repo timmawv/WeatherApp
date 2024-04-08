@@ -16,8 +16,8 @@ public class HibernateDao {
             session.beginTransaction();
 
             operation.accept(session);
-
             session.flush();
+
             session.getTransaction().commit();
         }
     }

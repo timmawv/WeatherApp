@@ -12,6 +12,7 @@ import avlyakulov.timur.service.UserService;
 import avlyakulov.timur.util.ContextUtil;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
+import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -49,20 +50,8 @@ public class LoginController extends HttpServlet {
             context.setVariable("error_field", SESSION_EXPIRE_MESSAGE);
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         } else {
-            try {
-                String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-                if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
-                    resp.sendRedirect("/WeatherApp-1.0/weather");
-                } else {
-                    CookieUtil.deleteSessionIdCookie(resp);
-                    ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
-                }
-            } catch (SessionNotValidException e) {
-                CookieUtil.deleteSessionIdCookie(resp);
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
-            } catch (CookieNotExistException e) {
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
-            }
+            UserSessionCheck.validateUserSession(sessionService, resp, req.getCookies());
+            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         }
     }
 
