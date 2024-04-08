@@ -8,7 +8,6 @@ import avlyakulov.timur.model.Session;
 import avlyakulov.timur.model.User;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public class SessionService {
@@ -45,7 +44,7 @@ public class SessionService {
     }
 
     public void deleteSessionById(String sessionId) {
-        sessionDao.delete(sessionId);
+        sessionDao.deleteSessionById(sessionId);
     }
 
     public void deleteSessionByUserId(int userId) {

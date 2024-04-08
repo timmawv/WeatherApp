@@ -18,9 +18,13 @@ CREATE TABLE IF NOT EXISTS Locations
 CREATE TABLE IF NOT EXISTS Sessions
 (
     id         VARCHAR,
-    user_id    INT       NOT NULL REFERENCES Users (id),
+    user_id    INT          NOT NULL REFERENCES Users (id),
     expires_at timestamp(9) NOT NULL
 );
+
+CREATE INDEX idx_user_login ON Users (login);
+CREATE INDEX idx_user_locations ON Locations (latitude, longitude, user_id);
+CREATE INDEX idx_user_session ON Sessions (expires_at);
 
 INSERT INTO Users(login, password)
 VALUES ('timur', '$2a$10$M55sGHCwyjyd6AuGcp0HKuu.LOjyA9kAIaPGIXy7mUQw.ByskwCjC'),

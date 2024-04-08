@@ -7,14 +7,10 @@ import lombok.*;
 @Table(name = "users")
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@NamedQueries({
-        @NamedQuery(name = "HQL_FindUserByUsername",
-                query = "from User where login = :userLogin")
-})
 public class User {
 
     @Id

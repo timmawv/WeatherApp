@@ -15,16 +15,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-@NamedQueries({
-        @NamedQuery(name = "HQL_DeleteSessionById",
-                query = "delete from Session where id = :sessionId"),
-        @NamedQuery(name = "HQL_GetUserByHisSession",
-                query = "select user from Session where id = :sessionId"),
-        @NamedQuery(name = "HQL_DeleteSessionByUserId",
-                query = "delete from Session where user.id = :userId"),
-        @NamedQuery(name = "HQL_IsSessionValid",
-                query = "select (now() < expiresAt) as is_session_valid from Session where id = :sessionId")
-})
 public class Session {
 
     @Transient

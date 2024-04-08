@@ -27,20 +27,20 @@ public class SessionDao extends HibernateDao {
         return executeNotInTransaction(session -> session.get(Session.class, sessionId));
     }
 
-    public void delete(String sessionId) {
-        executeInTransaction(session -> session.createNamedQuery("HQL_DeleteSessionById")
+    public void deleteSessionById(String sessionId) {
+        executeInTransaction(session -> session.createQuery("delete from Session where id = :sessionId")
                 .setParameter("sessionId", sessionId)
                 .executeUpdate());
     }
 
     public void deleteSessionByUserId(int userId) {
-        executeInTransaction(session -> session.createNamedQuery("HQL_DeleteSessionByUserId")
+        executeInTransaction(session -> session.createQuery("delete from Session where user.id = :userId")
                 .setParameter("userId", userId)
                 .executeUpdate());
     }
 
     public Boolean isSessionValid(String sessionId) {
-        return executeNotInTransaction(session -> session.createNamedQuery("HQL_IsSessionValid", Boolean.class)
+        return executeNotInTransaction(session -> session.createQuery("select (now() < expiresAt) as is_session_valid from Session where id = :sessionId", Boolean.class)
                 .setParameter("sessionId", sessionId)
                 .getSingleResultOrNull());
     }

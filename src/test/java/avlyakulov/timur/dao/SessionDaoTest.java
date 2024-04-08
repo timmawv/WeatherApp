@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -87,7 +86,7 @@ public class SessionDaoTest extends IntegrationTestBase {
     void deleteSessionById_sessionExistsInDB() {
         sessionDao.create(sessionUser);
 
-        sessionDao.delete(sessionUser.getId().toString());
+        sessionDao.deleteSessionById(sessionUser.getId().toString());
 
         List<Session> sessions = sessionDao.findAll();
         assertThat(sessions).hasSize(0);

@@ -18,7 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LocationDaoTest extends IntegrationTestBase {
     private static User TIMUR;
-    private static Location KHARKIV;
+
+    private static User DIMA;
+    private static Location KHARKIV_TIMUR;
+
+    private static Location KHARKIV_DIMA;
 
     private UserDao userDao;
 
@@ -27,29 +31,31 @@ class LocationDaoTest extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         TIMUR = new User("timur", "123");
+        DIMA = new User("dima", "123");
         userDao = new UserDao();
-        userDao.create(TIMUR);
+        userDao.create(TIMUR, DIMA);
         locationDao = new LocationDao();
-        KHARKIV = new Location("Kharkiv", new BigDecimal("50"), new BigDecimal("36"), TIMUR);
+        KHARKIV_TIMUR = new Location("Kharkiv", new BigDecimal("50"), new BigDecimal("36"), TIMUR);
+        KHARKIV_DIMA = new Location("Kharkiv", new BigDecimal("50"), new BigDecimal("36"), DIMA);
     }
 
     @Test
     void createLocation_locationCreated_LocationNotExistInDB() {
-        locationDao.create(KHARKIV);
+        locationDao.create(KHARKIV_TIMUR);
 
         List<Location> locations = locationDao.findLocationsByUserId(TIMUR.getId());
         assertThat(locations).hasSize(1);
 
         Location locationDB = locations.get(0);
 
-        assertThat(locationDB.getName()).isEqualTo(KHARKIV.getName());
-        assertThat(locationDB.getLatitude()).isEqualTo(KHARKIV.getLatitude());
-        assertThat(locationDB.getLongitude()).isEqualTo(KHARKIV.getLongitude());
+        assertThat(locationDB.getName()).isEqualTo(KHARKIV_TIMUR.getName());
+        assertThat(locationDB.getLatitude()).isEqualTo(KHARKIV_TIMUR.getLatitude());
+        assertThat(locationDB.getLongitude()).isEqualTo(KHARKIV_TIMUR.getLongitude());
     }
 
     @Test
     void createLocation_throwsException_locationAlreadyExistInDB() {
-        locationDao.create(KHARKIV);
+        locationDao.create(KHARKIV_TIMUR);
         Location testLocation = new Location("Kharkiv", new BigDecimal("50"), new BigDecimal("36"), TIMUR);
 
         ModelAlreadyExistsException modelAlreadyExistsException = assertThrows(ModelAlreadyExistsException.class, () -> locationDao.create(testLocation));
@@ -61,7 +67,7 @@ class LocationDaoTest extends IntegrationTestBase {
 
     @Test
     void findNumberUserLocation_findOne_createdOneLocation() {
-        locationDao.create(KHARKIV);
+        locationDao.create(KHARKIV_TIMUR);
 
         Long numberUserLocations = locationDao.findNumberUserLocations(TIMUR.getId());
 
@@ -77,9 +83,9 @@ class LocationDaoTest extends IntegrationTestBase {
 
     @Test
     void deleteLocation_deleteOneLocation() {
-        locationDao.create(KHARKIV);
+        locationDao.create(KHARKIV_TIMUR);
 
-        LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV);
+        LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV_TIMUR);
         locationDao.deleteLocation(locationDto);
 
         List<Location> locations = locationDao.findLocationsByUserId(TIMUR.getId());
@@ -87,8 +93,24 @@ class LocationDaoTest extends IntegrationTestBase {
     }
 
     @Test
+    void deleteLocation_deleteOnlyUserLocation() {
+        locationDao.create(KHARKIV_TIMUR);
+        locationDao.create(KHARKIV_DIMA);
+
+
+        LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV_TIMUR);
+        locationDao.deleteLocation(locationDto);
+
+        List<Location> allLocations = locationDao.findAll();
+        assertThat(allLocations).hasSize(1);
+
+        List<Location> locations = locationDao.findLocationsByUserId(TIMUR.getId());
+        assertThat(locations).hasSize(0);
+    }
+
+    @Test
     void deleteLocation_deleteZeroLocation() {
-        LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV);
+        LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV_TIMUR);
         locationDao.deleteLocation(locationDto);
 
         List<Location> locations = locationDao.findLocationsByUserId(TIMUR.getId());

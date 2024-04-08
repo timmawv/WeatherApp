@@ -17,17 +17,19 @@ public class UserDao extends HibernateDao {
         return executeNotInTransaction(session -> session.createQuery("from User", User.class).getResultList());
     }
 
-    public void create(User user) {
-        try {
-            executeInTransaction(session -> session.persist(user));
-        } catch (ConstraintViolationException e) {
-            log.error("User with such login name {} already exists", user.getLogin());
-            throw new ModelAlreadyExistsException("User with such login name already exists");
+    public void create(User... users) {
+        for (User user : users) {
+            try {
+                executeInTransaction(session -> session.persist(user));
+            } catch (ConstraintViolationException e) {
+                log.error("User with such login name {} already exists", user.getLogin());
+                throw new ModelAlreadyExistsException("User with such login name already exists");
+            }
         }
     }
 
     public User getUserByLogin(String login) {
-        return executeNotInTransaction(session -> session.createNamedQuery("HQL_FindUserByUsername", User.class)
+        return executeNotInTransaction(session -> session.createQuery("from User where login = :userLogin", User.class)
                 .setParameter("userLogin", login)
                 .getSingleResultOrNull());
     }

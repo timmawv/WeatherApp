@@ -9,6 +9,10 @@ import java.util.List;
 
 public class LocationDao extends HibernateDao {
 
+    public List<Location> findAll() {
+        return executeNotInTransaction(session -> session.createQuery("from Location", Location.class).getResultList());
+    }
+
     public void create(Location location) {
         try {
             executeInTransaction(session -> session.persist(location));
@@ -30,9 +34,10 @@ public class LocationDao extends HibernateDao {
     }
 
     public void deleteLocation(LocationDto locationDto) {
-        executeInTransaction(session -> session.createQuery("delete from Location where latitude = :latitude and longitude = :longitude")
+        executeInTransaction(session -> session.createQuery("delete from Location where latitude = :latitude and longitude = :longitude and user.id = :userId")
                 .setParameter("latitude", locationDto.getLatitude())
                 .setParameter("longitude", locationDto.getLongitude())
+                .setParameter("userId", locationDto.getUserId())
                 .executeUpdate());
     }
 }
