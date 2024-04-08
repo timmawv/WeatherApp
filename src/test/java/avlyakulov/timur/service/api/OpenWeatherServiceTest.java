@@ -53,7 +53,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getOneWeather() throws URISyntaxException, IOException, InterruptedException {
         doReturn(userNoLocations).when(locationService).getAllLocationByUserId(TIMUR.getUserId());
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
-        doReturn(getWeatherJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(weatherJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
 
@@ -96,7 +96,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getOneWeather_userHasSameLocation() throws URISyntaxException, IOException, InterruptedException {
         doReturn(userHasOneLocation).when(locationService).getAllLocationByUserId(TIMUR.getUserId());
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
-        doReturn(getWeatherJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(weatherJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
 
@@ -118,7 +118,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
 
     @Test
     void getWeatherByUserLocations_userHasOneLocation() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(getWeatherJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(weatherJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherByUserLocations = openWeatherService.getWeatherByUserLocations(userHasOneLocation);
 

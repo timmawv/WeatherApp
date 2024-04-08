@@ -33,7 +33,7 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Test
     void getCitiesDtoByName_locationExists() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(getGeoJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(geoJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
         List<GeoCityDto> cities = openGeoService.getCitiesDtoByName("Poltava");
 
@@ -50,7 +50,7 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Test
     void getCitiesDtoByName_locationsExist() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(getGeosJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(geosJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
         List<GeoCityDto> cities = openGeoService.getCitiesDtoByName("Poltava");
 
@@ -59,7 +59,7 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Test
     void getCitiesDtoByName_locationsNotExist() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(getEmptyJson()).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(emptyJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
 
         List<GeoCityDto> cities = openGeoService.getCitiesDtoByName("Dummy");
 

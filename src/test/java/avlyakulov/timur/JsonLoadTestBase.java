@@ -12,13 +12,13 @@ import java.io.InputStreamReader;
 @Slf4j
 public abstract class JsonLoadTestBase {
 
-    private static String geosJson;
+    protected static String geosJson;
 
-    private static String geoJson;
+    protected static String geoJson;
 
-    private static String weatherJson;
+    protected static String weatherJson;
 
-    private static String emptyJson = "[]";
+    protected static String emptyJson = "[]";
 
     @BeforeAll
     static void setUp() {
@@ -42,21 +42,5 @@ public abstract class JsonLoadTestBase {
             throw new RuntimeException();
         }
         return fileJson;
-    }
-
-    public String getGeosJson() {
-        return geosJson;
-    }
-
-    public String getGeoJson() {
-        return geoJson;
-    }
-
-    public String getEmptyJson() {
-        return emptyJson;
-    }
-
-    public String getWeatherJson() {
-        return weatherJson;
     }
 }

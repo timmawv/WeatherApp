@@ -1,8 +1,6 @@
 package avlyakulov.timur.util;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
-import avlyakulov.timur.model.User;
-import avlyakulov.timur.service.SessionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
