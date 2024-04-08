@@ -7,11 +7,9 @@ services:
       - weather_volume:/var/lib/postgresql/data
       - ./create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
     environment:
-      POSTGRES_DB: weather_db
-      PGUSER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${DB_NAME}
+      PGUSER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready", "-U", "docker_app" ]
       interval: 5s
@@ -20,15 +18,10 @@ services:
 
   weather:
     image: weather-app
-    #    env_file:
-    #      - credentials.env
-    environment:
-      DB_URL: jdbc:postgresql://postgres_db:5432/weather_db
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      API_WEATHER_KEY: ${API_WEATHER_KEY}
+    env_file:
+      - credentials.env
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       postgres_db:
         condition: service_healthy
