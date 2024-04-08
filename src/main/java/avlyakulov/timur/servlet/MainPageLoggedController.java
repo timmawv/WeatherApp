@@ -68,7 +68,10 @@ public class MainPageLoggedController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String latitude = req.getParameter("latitude");
         String longitude = req.getParameter("longitude");
-        LocationDto location = new LocationDto(new BigDecimal(latitude), new BigDecimal(longitude));
+        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+        Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
+        UserDto userDto = sessionService.getUserDtoByHisSession(userSession);
+        LocationDto location = new LocationDto(new BigDecimal(latitude), new BigDecimal(longitude), userDto.getUserId());
         locationService.deleteLocationByCoordinate(location);
         resp.sendRedirect("/WeatherApp-1.0/weather");
     }

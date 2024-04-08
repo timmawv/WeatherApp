@@ -10,7 +10,6 @@ function addToFavorite() {
             var latitude = form.querySelector('#latitudeId').value;
             var longitude = form.querySelector('#longitudeId').value;
             var cityName = form.querySelector('#cityNameId').value;
-            var userId = form.querySelector('#userId').value;
 
             var isActive = button.classList.contains('active')
 
@@ -42,13 +41,12 @@ function addToFavorite() {
                         alert(error.message);
                     });
             } else {
-
                 fetch('/WeatherApp-1.0/weather/search', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({latitude, longitude, cityName, userId})
+                    body: JSON.stringify({latitude, longitude, cityName})
                 })
                     .then(response => {
                         console.log(response);

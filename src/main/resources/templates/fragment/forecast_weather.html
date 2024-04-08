@@ -6,7 +6,6 @@
                 <input type="hidden" id="latitudeId" name="latitude" th:value="${weather.getCityInformation().getLatitude()}">
                 <input type="hidden" id="longitudeId" name="longitude" th:value="${weather.getCityInformation().getLongitude()}">
                 <input type="hidden" id="cityNameId" name="cityName" th:value="${weather.getCityInformation().getCityName()}">
-                <input type="hidden" id="userId" name="userId" th:value="${login.getUserId()}">
                 <div class='large-font text-center top-20'>
                     <ion-icon id="heart" name="heart"
                               th:class="${weather.isFavorite() == true} ? 'button active' : 'button'">

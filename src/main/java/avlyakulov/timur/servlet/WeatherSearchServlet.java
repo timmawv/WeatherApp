@@ -85,6 +85,10 @@ public class WeatherSearchServlet extends HttpServlet {
             String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
             LocationDto locationDto = objectMapper.readValue(locationJson, new TypeReference<>() {
             });
+            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+            Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
+            UserDto userDto = sessionService.getUserDtoByHisSession(userSession);
+            locationDto.setUserId(userDto.getUserId());
             locationService.createLocation(locationDto);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
@@ -99,9 +103,13 @@ public class WeatherSearchServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
-            LocationDto location = objectMapper.readValue(locationJson, new TypeReference<>() {
+            LocationDto locationDto = objectMapper.readValue(locationJson, new TypeReference<>() {
             });
-            locationService.deleteLocationByCoordinate(location);
+            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
+            Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
+            UserDto userDto = sessionService.getUserDtoByHisSession(userSession);
+            locationDto.setUserId(userDto.getUserId());
+            locationService.deleteLocationByCoordinate(locationDto);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
