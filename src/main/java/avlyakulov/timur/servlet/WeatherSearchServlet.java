@@ -69,6 +69,7 @@ public class WeatherSearchServlet extends HttpServlet {
             try {
                 List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromCityNameLoggedUser(cityName, userLogin);
                 context.setVariable("weatherList", weatherList);
+                context.setVariable("cityName", cityName);
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
             } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
                 context.setVariable("error_city_name", e.getMessage());
