@@ -22,6 +22,11 @@ services:
       - credentials.env
     ports:
       - 8080:8080
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "localhost:8080/WeatherApp-1.0/test-back" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
     depends_on:
       postgres_db:
         condition: service_healthy

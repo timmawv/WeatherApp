@@ -19,9 +19,7 @@ services:
       retries: 3
 
   weather:
-    image: weather-app
-    #    env_file:
-    #      - credentials.env
+    image: timmawv/weather-app
     environment:
       DB_URL: jdbc:postgresql://postgres_db:5432/weather_db
       DB_USERNAME: postgres
@@ -29,6 +27,11 @@ services:
       API_WEATHER_KEY: ${API_WEATHER_KEY}
     ports:
       - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "localhost:8080/WeatherApp-1.0/test-back" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
     depends_on:
       postgres_db:
         condition: service_healthy
