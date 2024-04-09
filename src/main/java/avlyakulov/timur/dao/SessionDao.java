@@ -44,4 +44,8 @@ public class SessionDao extends HibernateDao {
                 .setParameter("sessionId", sessionId)
                 .getSingleResultOrNull());
     }
+
+    public void deleteExpiredSessions() {
+        executeInTransaction(session -> session.createQuery("delete from Session where now() > expiresAt").executeUpdate());
+    }
 }

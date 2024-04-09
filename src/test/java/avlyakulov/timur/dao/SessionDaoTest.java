@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class SessionDaoTest extends IntegrationTestBase {
 
     private static User TIMUR;
+    private static User DIMA;
 
     private String sessionId = "4f49f711-cc3f-459e-a9f3-8a6e1656befc";
 
@@ -29,8 +30,10 @@ public class SessionDaoTest extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         TIMUR = new User("timur", "123");
+        DIMA = new User("dima", "321");
         userDao = new UserDao();
         userDao.create(TIMUR);
+        userDao.create(DIMA);
         sessionDao = new SessionDao();
         sessionUser = new Session(sessionId, TIMUR);
     }
@@ -126,5 +129,18 @@ public class SessionDaoTest extends IntegrationTestBase {
         Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
 
         assertThat(isSessionValid).isNull();
+    }
+
+    @Test
+    void deleteExpiredSessions() {
+        sessionUser.setMinutesSessionExist(0);
+        sessionDao.create(sessionUser);
+        Session validSession = new Session("session_id", DIMA);
+        sessionDao.create(validSession);
+
+        sessionDao.deleteExpiredSessions();
+
+        List<Session> sessions = sessionDao.findAll();
+        assertThat(sessions).hasSize(1);
     }
 }

@@ -9,8 +9,6 @@ public class LoginRegistrationValidation {
 
     private static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-    private static final String loginRegex = "[a-z]*";
-
     private static final String cityNameRegex = ".*\\d+.*";
 
     private static final String nameFieldError = "error_field";
@@ -27,22 +25,24 @@ public class LoginRegistrationValidation {
 
     public static boolean isPasswordTheSameAndStrong(String password, String confirmPassword, Context context) {
         if (isPasswordsTheSame(password, confirmPassword, context)) {
-            if (password.length() >= 6 && password.length() <= 16) {
-                if (password.matches(passwordRegex)) {
-                    Zxcvbn zxcvbn = new Zxcvbn();
-                    Strength strength = zxcvbn.measure(password);
-                    if (strength.getScore() >= 3) {
-                        return true;
-                    } else {
-                        setErrorToContext(context, "Your password is to easy. Here is some suggestions to help you <br>" + strength.getFeedback().getSuggestions());
-                        return false;
-                    }
-                } else {
-                    setErrorToContext(context, "Your password must contain one capital letter one small letter and one number");
-                    return false;
-                }
+            if (password.length() >= 3 && password.length() <= 16) {
+                return true;
+//                if (password.matches(passwordRegex)) {
+//                    return true;
+////                    Zxcvbn zxcvbn = new Zxcvbn();
+////                    Strength strength = zxcvbn.measure(password);
+////                    if (strength.getScore() >= 3) {
+////                        return true;
+////                    } else {
+////                        setErrorToContext(context, "Your password is to easy. Here is some suggestions to help you <br>" + strength.getFeedback().getSuggestions());
+////                        return false;
+////                    }
+//                } else {
+//                    setErrorToContext(context, "Your password must contain one capital letter one small letter and one number");
+//                    return false;
+//                }
             } else {
-                setErrorToContext(context, "The length of password has to be from 6 to 16");
+                setErrorToContext(context, "The length of password has to be from 3 to 16");
                 return false;
             }
         } else {
@@ -69,10 +69,10 @@ public class LoginRegistrationValidation {
 
 
     private static boolean isLoginValid(String login, Context context) {
-        if (login.matches(loginRegex) && (login.length() >= 2 && login.length() <= 10)) {
+        if (!login.contains(" ") && (login.length() >= 2 && login.length() <= 10)) {
             return true;
         } else {
-            setErrorToContext(context, "Your login should only be in small letters and in Latin. Your length has to be from 2 to 10 symbols.");
+            setErrorToContext(context, "Your login can't contain space. Your length has to be from 2 to 10 symbols.");
             return false;
         }
     }
