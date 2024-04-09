@@ -17,7 +17,7 @@ services:
       retries: 3
 
   weather:
-    image: weather-app
+    image: timmawv/weather-app
     env_file:
       - credentials.env
     ports:
