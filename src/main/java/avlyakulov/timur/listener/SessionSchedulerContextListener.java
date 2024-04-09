@@ -9,14 +9,39 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
 @WebListener
 public class SessionSchedulerContextListener implements ServletContextListener {
+    private ScheduledExecutorService scheduler;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        try {
+            scheduler = Executors.newScheduledThreadPool(1);
 
-        Runnable task = new SessionScheduler();
+            Runnable task = new SessionScheduler();
 
-        scheduler.scheduleAtFixedRate(task, 5, 15, TimeUnit.MINUTES);
+            int initialDelayMinutes = 5;
+            int intervalMinutes = 15;
+            scheduler.scheduleAtFixedRate(task, initialDelayMinutes, intervalMinutes, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        if (scheduler != null) {
+            try {
+                scheduler.shutdown();
+                scheduler.awaitTermination(30, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                if (!scheduler.isTerminated()) {
+                    scheduler.shutdownNow();
+                }
+            }
+        }
     }
 }
