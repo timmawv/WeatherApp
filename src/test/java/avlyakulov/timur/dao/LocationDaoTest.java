@@ -33,7 +33,8 @@ class LocationDaoTest extends IntegrationTestBase {
         TIMUR = new User("timur", "123");
         DIMA = new User("dima", "123");
         userDao = new UserDao();
-        userDao.create(TIMUR, DIMA);
+        userDao.create(TIMUR);
+        userDao.create(DIMA);
         locationDao = new LocationDao();
         KHARKIV_TIMUR = new Location("Kharkiv", new BigDecimal("50"), new BigDecimal("36"), TIMUR);
         KHARKIV_DIMA = new Location("Kharkiv", new BigDecimal("50"), new BigDecimal("36"), DIMA);
