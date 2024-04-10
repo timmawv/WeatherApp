@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS Locations
 
 CREATE TABLE IF NOT EXISTS Sessions
 (
-    id         VARCHAR,
+    id         VARCHAR PRIMARY KEY,
     user_id    INT          NOT NULL REFERENCES Users (id),
     expires_at timestamp(9) NOT NULL
 );
