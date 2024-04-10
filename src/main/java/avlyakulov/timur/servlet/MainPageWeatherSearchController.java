@@ -10,7 +10,6 @@ import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.dao.api.OpenGeoService;
 import avlyakulov.timur.dao.api.OpenWeatherService;
 import avlyakulov.timur.servlet.util.HttpRequestResponse;
-import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
@@ -60,17 +59,12 @@ public class MainPageWeatherSearchController extends HttpServlet {
     }
 
     private void printPage(String cityName, Context context, HttpServletResponse resp) throws IOException {
-        if (LoginRegistrationValidation.isCityNameValid(cityName, context)) {
-            try {
-                List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromCityNameNoLoggedUser(cityName);
-                context.setVariable("weatherList", weatherList);
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMainWeather, context, resp);
-            } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
-                context.setVariable("error_city_name", e.getMessage());
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMainWeather, context, resp);
-            }
-        } else {
-            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMainWeather, context, resp);
+        try {
+            List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromCityNameNoLoggedUser(cityName);
+            context.setVariable("weatherList", weatherList);
+        } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
+            context.setVariable("error_city_name", e.getMessage());
         }
+        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMainWeather, context, resp);
     }
 }

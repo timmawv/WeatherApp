@@ -1,9 +1,6 @@
 package avlyakulov.timur.servlet;
 
-import avlyakulov.timur.custom_exception.GlobalApiException;
-import avlyakulov.timur.custom_exception.JsonParseException;
-import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
-import avlyakulov.timur.custom_exception.TooManyLocationsException;
+import avlyakulov.timur.custom_exception.*;
 import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.api.UrlBuilder;
@@ -89,7 +86,8 @@ public class WeatherSearchServlet extends HttpServlet {
             locationDto.setUserId(userLogin.getUserId());
             locationService.createLocation(locationDto);
             resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
+        } catch (JsonParseException | TooManyLocationsException | CookieNotExistException | SessionNotValidException |
+                 ModelAlreadyExistsException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.setContentType("application/json");
             PrintWriter out = resp.getWriter();

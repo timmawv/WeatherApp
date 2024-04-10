@@ -15,12 +15,12 @@ public class CookieUtil {
         resp.addCookie(cookie);
     }
 
-    public static Optional<String> getSessionExpireCookie(Cookie[] cookies) {
+    public static Optional<String> getCookieSessionError(Cookie[] cookies) {
         if (cookies == null) {
             return Optional.empty();
         }
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("unauthorized_request")) {
+            if (cookie.getName().equals("cookie_session_error")) {
                 return Optional.of(cookie.getValue());
             }
         }

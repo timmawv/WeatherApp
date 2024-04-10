@@ -13,12 +13,14 @@ import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
@@ -28,6 +30,8 @@ public class LoginController extends HttpServlet {
     private SessionService sessionService;
 
     private final String htmlPageLogin = "auth/login";
+
+    private final String SESSION_EXPIRE_MESSAGE = "Your session was expired. You need to authorize again";
 
     @Override
     public void init() throws ServletException {
@@ -39,9 +43,9 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        String cookieSessionErrorMessage = req.getAttribute("cookie_session_error").toString();
-        if (cookieSessionErrorMessage != null) {
-            context.setVariable("error_field", cookieSessionErrorMessage);
+        Optional<String> cookieSessionError = CookieUtil.getCookieSessionError(req.getCookies());
+        if (cookieSessionError.isPresent()) {
+            context.setVariable("error_field", SESSION_EXPIRE_MESSAGE);
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         } else {
             boolean hasUserValidSession = UserSessionCheck.hasUserValidSession(sessionService, resp, req.getCookies());

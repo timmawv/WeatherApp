@@ -22,7 +22,7 @@ public class CookieSessionFilter implements Filter {
 
     private SessionService sessionService;
 
-    private final String SESSION_EXPIRE_MESSAGE = "Your session was expired. You need to authorize again";
+
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -41,12 +41,16 @@ public class CookieSessionFilter implements Filter {
             filterChain.doFilter(req, resp);
         } catch (CookieNotExistException e) {
             log.warn("User doesn't have active cookie");
-            req.setAttribute("cookie_session_error", SESSION_EXPIRE_MESSAGE);
+            Cookie cookie = new Cookie("cookie_session_error", "");
+            cookie.setMaxAge(1);
+            resp.addCookie(cookie);
             resp.sendRedirect("/WeatherApp-1.0/login");
         } catch (SessionNotValidException e) {
             log.warn("User's session was expired");
             CookieUtil.deleteSessionIdCookie(resp);
-            req.setAttribute("cookie_session_error", SESSION_EXPIRE_MESSAGE);
+            Cookie cookie = new Cookie("cookie_session_error", "");
+            cookie.setMaxAge(1);
+            resp.addCookie(cookie);
             resp.sendRedirect("/WeatherApp-1.0/login");
         }
     }
