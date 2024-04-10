@@ -12,7 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @Slf4j
-public class HttpRequestResponseUtil {
+public class HttpRequestResponse {
 
     public String getBodyOfResponse(String urlWeather) throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()

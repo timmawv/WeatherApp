@@ -40,7 +40,7 @@ class SessionServiceTest {
 
     @Test
     void createSessionAndGetItsId_sessionCreated() {
-        String maybeSessionId = sessionService.createSessionAndGetItsId(TIMUR);
+        String maybeSessionId = sessionService.createSession(TIMUR);
 
         verify(sessionDao, times(1)).create(argumentCaptor.capture());
 
@@ -88,7 +88,7 @@ class SessionServiceTest {
 
     @Test
     void isUserSessionValid_userSessionValid() {
-        doReturn(true).when(sessionDao).isSessionValid(anyString());
+        doReturn(validUserSession).when(sessionDao).getById(anyString());
 
         Boolean userSessionValid = sessionService.isUserSessionValid(anyString());
 
@@ -97,14 +97,14 @@ class SessionServiceTest {
 
     @Test
     void isUserSessionValid_userSessionNotExistInDB() {
-        doReturn(null).when(sessionDao).isSessionValid(anyString());
+        doReturn(null).when(sessionDao).getById(anyString());
 
         assertThrows(SessionNotValidException.class, () -> sessionService.isUserSessionValid(anyString()));
     }
 
     @Test
     void isUserSessionValid_userSessionIsExpired() {
-        doReturn(false).when(sessionDao).isSessionValid(anyString());
+        doReturn(invalidUserSession).when(sessionDao).getById(anyString());
 
         Boolean userSessionValid = sessionService.isUserSessionValid(anyString());
 

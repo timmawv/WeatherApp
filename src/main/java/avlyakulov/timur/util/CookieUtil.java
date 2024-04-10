@@ -16,7 +16,7 @@ public class CookieUtil {
     }
 
     public static Optional<String> getSessionExpireCookie(Cookie[] cookies) {
-        if (cookies == null ) {
+        if (cookies == null) {
             return Optional.empty();
         }
         for (Cookie cookie : cookies) {
@@ -30,11 +30,10 @@ public class CookieUtil {
     public static String getSessionIdFromCookie(Cookie[] cookies) {
         if (cookies == null) {
             throw new CookieNotExistException("Cookie doesn't exist");
-        } else {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("session_id")) {
-                    return cookie.getValue();
-                }
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("session_id")) {
+                return cookie.getValue();
             }
         }
         throw new CookieNotExistException("Cookie doesn't exist");

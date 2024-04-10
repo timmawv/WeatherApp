@@ -93,6 +93,6 @@ class LocationServiceTest {
     @Test
     void deleteLocationsByCoordinate() {
         locationService.deleteLocationByCoordinate(KHARKIV_DTO);
-        verify(locationDao, times(1)).deleteLocation(KHARKIV_DTO);
+        verify(locationDao, times(1)).deleteLocation(KHARKIV_DTO.getLatitude(), KHARKIV_DTO.getLongitude(), KHARKIV_DTO.getUserId());
     }
 }

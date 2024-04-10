@@ -1,4 +1,4 @@
-package avlyakulov.timur.service.api;
+package avlyakulov.timur.dao.api;
 
 import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
@@ -8,7 +8,7 @@ import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
 import avlyakulov.timur.service.LocationService;
-import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
+import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import avlyakulov.timur.util.api.SetMainWeatherUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,26 +20,23 @@ import java.util.List;
 
 public class OpenWeatherService {
 
-    private final String urlWeather = "https://api.openweathermap.org/data/2.5/weather?units=metric";
+    private final String urlWeather = "https://api.openweathermap.org/data/2.5/weather?units=metric&lat=%s&lon=%s";
 
-    private final String latitude = "&lat=";
+    private final OpenGeoService openGeoService;
 
-    private final String longitude = "&lon=";
+    private final LocationService locationService;
 
-    private final String appId = "&appid=".concat(System.getProperty("API_WEATHER_KEY"));
+    private final HttpRequestResponse httpRequestResponse;
 
-    private OpenGeoService openGeoService;
-
-    private LocationService locationService;
-
-    private HttpRequestResponseUtil httpRequestResponseUtil;
+    private final UrlBuilder urlBuilder;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public OpenWeatherService(OpenGeoService openGeoService, LocationService locationService, HttpRequestResponseUtil httpRequestResponseUtil) {
+    public OpenWeatherService(OpenGeoService openGeoService, LocationService locationService, HttpRequestResponse httpRequestResponse, UrlBuilder urlBuilder) {
         this.openGeoService = openGeoService;
         this.locationService = locationService;
-        this.httpRequestResponseUtil = httpRequestResponseUtil;
+        this.httpRequestResponse = httpRequestResponse;
+        this.urlBuilder = urlBuilder;
     }
 
     public List<WeatherCityDto> getWeatherListFromCityNameNoLoggedUser(String cityName) throws URISyntaxException, IOException, InterruptedException {
@@ -47,8 +44,8 @@ public class OpenWeatherService {
         try {
             List<GeoCityDto> cityCoordinateByName = openGeoService.getCitiesDtoByName(cityName);
             for (GeoCityDto geoCityDto : cityCoordinateByName) {
-                String urlWeatherFull = concatenateUrlWeather(geoCityDto);
-                String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
+                String urlWeatherFull = getFullUrlWeather(geoCityDto);
+                String bodyOfResponse = httpRequestResponse.getBodyOfResponse(urlWeatherFull);
                 WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
                 });
                 weatherCityDto.setCityInformation(geoCityDto);
@@ -67,8 +64,8 @@ public class OpenWeatherService {
         try {
             List<GeoCityDto> cityCoordinateByName = openGeoService.getCitiesDtoByName(cityName);
             for (GeoCityDto geoCityDto : cityCoordinateByName) {
-                String urlWeatherFull = concatenateUrlWeather(geoCityDto);
-                String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
+                String urlWeatherFull = getFullUrlWeather(geoCityDto);
+                String bodyOfResponse = httpRequestResponse.getBodyOfResponse(urlWeatherFull);
                 WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
                 });
                 weatherCityDto.setCityInformation(geoCityDto);
@@ -82,11 +79,12 @@ public class OpenWeatherService {
         }
     }
 
-    public List<WeatherCityDto> getWeatherByUserLocations(List<Location> locationList) throws URISyntaxException, IOException, InterruptedException {
+    public List<WeatherCityDto> getWeatherByUserLocations(Integer userId) throws URISyntaxException, IOException, InterruptedException {
         List<WeatherCityDto> weatherCityDtoList = new ArrayList<>();
+        List<Location> locationList = locationService.getAllLocationByUserId(userId);
         for (Location location : locationList) {
-            String urlWeatherFull = concatenateUrlWeather(location);
-            String bodyOfResponse = httpRequestResponseUtil.getBodyOfResponse(urlWeatherFull);
+            String urlWeatherFull = urlBuilder.buildUrlWithParameters(urlWeather, location.getLatitude().toString(), location.getLongitude().toString());
+            String bodyOfResponse = httpRequestResponse.getBodyOfResponse(urlWeatherFull);
             WeatherCityDto weatherCityDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
             });
             GeoCityDto cityInformation = new GeoCityDto(
@@ -111,15 +109,11 @@ public class OpenWeatherService {
                 });
     }
 
-    public String concatenateUrlWeather(GeoCityDto geoCityDto) {
-        return urlWeather.concat(latitude.concat(geoCityDto.getLatitude().toString()))
-                .concat(longitude.concat(geoCityDto.getLongitude().toString()))
-                .concat(appId);
-    }
-
-    public String concatenateUrlWeather(Location location) {
-        return urlWeather.concat(latitude.concat(location.getLatitude().toString()))
-                .concat(longitude.concat(location.getLongitude().toString()))
-                .concat(appId);
+    private String getFullUrlWeather(GeoCityDto geoCityDto) {
+        return urlBuilder.buildUrlWithParameters(
+                urlWeather,
+                geoCityDto.getLatitude().toString(),
+                geoCityDto.getLongitude().toString()
+        );
     }
 }

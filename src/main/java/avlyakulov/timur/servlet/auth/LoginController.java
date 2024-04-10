@@ -1,8 +1,5 @@
 package avlyakulov.timur.servlet.auth;
 
-import avlyakulov.timur.custom_exception.CookieNotExistException;
-import avlyakulov.timur.custom_exception.ModelNotFoundException;
-import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.custom_exception.UserCredentialsException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
@@ -22,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
@@ -32,8 +28,6 @@ public class LoginController extends HttpServlet {
     private SessionService sessionService;
 
     private final String htmlPageLogin = "auth/login";
-
-    private final String SESSION_EXPIRE_MESSAGE = "Your session was expired. You need to authorize again";
 
     @Override
     public void init() throws ServletException {
@@ -45,12 +39,15 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        Optional<String> sessionExpireCookie = CookieUtil.getSessionExpireCookie(req.getCookies());
-        if (sessionExpireCookie.isPresent()) {
-            context.setVariable("error_field", SESSION_EXPIRE_MESSAGE);
+        String cookieSessionErrorMessage = req.getAttribute("cookie_session_error").toString();
+        if (cookieSessionErrorMessage != null) {
+            context.setVariable("error_field", cookieSessionErrorMessage);
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         } else {
-            UserSessionCheck.validateUserSession(sessionService, resp, req.getCookies());
+            boolean hasUserValidSession = UserSessionCheck.hasUserValidSession(sessionService, resp, req.getCookies());
+            if (hasUserValidSession) {
+                resp.sendRedirect("/WeatherApp-1.0/weather");
+            }
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         }
     }
@@ -65,14 +62,14 @@ public class LoginController extends HttpServlet {
             ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
         } else {
             try {
-                user = userService.logUserByCredentials(login, password);
+                user = userService.getUserByLoginAndPassword(login, password);
             } catch (UserCredentialsException e) {
                 ContextUtil.setErrorToContext(context, e.getMessage());
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageLogin, context, resp);
                 return;
             }
             sessionService.deleteSessionByUserId(user.getId());
-            String sessionId = sessionService.createSessionAndGetItsId(user);
+            String sessionId = sessionService.createSession(user);
             CookieUtil.createCookie(sessionId, resp);
             resp.sendRedirect("/WeatherApp-1.0/weather");
         }

@@ -26,21 +26,19 @@ public class LoginRegistrationValidation {
     public static boolean isPasswordTheSameAndStrong(String password, String confirmPassword, Context context) {
         if (isPasswordsTheSame(password, confirmPassword, context)) {
             if (password.length() >= 3 && password.length() <= 16) {
-                return true;
-//                if (password.matches(passwordRegex)) {
-//                    return true;
-////                    Zxcvbn zxcvbn = new Zxcvbn();
-////                    Strength strength = zxcvbn.measure(password);
-////                    if (strength.getScore() >= 3) {
-////                        return true;
-////                    } else {
-////                        setErrorToContext(context, "Your password is to easy. Here is some suggestions to help you <br>" + strength.getFeedback().getSuggestions());
-////                        return false;
-////                    }
-//                } else {
-//                    setErrorToContext(context, "Your password must contain one capital letter one small letter and one number");
-//                    return false;
-//                }
+                if (password.matches(passwordRegex)) {
+                    Zxcvbn zxcvbn = new Zxcvbn();
+                    Strength strength = zxcvbn.measure(password);
+                    if (strength.getScore() >= 3) {
+                        return true;
+                    } else {
+                        setErrorToContext(context, "Your password is to easy. Here is some suggestions to help you <br>" + strength.getFeedback().getSuggestions());
+                        return false;
+                    }
+                } else {
+                    setErrorToContext(context, "Your password must contain one capital letter one small letter and one number");
+                    return false;
+                }
             } else {
                 setErrorToContext(context, "The length of password has to be from 3 to 16");
                 return false;

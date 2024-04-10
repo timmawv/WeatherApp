@@ -1,21 +1,18 @@
 package avlyakulov.timur.servlet;
 
-import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.GlobalApiException;
-import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dao.SessionDao;
+import avlyakulov.timur.dao.api.UrlBuilder;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
-import avlyakulov.timur.service.api.OpenGeoService;
-import avlyakulov.timur.service.api.OpenWeatherService;
-import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
-import avlyakulov.timur.util.CookieUtil;
+import avlyakulov.timur.dao.api.OpenGeoService;
+import avlyakulov.timur.dao.api.OpenWeatherService;
+import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -32,7 +29,9 @@ public class MainPageWeatherSearchController extends HttpServlet {
 
     private final String htmlPageMainWeather = "pages/main-page-weather";
 
-    private final HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
+    private final HttpRequestResponse httpRequestResponse = new HttpRequestResponse();
+
+    private final UrlBuilder urlBuilder = new UrlBuilder();
 
     private OpenWeatherService openWeatherService;
 
@@ -45,15 +44,18 @@ public class MainPageWeatherSearchController extends HttpServlet {
     public void init() throws ServletException {
         locationService = new LocationService(new LocationDao());
         sessionService = new SessionService(new SessionDao());
-        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponseUtil),
-                locationService, httpRequestResponseUtil);
+        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponse, urlBuilder),
+                locationService, httpRequestResponse, urlBuilder);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
+        boolean hasUserValidSession = UserSessionCheck.hasUserValidSession(sessionService, resp, req.getCookies());
+        if (hasUserValidSession) {
+            resp.sendRedirect("/WeatherApp-1.0/weather");
+        }
         String cityName = req.getParameter("city");
-        UserSessionCheck.validateUserSession(sessionService, resp, req.getCookies());
         printPage(cityName, context, resp);
     }
 

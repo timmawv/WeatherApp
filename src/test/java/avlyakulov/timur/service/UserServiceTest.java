@@ -1,11 +1,8 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.UserCredentialsException;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
-import avlyakulov.timur.service.UserService;
-import avlyakulov.timur.util.BCryptUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -20,7 +17,7 @@ public class UserServiceTest {
 
     private final User TIMUR = new User("timur", "111");
 
-    private final User TIMUR_PASSWORD = new User("timur", "$2a$10$WNiCiKGnmhWxuwWfRFtZZeze7vMDsHgnPy2fEqrLyyqtsuIv6KpkG");
+    private final User TIMUR_CREATED = new User("timur", "$2a$10$WNiCiKGnmhWxuwWfRFtZZeze7vMDsHgnPy2fEqrLyyqtsuIv6KpkG");
 
     private final User INVALID_USER = new User("dummy", "dummy");
 
@@ -37,28 +34,29 @@ public class UserServiceTest {
     void createUser_userWasCreated() {
         userService.createUser(TIMUR);
 
+
         Mockito.verify(userDao, times(1)).create(argumentCaptor.capture());
 
         String encryptedPasswordUser = argumentCaptor.getValue().getPassword();
-        assertThat(BCryptUtil.isPasswordCorrect("111", encryptedPasswordUser)).isTrue();
+        assertThat(userService.isPasswordCorrect("111", encryptedPasswordUser)).isTrue();
     }
 
     @Test
     void logUserByCredentials_userWasLogged_validCredentials() {
-        doReturn(TIMUR_PASSWORD).when(userDao).getUserByLogin(TIMUR.getLogin());
+        doReturn(TIMUR_CREATED).when(userDao).getUserByLogin(TIMUR.getLogin());
 
-        User maybeUser = userService.logUserByCredentials(TIMUR.getLogin(), TIMUR.getPassword());
+        User maybeUser = userService.getUserByLoginAndPassword(TIMUR.getLogin(), TIMUR.getPassword());
 
         verify(userDao, times(1)).getUserByLogin(TIMUR.getLogin());
         assertThat(maybeUser.getLogin()).isEqualTo(TIMUR.getLogin());
-        assertThat(maybeUser.getPassword()).isEqualTo(TIMUR_PASSWORD.getPassword());
+        assertThat(maybeUser.getPassword()).isEqualTo(TIMUR_CREATED.getPassword());
     }
 
     @Test
     void logUserByCredentials_userWasNotLogged_invalidLogin() {
         doReturn(null).when(userDao).getUserByLogin(INVALID_USER.getLogin());
 
-        UserCredentialsException userCredentialsException = assertThrows(UserCredentialsException.class, () -> userService.logUserByCredentials(INVALID_USER.getLogin(), INVALID_USER.getPassword()));
+        UserCredentialsException userCredentialsException = assertThrows(UserCredentialsException.class, () -> userService.getUserByLoginAndPassword(INVALID_USER.getLogin(), INVALID_USER.getPassword()));
 
         verify(userDao, times(1)).getUserByLogin(INVALID_USER.getLogin());
         assertThat(userCredentialsException.getMessage()).isEqualTo("Login or password isn't correct");
@@ -66,9 +64,9 @@ public class UserServiceTest {
 
     @Test
     void logUserByCredentials_userWasNotLogged_invalidPassword() {
-        doReturn(TIMUR_PASSWORD).when(userDao).getUserByLogin(TIMUR.getLogin());
+        doReturn(TIMUR_CREATED).when(userDao).getUserByLogin(TIMUR.getLogin());
 
-        UserCredentialsException userCredentialsException = assertThrows(UserCredentialsException.class, () -> userService.logUserByCredentials(TIMUR.getLogin(), INVALID_USER.getPassword()));
+        UserCredentialsException userCredentialsException = assertThrows(UserCredentialsException.class, () -> userService.getUserByLoginAndPassword(TIMUR.getLogin(), INVALID_USER.getPassword()));
 
         verify(userDao, times(1)).getUserByLogin(TIMUR.getLogin());
         assertThat(userCredentialsException.getMessage()).isEqualTo("Login or password isn't correct");

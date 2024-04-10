@@ -11,19 +11,19 @@ import java.io.IOException;
 
 public class UserSessionCheck {
 
-    public static void validateUserSession(SessionService sessionService, HttpServletResponse resp, Cookie[] cookies) throws IOException {
+    public static boolean hasUserValidSession(SessionService sessionService, HttpServletResponse resp, Cookie[] cookies) throws IOException {
         try {
             String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(cookies);
             if (sessionService.isUserSessionValid(sessionIdFromCookie)) {
-                resp.sendRedirect("/WeatherApp-1.0/weather");
-            } else {
-                CookieUtil.deleteSessionIdCookie(resp);
-                sessionService.deleteSessionById(sessionIdFromCookie);
+                return true;
             }
+            CookieUtil.deleteSessionIdCookie(resp);
+            sessionService.deleteSessionById(sessionIdFromCookie);
         } catch (CookieNotExistException ignored) {
 
         } catch (SessionNotValidException e) {
             CookieUtil.deleteSessionIdCookie(resp);
         }
+        return false;
     }
 }

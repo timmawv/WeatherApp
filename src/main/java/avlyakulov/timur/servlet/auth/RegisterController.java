@@ -1,20 +1,15 @@
 package avlyakulov.timur.servlet.auth;
 
-import avlyakulov.timur.custom_exception.CookieNotExistException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
-import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.service.UserService;
-import avlyakulov.timur.util.BCryptUtil;
 import avlyakulov.timur.util.ContextUtil;
-import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
-import jakarta.persistence.NoResultException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -43,7 +38,10 @@ public class RegisterController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
         context.setVariable("success_registration", false);
-        UserSessionCheck.validateUserSession(sessionService, resp, req.getCookies());
+        boolean hasUserValidSession = UserSessionCheck.hasUserValidSession(sessionService, resp, req.getCookies());
+        if (hasUserValidSession) {
+            resp.sendRedirect("/WeatherApp-1.0/weather");
+        }
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
     }
 
