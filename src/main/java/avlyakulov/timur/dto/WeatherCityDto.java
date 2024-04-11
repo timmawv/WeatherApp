@@ -1,9 +1,6 @@
 package avlyakulov.timur.dto;
 
-import avlyakulov.timur.dto.api.SolarCycle;
-import avlyakulov.timur.dto.api.Temperature;
-import avlyakulov.timur.dto.api.Weather;
-import avlyakulov.timur.dto.api.Wind;
+import avlyakulov.timur.dto.api.*;
 import avlyakulov.timur.util.api.converter.VisibilityConverter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

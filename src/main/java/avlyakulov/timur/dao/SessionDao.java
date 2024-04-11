@@ -39,12 +39,6 @@ public class SessionDao extends HibernateDao {
                 .executeUpdate());
     }
 
-    public Boolean isSessionValid(String sessionId) {
-        return executeNotInTransaction(session -> session.createQuery("select (now() < expiresAt) as is_session_valid from Session where id = :sessionId", Boolean.class)
-                .setParameter("sessionId", sessionId)
-                .getSingleResultOrNull());
-    }
-
     public void deleteExpiredSessions() {
         executeInTransaction(session -> session.createQuery("delete from Session where now() > expiresAt").executeUpdate());
     }

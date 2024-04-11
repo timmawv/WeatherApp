@@ -87,7 +87,7 @@ class LocationDaoTest extends IntegrationTestBase {
         locationDao.create(KHARKIV_TIMUR);
 
         LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV_TIMUR);
-        locationDao.deleteLocation(locationDto);
+        locationDao.deleteLocation(locationDto.getLatitude(), locationDto.getLongitude(), locationDto.getUserId());
 
         List<Location> locations = locationDao.findLocationsByUserId(TIMUR.getId());
         assertThat(locations).hasSize(0);
@@ -100,7 +100,7 @@ class LocationDaoTest extends IntegrationTestBase {
 
 
         LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV_TIMUR);
-        locationDao.deleteLocation(locationDto);
+        locationDao.deleteLocation(locationDto.getLatitude(), locationDto.getLongitude(), locationDto.getUserId());
 
         List<Location> allLocations = locationDao.findAll();
         assertThat(allLocations).hasSize(1);
@@ -112,7 +112,7 @@ class LocationDaoTest extends IntegrationTestBase {
     @Test
     void deleteLocation_deleteZeroLocation() {
         LocationDto locationDto = LocationMapper.INSTANCE.mapLocationToLocationDto(KHARKIV_TIMUR);
-        locationDao.deleteLocation(locationDto);
+        locationDao.deleteLocation(locationDto.getLatitude(), locationDto.getLongitude(), locationDto.getUserId());
 
         List<Location> locations = locationDao.findLocationsByUserId(TIMUR.getId());
         assertThat(locations).hasSize(0);

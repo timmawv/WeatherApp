@@ -12,7 +12,6 @@ import java.math.BigDecimal;
         })
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Location {

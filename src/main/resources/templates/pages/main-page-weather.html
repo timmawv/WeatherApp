@@ -14,7 +14,7 @@
 <header th:insert="~{fragment/header :: header}"></header>
 
 <main>
-    <div style="text-align: center">
+    <div th:if="${weatherList != null and weatherList.size() > 0}" style="text-align: center">
         <h1 class="sign_save">In order to save these locations. You have to create account!</h1>
     </div>
     <div th:insert="~{fragment/forecast_weather :: forecast_block}"></div>

@@ -1,4 +1,4 @@
-package avlyakulov.timur.dto;
+package avlyakulov.timur.dto.api;
 
 import avlyakulov.timur.util.api.converter.CountryCodeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

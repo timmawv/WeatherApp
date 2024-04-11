@@ -5,6 +5,7 @@ import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.model.Location;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class LocationDao extends HibernateDao {
@@ -33,11 +34,11 @@ public class LocationDao extends HibernateDao {
                 .getSingleResult());
     }
 
-    public void deleteLocation(LocationDto locationDto) {
+    public void deleteLocation(BigDecimal latitude, BigDecimal longitude, Integer userId) {
         executeInTransaction(session -> session.createQuery("delete from Location where latitude = :latitude and longitude = :longitude and user.id = :userId")
-                .setParameter("latitude", locationDto.getLatitude())
-                .setParameter("longitude", locationDto.getLongitude())
-                .setParameter("userId", locationDto.getUserId())
+                .setParameter("latitude", latitude)
+                .setParameter("longitude", longitude)
+                .setParameter("userId", userId)
                 .executeUpdate());
     }
 }

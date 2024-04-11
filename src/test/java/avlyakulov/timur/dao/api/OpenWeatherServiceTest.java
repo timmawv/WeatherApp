@@ -1,12 +1,12 @@
-package avlyakulov.timur.service.api;
+package avlyakulov.timur.dao.api;
 
 import avlyakulov.timur.JsonLoadTestBase;
-import avlyakulov.timur.dto.GeoCityDto;
+import avlyakulov.timur.dto.api.GeoCityDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
 import avlyakulov.timur.service.LocationService;
-import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
+import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
@@ -40,11 +41,15 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
 
     @Mock
     private OpenGeoService openGeoService;
+
     @Mock
     private LocationService locationService;
 
     @Mock
-    private HttpRequestResponseUtil httpRequestResponseUtil;
+    private UrlBuilder urlBuilder;
+
+    @Mock
+    private HttpRequestResponse httpRequestResponse;
 
     @InjectMocks
     private OpenWeatherService openWeatherService;
@@ -53,7 +58,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getOneWeather() throws URISyntaxException, IOException, InterruptedException {
         doReturn(userNoLocations).when(locationService).getAllLocationByUserId(TIMUR.getUserId());
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
-        doReturn(weatherJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(weatherJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
 
@@ -96,7 +101,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getOneWeather_userHasSameLocation() throws URISyntaxException, IOException, InterruptedException {
         doReturn(userHasOneLocation).when(locationService).getAllLocationByUserId(TIMUR.getUserId());
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
-        doReturn(weatherJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(weatherJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
 
@@ -118,16 +123,19 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
 
     @Test
     void getWeatherByUserLocations_userHasOneLocation() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(weatherJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(weatherJson).when(httpRequestResponse).getBodyOfResponse(anyString());
+        doReturn(userHasOneLocation).when(locationService).getAllLocationByUserId(anyInt());
 
-        List<WeatherCityDto> weatherByUserLocations = openWeatherService.getWeatherByUserLocations(userHasOneLocation);
+        List<WeatherCityDto> weatherByUserLocations = openWeatherService.getWeatherByUserLocations(TIMUR.getUserId());
 
         assertThat(weatherByUserLocations).hasSize(1);
     }
 
     @Test
     void getWeatherByUserLocations_userHasNoLocation() throws URISyntaxException, IOException, InterruptedException {
-        List<WeatherCityDto> weatherByUserLocations = openWeatherService.getWeatherByUserLocations(userNoLocations);
+        doReturn(userNoLocations).when(locationService).getAllLocationByUserId(anyInt());
+
+        List<WeatherCityDto> weatherByUserLocations = openWeatherService.getWeatherByUserLocations(TIMUR.getUserId());
 
         assertThat(weatherByUserLocations).isEmpty();
     }

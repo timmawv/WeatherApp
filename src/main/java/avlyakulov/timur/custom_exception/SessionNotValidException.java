@@ -9,12 +9,4 @@ public class SessionNotValidException extends RuntimeException {
         super(message);
     }
 
-    public SessionNotValidException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public SessionNotValidException(Throwable cause) {
-        super(cause);
-    }
-
 }

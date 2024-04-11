@@ -106,32 +106,6 @@ public class SessionDaoTest extends IntegrationTestBase {
     }
 
     @Test
-    void isUserSessionValid_returnTrue_sessionValidAndExistsInDB() {
-        sessionDao.create(sessionUser);
-
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
-
-        assertThat(isSessionValid).isTrue();
-    }
-
-    @Test
-    void isUserSessionValid_returnFalse_sessionIsExpiredAndExistsInDB() {
-        sessionUser.setMinutesSessionExist(0);
-        sessionDao.create(sessionUser);
-
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
-
-        assertThat(isSessionValid).isFalse();
-    }
-
-    @Test
-    void isUserSessionValid_returnNull_sessionNotExistInDB() {
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionUser.getId().toString());
-
-        assertThat(isSessionValid).isNull();
-    }
-
-    @Test
     void deleteExpiredSessions() {
         sessionUser.setMinutesSessionExist(0);
         sessionDao.create(sessionUser);

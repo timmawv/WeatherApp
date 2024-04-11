@@ -1,13 +1,13 @@
-package avlyakulov.timur.service.api;
+package avlyakulov.timur.dao.api;
 
 import avlyakulov.timur.JsonLoadTestBase;
 import avlyakulov.timur.custom_exception.BadHttpRequest;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
-import avlyakulov.timur.dto.GeoCityDto;
-import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
+import avlyakulov.timur.dto.api.GeoCityDto;
+import avlyakulov.timur.servlet.util.HttpRequestResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -26,14 +27,22 @@ import static org.mockito.Mockito.doThrow;
 class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Mock
-    private HttpRequestResponseUtil httpRequestResponseUtil;
+    private HttpRequestResponse httpRequestResponse;
 
-    @InjectMocks
+
+    private UrlBuilder urlBuilder = new UrlBuilder();
+
+
     private OpenGeoService openGeoService;
+
+    @BeforeEach
+    void setUp() {
+        openGeoService = new OpenGeoService(httpRequestResponse, urlBuilder);
+    }
 
     @Test
     void getCitiesDtoByName_locationExists() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(geoJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(geoJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<GeoCityDto> cities = openGeoService.getCitiesDtoByName("Poltava");
 
@@ -50,7 +59,7 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Test
     void getCitiesDtoByName_locationsExist() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(geosJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(geosJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<GeoCityDto> cities = openGeoService.getCitiesDtoByName("Poltava");
 
@@ -59,7 +68,7 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Test
     void getCitiesDtoByName_locationsNotExist() throws URISyntaxException, IOException, InterruptedException {
-        doReturn(emptyJson).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doReturn(emptyJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<GeoCityDto> cities = openGeoService.getCitiesDtoByName("Dummy");
 
@@ -68,7 +77,7 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
 
     @Test
     void getCitiesDtoByName_throwsException_badRequestFromUser() throws URISyntaxException, IOException, InterruptedException {
-        doThrow(BadHttpRequest.class).when(httpRequestResponseUtil).getBodyOfResponse(anyString());
+        doThrow(BadHttpRequest.class).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         assertThrows(ModelNotFoundException.class, () -> openGeoService.getCitiesDtoByName("   "));
     }

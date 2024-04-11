@@ -2,6 +2,7 @@ package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.dao.LocationDao;
 import avlyakulov.timur.dao.SessionDao;
+import avlyakulov.timur.dao.api.UrlBuilder;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
@@ -9,9 +10,9 @@ import avlyakulov.timur.model.Location;
 import avlyakulov.timur.model.Session;
 import avlyakulov.timur.service.LocationService;
 import avlyakulov.timur.service.SessionService;
-import avlyakulov.timur.service.api.OpenGeoService;
-import avlyakulov.timur.service.api.OpenWeatherService;
-import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
+import avlyakulov.timur.dao.api.OpenGeoService;
+import avlyakulov.timur.dao.api.OpenWeatherService;
+import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
@@ -29,9 +30,10 @@ import java.util.List;
 @WebServlet(urlPatterns = "/weather")
 public class MainPageLoggedController extends HttpServlet {
 
-    private final HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
+    private final HttpRequestResponse httpRequestResponse = new HttpRequestResponse();
 
-    private SessionService sessionService;
+    private final UrlBuilder urlBuilder = new UrlBuilder();
+
 
     private LocationService locationService;
 
@@ -42,21 +44,17 @@ public class MainPageLoggedController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         locationService = new LocationService(new LocationDao());
-        sessionService = new SessionService(new SessionDao());
-        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponseUtil),
-                locationService, httpRequestResponseUtil);
+        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponse, urlBuilder),
+                locationService, httpRequestResponse, urlBuilder);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-        Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
-        UserDto userLogin = sessionService.getUserDtoByHisSession(userSession);
+        UserDto userLogin = (UserDto) req.getAttribute("userLogin");
         context.setVariable("login", userLogin);
         try {
-            List<Location> locationList = locationService.getAllLocationByUserId(userLogin.getUserId());
-            List<WeatherCityDto> weatherList = openWeatherService.getWeatherByUserLocations(locationList);
+            List<WeatherCityDto> weatherList = openWeatherService.getWeatherByUserLocations(userLogin.getUserId());
             context.setVariable("weatherList", weatherList);
         } catch (URISyntaxException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -68,11 +66,9 @@ public class MainPageLoggedController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String latitude = req.getParameter("latitude");
         String longitude = req.getParameter("longitude");
-        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-        Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
-        UserDto userDto = sessionService.getUserDtoByHisSession(userSession);
-        LocationDto location = new LocationDto(new BigDecimal(latitude), new BigDecimal(longitude), userDto.getUserId());
-        locationService.deleteLocationByCoordinate(location);
+        UserDto userLogin = (UserDto) req.getAttribute("userLogin");
+        LocationDto locationDto = new LocationDto(new BigDecimal(latitude), new BigDecimal(longitude), userLogin.getUserId());
+        locationService.deleteLocationByCoordinate(locationDto);
         resp.sendRedirect("/WeatherApp-1.0/weather");
     }
 }

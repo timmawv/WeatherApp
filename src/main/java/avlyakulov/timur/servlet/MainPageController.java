@@ -1,10 +1,7 @@
 package avlyakulov.timur.servlet;
 
-import avlyakulov.timur.custom_exception.CookieNotExistException;
-import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.service.SessionService;
-import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.authentication.UserSessionCheck;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
@@ -26,7 +23,10 @@ public class MainPageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        UserSessionCheck.validateUserSession(sessionService, resp, req.getCookies());
+        boolean hasUserValidSession = UserSessionCheck.hasUserValidSession(sessionService, resp, req.getCookies());
+        if (hasUserValidSession) {
+            resp.sendRedirect("/WeatherApp-1.0/weather");
+        }
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageMain, context, resp);
     }
 }

@@ -1,25 +1,19 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.custom_exception.GlobalApiException;
-import avlyakulov.timur.custom_exception.JsonParseException;
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.TooManyLocationsException;
 import avlyakulov.timur.dao.LocationDao;
-import avlyakulov.timur.dao.SessionDao;
-import avlyakulov.timur.dto.LocationDto;
+import avlyakulov.timur.dao.api.OpenGeoService;
+import avlyakulov.timur.dao.api.OpenWeatherService;
+import avlyakulov.timur.dao.api.UrlBuilder;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
-import avlyakulov.timur.model.Session;
 import avlyakulov.timur.service.LocationService;
-import avlyakulov.timur.service.SessionService;
-import avlyakulov.timur.service.api.OpenGeoService;
-import avlyakulov.timur.service.api.OpenWeatherService;
-import avlyakulov.timur.servlet.util.HttpRequestResponseUtil;
-import avlyakulov.timur.util.CookieUtil;
+import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import avlyakulov.timur.util.HttpRequestJsonReader;
-import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,11 +32,12 @@ public class WeatherSearchServlet extends HttpServlet {
 
     private final String htmlPageWeather = "pages/weather";
 
-    private final HttpRequestResponseUtil httpRequestResponseUtil = new HttpRequestResponseUtil();
+    private final HttpRequestResponse httpRequestResponse = new HttpRequestResponse();
+
+    private final UrlBuilder urlBuilder = new UrlBuilder();
 
     private OpenWeatherService openWeatherService;
 
-    private SessionService sessionService;
 
     private LocationService locationService;
 
@@ -52,45 +47,32 @@ public class WeatherSearchServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         locationService = new LocationService(new LocationDao());
-        sessionService = new SessionService(new SessionDao());
-        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponseUtil),
-                locationService, httpRequestResponseUtil);
+        openWeatherService = new OpenWeatherService(new OpenGeoService(httpRequestResponse, urlBuilder),
+                locationService, httpRequestResponse, urlBuilder);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Context context = new Context();
-        String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-        Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
-        UserDto userLogin = sessionService.getUserDtoByHisSession(userSession);
+        UserDto userLogin = (UserDto) req.getAttribute("userLogin");
         context.setVariable("login", userLogin);
         String cityName = req.getParameter("city");
-        if (LoginRegistrationValidation.isCityNameValid(cityName, context)) {
-            try {
-                List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromCityNameLoggedUser(cityName, userLogin);
-                context.setVariable("weatherList", weatherList);
-                context.setVariable("cityName", cityName);
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
-            } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
-                context.setVariable("error_city_name", e.getMessage());
-                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
-            }
-        } else {
-            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
+        try {
+            List<WeatherCityDto> weatherList = openWeatherService.getWeatherListFromCityNameLoggedUser(cityName, userLogin);
+            context.setVariable("weatherList", weatherList);
+            context.setVariable("cityName", cityName);
+        } catch (URISyntaxException | InterruptedException | GlobalApiException e) {
+            context.setVariable("error_city_name", e.getMessage());
         }
+        ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageWeather, context, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
-            LocationDto locationDto = objectMapper.readValue(locationJson, new TypeReference<>() {
-            });
-            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
-            UserDto userDto = sessionService.getUserDtoByHisSession(userSession);
-            locationDto.setUserId(userDto.getUserId());
-            locationService.createLocation(locationDto);
+            UserDto userLogin = (UserDto) req.getAttribute("userLogin");
+            locationService.createLocationFromJsonFile(locationJson, userLogin.getUserId());
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException | TooManyLocationsException | ModelAlreadyExistsException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -104,13 +86,8 @@ public class WeatherSearchServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String locationJson = HttpRequestJsonReader.readJsonFileFromRequest(req);
-            LocationDto locationDto = objectMapper.readValue(locationJson, new TypeReference<>() {
-            });
-            String sessionIdFromCookie = CookieUtil.getSessionIdFromCookie(req.getCookies());
-            Session userSession = sessionService.getUserSessionIfItNotExpired(sessionIdFromCookie);
-            UserDto userDto = sessionService.getUserDtoByHisSession(userSession);
-            locationDto.setUserId(userDto.getUserId());
-            locationService.deleteLocationByCoordinate(locationDto);
+            UserDto userLogin = (UserDto) req.getAttribute("userLogin");
+            locationService.deleteLocationFromJsonFile(locationJson, userLogin.getUserId());
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (JsonParseException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

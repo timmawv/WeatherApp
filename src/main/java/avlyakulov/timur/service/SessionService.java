@@ -18,7 +18,7 @@ public class SessionService {
         this.sessionDao = sessionDao;
     }
 
-    public String createSessionAndGetItsId(User user) {
+    public String createSession(User user) {
         Session session = new Session(UUID.randomUUID().toString(), user);
         sessionDao.create(session);
         return session.getId();
@@ -28,14 +28,12 @@ public class SessionService {
         Session session = sessionDao.getById(sessionId);
         if (session == null) {
             throw new SessionNotValidException("User session was expired or it doesn't exist");
-        } else {
-            LocalDateTime now = LocalDateTime.now();
-            if (now.isBefore(session.getExpiresAt())) {
-                return session;
-            } else {
-                throw new SessionNotValidException("User session was expired");
-            }
         }
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(session.getExpiresAt())) {
+            return session;
+        }
+        throw new SessionNotValidException("User session was expired");
     }
 
     public UserDto getUserDtoByHisSession(Session session) {
@@ -52,11 +50,10 @@ public class SessionService {
     }
 
     public Boolean isUserSessionValid(String sessionId) {
-        Boolean isSessionValid = sessionDao.isSessionValid(sessionId);
-        if (isSessionValid == null) {
-            throw new SessionNotValidException();
-        } else {
-            return isSessionValid;
+        Session session = sessionDao.getById(sessionId);
+        if (session == null) {
+            return false;
         }
+        return LocalDateTime.now().isBefore(session.getExpiresAt());
     }
 }

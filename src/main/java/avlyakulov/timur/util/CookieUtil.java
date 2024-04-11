@@ -9,18 +9,21 @@ import java.util.Optional;
 
 public class CookieUtil {
 
+    //30 minutes
+    private static final int COOKIE_TIME_EXIST = 30 * 60;
+
     public static void createCookie(String sessionId, HttpServletResponse resp) throws IOException {
         Cookie cookie = new Cookie("session_id", sessionId);
-        cookie.setMaxAge(30 * 60);
+        cookie.setMaxAge(COOKIE_TIME_EXIST);
         resp.addCookie(cookie);
     }
 
-    public static Optional<String> getSessionExpireCookie(Cookie[] cookies) {
-        if (cookies == null ) {
+    public static Optional<String> getCookieSessionError(Cookie[] cookies) {
+        if (cookies == null) {
             return Optional.empty();
         }
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("unauthorized_request")) {
+            if (cookie.getName().equals("cookie_session_error")) {
                 return Optional.of(cookie.getValue());
             }
         }
@@ -30,11 +33,10 @@ public class CookieUtil {
     public static String getSessionIdFromCookie(Cookie[] cookies) {
         if (cookies == null) {
             throw new CookieNotExistException("Cookie doesn't exist");
-        } else {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("session_id")) {
-                    return cookie.getValue();
-                }
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("session_id")) {
+                return cookie.getValue();
             }
         }
         throw new CookieNotExistException("Cookie doesn't exist");

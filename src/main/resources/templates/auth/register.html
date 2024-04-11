@@ -15,7 +15,7 @@
 
 <main>
     <div th:if="${success_registration} == false" class="container main">
-        <form action="/WeatherApp-1.0/register" method="POST">
+        <form action="/WeatherApp-1.0/registration" method="POST">
             <div class="mb-3">
                 <label for="exampleInputEmail" class="form-label">Username or Email</label>
                 <input type="text" name="login" class="form-control" id="exampleInputEmail"
@@ -39,7 +39,6 @@
 
     <div th:if="${success_registration} == true" class="success_register">
         <h1>You were successfully registered!</h1>
-        <a href="/WeatherApp-1.0/main-page">Go to main page</a>
         <a href="/WeatherApp-1.0/login">Go to login page</a>
     </div>
 </main>
