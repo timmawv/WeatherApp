@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  install:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,6 +16,5 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-
       - name: Run tests with Maven
         run: mvn -B test --file pom.xml

@@ -4,5 +4,6 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -Dmaven.test.skip
 
-FROM tomcat:10.1.18-jdk17
+FROM tomcat
 COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/
+CMD ["catalina.sh", "run"]
