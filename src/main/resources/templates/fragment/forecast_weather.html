@@ -1,11 +1,19 @@
 <div th:fragment="forecast_block" th:if="${weatherList != null and weatherList.size() > 0}" class="container">
+    <div style="margin-left: 20px" class="btn-group" role="group" aria-label="Basic example">
+        <button  type="button" class="btn btn-light one active">full view</button>
+        <button type="button" class="btn btn-light two">short view</button>
+    </div>
     <div class="forecast_wrapper">
         <div class="forecast" th:each="weather : ${weatherList}">
-            <h1 class="location_sign" th:text="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}"></h1>
+            <h1 class="location_sign"
+                th:text="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}"></h1>
             <form th:if="${login != null}" id="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
-                <input type="hidden" id="latitudeId" name="latitude" th:value="${weather.getCityInformation().getLatitude()}">
-                <input type="hidden" id="longitudeId" name="longitude" th:value="${weather.getCityInformation().getLongitude()}">
-                <input type="hidden" id="cityNameId" name="cityName" th:value="${weather.getCityInformation().getCityName()}">
+                <input type="hidden" id="latitudeId" name="latitude"
+                       th:value="${weather.getCityInformation().getLatitude()}">
+                <input type="hidden" id="longitudeId" name="longitude"
+                       th:value="${weather.getCityInformation().getLongitude()}">
+                <input type="hidden" id="cityNameId" name="cityName"
+                       th:value="${weather.getCityInformation().getCityName()}">
                 <div class='large-font text-center top-20'>
                     <ion-icon id="heart" name="heart"
                               th:class="${weather.isFavorite() == true} ? 'button active' : 'button'">
@@ -20,7 +28,8 @@
                 <div class="city_info">
                     <h3>City info</h3>
                     <p th:text="'Country: ' + ${weather.getCityInformation().getCountry()}"></p>
-                    <p th:if="${weather.getCityInformation().getState() != null}" th:text="'State: ' + ${weather.getCityInformation().getState()}"></p>
+                    <p th:if="${weather.getCityInformation().getState() != null}"
+                       th:text="'State: ' + ${weather.getCityInformation().getState()}"></p>
                     <p th:text="'City: ' + ${weather.getCityInformation().getCityName()}"></p>
                 </div>
             </div>
@@ -30,7 +39,8 @@
                     <p th:text="'Detailed weather: ' + ${weather.getWeather().getDescription()}"></p>
                     <img width="50px" height="40px"
                          src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-celsius.svg?raw=true"
-                         alt="wind"><span th:text="'Temperature now: ' + ${weather.getTemperature().getTemp()}"></span><br>
+                         alt="wind"><span
+                        th:text="'Temperature now: ' + ${weather.getTemperature().getTemp()}"></span><br>
                     <img width="50px" height="40px"
                          src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-warmer.svg?raw=true"
                          alt="wind"><span
@@ -41,7 +51,8 @@
                         th:text="'Min temperature: ' + ${weather.getTemperature().getTemperatureMin()}"></span><br>
                     <img width="50px" height="40px"
                          src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/thermometer-celsius.svg?raw=true"
-                         alt="wind"><span th:text="'Feels like: ' + ${weather.getTemperature().getFeelsLike()}"></span><br>
+                         alt="wind"><span
+                        th:text="'Feels like: ' + ${weather.getTemperature().getFeelsLike()}"></span><br>
                     <img width="50px" height="40px"
                          src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/humidity.svg?raw=true"
                          alt="wind"><span th:text="'Humidity: ' + ${weather.getTemperature().getHumidity()}"></span>
