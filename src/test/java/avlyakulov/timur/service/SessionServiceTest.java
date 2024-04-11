@@ -99,7 +99,9 @@ class SessionServiceTest {
     void isUserSessionValid_userSessionNotExistInDB() {
         doReturn(null).when(sessionDao).getById(anyString());
 
-        assertThrows(SessionNotValidException.class, () -> sessionService.isUserSessionValid(anyString()));
+        Boolean userSessionValid = sessionService.isUserSessionValid(anyString());
+
+        assertThat(userSessionValid).isFalse();
     }
 
     @Test
