@@ -1,0 +1,10 @@
+name: Check
+on: push
+jobs:
+  deps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install deps
+        run: ./mvnw clean install
