@@ -52,7 +52,7 @@ public class SessionService {
     public Boolean isUserSessionValid(String sessionId) {
         Session session = sessionDao.getById(sessionId);
         if (session == null) {
-            throw new SessionNotValidException();
+            return false;
         }
         return LocalDateTime.now().isBefore(session.getExpiresAt());
     }

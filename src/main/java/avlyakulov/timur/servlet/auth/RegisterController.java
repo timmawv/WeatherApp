@@ -67,10 +67,12 @@ public class RegisterController extends HttpServlet {
             try {
                 userService.createUser(user);
             } catch (ModelAlreadyExistsException e) {
-
+                context.setVariable("error_field", e.getMessage());
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
+                return;
             }
-            ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
         }
+        context.setVariable("success_registration", true);
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
     }
 }

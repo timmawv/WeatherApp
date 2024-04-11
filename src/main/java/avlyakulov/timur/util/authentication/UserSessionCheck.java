@@ -1,7 +1,6 @@
 package avlyakulov.timur.util.authentication;
 
 import avlyakulov.timur.custom_exception.CookieNotExistException;
-import avlyakulov.timur.custom_exception.SessionNotValidException;
 import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
@@ -19,11 +18,9 @@ public class UserSessionCheck {
             }
             CookieUtil.deleteSessionIdCookie(resp);
             sessionService.deleteSessionById(sessionIdFromCookie);
-        } catch (CookieNotExistException ignored) {
-
-        } catch (SessionNotValidException e) {
-            CookieUtil.deleteSessionIdCookie(resp);
+            return false;
+        } catch (CookieNotExistException e) {
+            return false;
         }
-        return false;
     }
 }
