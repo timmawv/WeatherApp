@@ -5,7 +5,4 @@ public class BadHttpRequest extends RuntimeException {
     public BadHttpRequest() {
     }
 
-    public BadHttpRequest(String message) {
-        super(message);
-    }
 }

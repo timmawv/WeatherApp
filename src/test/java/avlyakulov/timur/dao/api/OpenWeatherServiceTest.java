@@ -1,7 +1,7 @@
 package avlyakulov.timur.dao.api;
 
 import avlyakulov.timur.JsonLoadTestBase;
-import avlyakulov.timur.dto.GeoCityDto;
+import avlyakulov.timur.dto.api.GeoCityDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Locations
     user_id   INT     NOT NULL REFERENCES Users (id),
     latitude  DECIMAL NOT NULL,
     longitude DECIMAL NOT NULL,
-    UNIQUE (user_id, latitude, longitude)
+    UNIQUE (latitude, longitude, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS Sessions
@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS Sessions
     expires_at timestamp(9) NOT NULL
 );
 
-CREATE INDEX idx_user_login ON Users (login);
-CREATE INDEX idx_user_locations ON Locations (latitude, longitude, user_id);
 CREATE INDEX idx_user_session ON Sessions (expires_at);
 
 INSERT INTO Users(login, password)

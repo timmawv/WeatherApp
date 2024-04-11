@@ -9,9 +9,12 @@ import java.util.Optional;
 
 public class CookieUtil {
 
+    //30 minutes
+    private static final int COOKIE_TIME_EXIST = 30 * 60;
+
     public static void createCookie(String sessionId, HttpServletResponse resp) throws IOException {
         Cookie cookie = new Cookie("session_id", sessionId);
-        cookie.setMaxAge(30 * 60);
+        cookie.setMaxAge(COOKIE_TIME_EXIST);
         resp.addCookie(cookie);
     }
 

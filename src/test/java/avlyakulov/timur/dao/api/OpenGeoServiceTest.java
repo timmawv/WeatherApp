@@ -3,12 +3,11 @@ package avlyakulov.timur.dao.api;
 import avlyakulov.timur.JsonLoadTestBase;
 import avlyakulov.timur.custom_exception.BadHttpRequest;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
-import avlyakulov.timur.dto.GeoCityDto;
+import avlyakulov.timur.dto.api.GeoCityDto;
 import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 

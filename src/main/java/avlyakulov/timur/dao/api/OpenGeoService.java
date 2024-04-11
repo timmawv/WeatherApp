@@ -3,7 +3,7 @@ package avlyakulov.timur.dao.api;
 import avlyakulov.timur.custom_exception.BadHttpRequest;
 import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
-import avlyakulov.timur.dto.GeoCityDto;
+import avlyakulov.timur.dto.api.GeoCityDto;
 import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

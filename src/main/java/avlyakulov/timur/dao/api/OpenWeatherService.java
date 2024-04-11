@@ -3,7 +3,7 @@ package avlyakulov.timur.dao.api;
 import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.custom_exception.ServerErrorException;
-import avlyakulov.timur.dto.GeoCityDto;
+import avlyakulov.timur.dto.api.GeoCityDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
 import avlyakulov.timur.model.Location;
