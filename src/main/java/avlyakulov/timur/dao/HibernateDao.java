@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class HibernateDao {
 
     private final SessionFactory sessionFactory = HibernateSingletonUtil.getSessionFactory();
-
+    //add find all test
     public void executeInTransaction(Consumer<Session> operation) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
