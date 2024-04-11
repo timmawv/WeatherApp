@@ -42,6 +42,7 @@ public class UserService extends LoginRegistrationValidation implements BCryptPa
     public boolean isUserLoginAndPasswordAreValid(Context context, UserRegistrationDto userDto) {
         if (isUserLoginValid(userDto.getLogin(), context) && isPasswordTheSameAndStrong(userDto.getPassword(), userDto.getConfirmPassword(), context)) {
             context.setVariable("success_registration", true);
+            return true;
         }
         return false;
     }

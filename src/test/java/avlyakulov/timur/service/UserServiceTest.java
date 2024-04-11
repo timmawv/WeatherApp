@@ -2,11 +2,16 @@ package avlyakulov.timur.service;
 
 import avlyakulov.timur.custom_exception.UserCredentialsException;
 import avlyakulov.timur.dao.UserDao;
+import avlyakulov.timur.dto.UserRegistrationDto;
 import avlyakulov.timur.model.User;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.thymeleaf.context.Context;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -70,5 +75,68 @@ public class UserServiceTest {
 
         verify(userDao, times(1)).getUserByLogin(TIMUR.getLogin());
         assertThat(userCredentialsException.getMessage()).isEqualTo("Login or password isn't correct");
+    }
+
+
+    @Nested
+    @Tag("login_password_validation")
+    @DisplayName("Test user login validation functionality")
+    class LoginPasswordValidation {
+
+        private final Context context = new Context();
+
+        private UserRegistrationDto userLoginValid = new UserRegistrationDto("timur", "cJ3SKJ2mb8BVkt", "cJ3SKJ2mb8BVkt");
+
+        private UserRegistrationDto userLoginInvalid = new UserRegistrationDto("timur 1", "cJ3SKJ2mb8BVkt", "cJ3SKJ2mb8BVkt");
+
+        private UserRegistrationDto userEmailLoginValid = new UserRegistrationDto("timur@gmail.com", "cJ3SKJ2mb8BVkt", "cJ3SKJ2mb8BVkt");
+
+        private UserRegistrationDto userEmailLoginInvalid = new UserRegistrationDto("timur@.com", "cJ3SKJ2mb8BVkt", "cJ3SKJ2mb8BVkt");
+
+        private UserRegistrationDto userPasswordInvalid = new UserRegistrationDto("timur", "dummy", "cJ3SKJ2mb8BVkt");
+
+        private UserRegistrationDto userConfirmPasswordInvalid = new UserRegistrationDto("timur", "cJ3SKJ2mb8BVkt", "dummy");
+
+        @Test
+        void isUserLoginAndPasswordAreValid_returnTrue_userHasValidLoginAndPassword() {
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userLoginValid);
+
+            assertThat(userLoginAndPasswordAreValid).isTrue();
+        }
+
+        @Test
+        void isUserLoginAndPasswordAreValid_returnFalse_userHasInvalidLogin() {
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userLoginInvalid);
+
+            assertThat(userLoginAndPasswordAreValid).isFalse();
+        }
+
+        @Test
+        void isUserLoginAndPasswordAreValid_returnTrue_userHasValidEmailLogin() {
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userEmailLoginValid);
+
+            assertThat(userLoginAndPasswordAreValid).isTrue();
+        }
+
+        @Test
+        void isUserLoginAndPasswordAreValid_returnFalse_userHasInvalidEmailLogin() {
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userEmailLoginInvalid);
+
+            assertThat(userLoginAndPasswordAreValid).isFalse();
+        }
+
+        @Test
+        void isUserLoginAndPasswordAreValid_returnFalse_userHasWeakPassword() {
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userPasswordInvalid);
+
+            assertThat(userLoginAndPasswordAreValid).isFalse();
+        }
+
+        @Test
+        void isUserLoginAndPasswordAreValid_returnFalse_userHasInvalidConfirmPassword() {
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userConfirmPasswordInvalid);
+
+            assertThat(userLoginAndPasswordAreValid).isFalse();
+        }
     }
 }

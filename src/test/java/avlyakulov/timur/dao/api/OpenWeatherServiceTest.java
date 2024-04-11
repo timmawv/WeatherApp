@@ -58,6 +58,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getOneWeather() throws URISyntaxException, IOException, InterruptedException {
         doReturn(userNoLocations).when(locationService).getAllLocationByUserId(TIMUR.getUserId());
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
+        doReturn(" ").when(urlBuilder).buildUrlWithParameters(anyString(), anyString(), anyString());
         doReturn(weatherJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
@@ -101,6 +102,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     void getWeatherListFromCityName_getOneWeather_userHasSameLocation() throws URISyntaxException, IOException, InterruptedException {
         doReturn(userHasOneLocation).when(locationService).getAllLocationByUserId(TIMUR.getUserId());
         doReturn(locationListFromOpenGeo).when(openGeoService).getCitiesDtoByName(POLTAVA.getCityName());
+        doReturn(" ").when(urlBuilder).buildUrlWithParameters(anyString(), anyString(), anyString());
         doReturn(weatherJson).when(httpRequestResponse).getBodyOfResponse(anyString());
 
         List<WeatherCityDto> weatherListFromCityName = openWeatherService.getWeatherListFromCityNameLoggedUser(POLTAVA.getCityName(), TIMUR);
@@ -124,6 +126,7 @@ class OpenWeatherServiceTest extends JsonLoadTestBase {
     @Test
     void getWeatherByUserLocations_userHasOneLocation() throws URISyntaxException, IOException, InterruptedException {
         doReturn(weatherJson).when(httpRequestResponse).getBodyOfResponse(anyString());
+        doReturn(" ").when(urlBuilder).buildUrlWithParameters(anyString(), anyString(), anyString());
         doReturn(userHasOneLocation).when(locationService).getAllLocationByUserId(anyInt());
 
         List<WeatherCityDto> weatherByUserLocations = openWeatherService.getWeatherByUserLocations(TIMUR.getUserId());

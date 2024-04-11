@@ -2,6 +2,7 @@ package avlyakulov.timur.dao.api;
 
 import avlyakulov.timur.JsonLoadTestBase;
 import avlyakulov.timur.custom_exception.BadHttpRequest;
+import avlyakulov.timur.custom_exception.GlobalApiException;
 import avlyakulov.timur.custom_exception.ModelNotFoundException;
 import avlyakulov.timur.dto.api.GeoCityDto;
 import avlyakulov.timur.servlet.util.HttpRequestResponse;
@@ -76,9 +77,18 @@ class OpenGeoServiceTest extends JsonLoadTestBase {
     }
 
     @Test
+    void getCitiesDtoByName_throwsException_cityNameIsInvalid() throws URISyntaxException, IOException, InterruptedException {
+        String invalidCityName = "   ";
+
+        assertThrows(GlobalApiException.class, () -> openGeoService.getCitiesDtoByName(invalidCityName));
+    }
+
+    @Test
     void getCitiesDtoByName_throwsException_badRequestFromUser() throws URISyntaxException, IOException, InterruptedException {
         doThrow(BadHttpRequest.class).when(httpRequestResponse).getBodyOfResponse(anyString());
 
-        assertThrows(ModelNotFoundException.class, () -> openGeoService.getCitiesDtoByName("   "));
+        String invalidCityName = "Dummy";
+
+        assertThrows(ModelNotFoundException.class, () -> openGeoService.getCitiesDtoByName(invalidCityName));
     }
 }
