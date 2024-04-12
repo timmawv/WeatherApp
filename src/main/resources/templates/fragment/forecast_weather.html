@@ -1,18 +1,19 @@
 <div th:fragment="forecast_block" th:if="${weatherList != null and weatherList.size() > 0}" class="container">
-    <div style="margin-left: 20px" class="btn-group" role="group" aria-label="Basic example">
-        <button  type="button" class="btn btn-light one active">full view</button>
-        <button type="button" class="btn btn-light two">short view</button>
+    <div style="margin-left: 20px; margin-top: 10px" class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-outline-primary one active">full view</button>
+        <button type="button" class="btn btn-outline-primary two">short view</button>
     </div>
     <div class="forecast_wrapper">
-        <div class="forecast" th:each="weather : ${weatherList}">
+
+        <div class="forecast full" th:each="weather : ${weatherList}">
             <h1 class="location_sign"
                 th:text="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}"></h1>
-            <form th:if="${login != null}" id="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
-                <input type="hidden" id="latitudeId" name="latitude"
+            <form th:if="${login != null}" class="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
+                <input type="hidden" class="latitudeId" name="latitude"
                        th:value="${weather.getCityInformation().getLatitude()}">
-                <input type="hidden" id="longitudeId" name="longitude"
+                <input type="hidden" class="longitudeId" name="longitude"
                        th:value="${weather.getCityInformation().getLongitude()}">
-                <input type="hidden" id="cityNameId" name="cityName"
+                <input type="hidden" class="cityNameId" name="cityName"
                        th:value="${weather.getCityInformation().getCityName()}">
                 <div class='large-font text-center top-20'>
                     <ion-icon id="heart" name="heart"
@@ -79,5 +80,39 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="forecast short" style="display: none" th:each="weather : ${weatherList}">
+            <h1 class="location_sign"
+                th:text="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}"></h1>
+            <form th:if="${login != null}" class="addForecast" th:method="POST" action="/WeatherApp-1.0/weather">
+                <input type="hidden" class="latitudeId" name="latitude"
+                       th:value="${weather.getCityInformation().getLatitude()}">
+                <input type="hidden" class="longitudeId" name="longitude"
+                       th:value="${weather.getCityInformation().getLongitude()}">
+                <input type="hidden" class="cityNameId" name="cityName"
+                       th:value="${weather.getCityInformation().getCityName()}">
+                <div class='large-font text-center top-20'>
+                    <ion-icon id="heart" name="heart"
+                              th:class="${weather.isFavorite() == true} ? 'button active' : 'button'">
+                        <div class='red-bg'></div>
+                    </ion-icon>
+                </div>
+            </form>
+            <h3 th:text="${weather.getWeather().getMain()}"></h3>
+            <div class="img_city_info">
+                <img class="img_weather" width="200px" height="200px" th:src="${weather.getWeather().getIcon()}"
+                     alt="weather icon">
+                <div class="city_info">
+                    <h3>City info</h3>
+                    <p th:text="'Country: ' + ${weather.getCityInformation().getCountry()}"></p>
+                    <p th:if="${weather.getCityInformation().getState() != null}"
+                       th:text="'State: ' + ${weather.getCityInformation().getState()}"></p>
+                    <p th:text="'City: ' + ${weather.getCityInformation().getCityName()}"></p>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
