@@ -67,6 +67,7 @@ public class HibernateSingletonUtil {
                     .addAnnotatedClass(Location.class)
                     .buildSessionFactory();
         }
+
     }
 
     public static SessionFactory getSessionFactory() {
