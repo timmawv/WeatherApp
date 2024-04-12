@@ -46,7 +46,7 @@
             </column>
             <column name="user_id" type="int">
                 <constraints nullable="false" foreignKeyName="locations_user_fk" referencedTableName="users"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" deleteCascade="true"/>
             </column>
         </createTable>
 
@@ -67,7 +67,7 @@
             </column>
             <column name="user_id" type="int">
                 <constraints nullable="false" foreignKeyName="session_user_fk" referencedTableName="users"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="id" deleteCascade="true"/>
             </column>
             <column name="expires_at" type="TIMESTAMP">
                 <constraints nullable="false"/>

@@ -11,14 +11,14 @@ CREATE TABLE IF NOT EXISTS Locations
     name      VARCHAR NOT NULL,
     latitude  DECIMAL NOT NULL,
     longitude DECIMAL NOT NULL,
-    user_id   INT     NOT NULL REFERENCES Users (id),
+    user_id   INT     NOT NULL REFERENCES Users (id) ON DELETE CASCADE,
     UNIQUE (latitude, longitude, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS Sessions
 (
     id         VARCHAR PRIMARY KEY,
-    user_id    INT          NOT NULL REFERENCES Users (id),
+    user_id    INT       NOT NULL REFERENCES Users (id) ON DELETE CASCADE,
     expires_at timestamp NOT NULL
 );
 
