@@ -5,9 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "sessions",
@@ -35,7 +35,7 @@ public class Session {
 
     @PrePersist
     private void setExpiresAt() {
-        this.expiresAt = LocalDateTime.now().plusMinutes(minutesSessionExist);
+        this.expiresAt = LocalDateTime.now().withNano(0).plusMinutes(minutesSessionExist);
     }
 
     public Session(String id, User user) {

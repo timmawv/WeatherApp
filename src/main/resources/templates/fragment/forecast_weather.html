@@ -22,7 +22,15 @@
                     </ion-icon>
                 </div>
             </form>
-            <h3 th:text="${weather.getWeather().getMain()}"></h3>
+            <h3 style="display: inline-block;" th:text="${weather.getWeather().getMain()}"></h3>
+
+            <form style="display: inline-block; margin-left: 15px" method="GET" action="/WeatherApp-1.0/forecast">
+                <input type="hidden" class="latitudeId" name="latitude" th:value="${weather.getCityInformation().getLatitude()}">
+                <input type="hidden" class="longitudeId" name="longitude" th:value="${weather.getCityInformation().getLongitude()}">
+                <input type="hidden" class="longitudeId" name="city" th:value="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}">
+                <button type="submit" class="button-36" role="button">Forecast</button>
+            </form>
+
             <div class="img_city_info">
                 <img class="img_weather" width="200px" height="200px" th:src="${weather.getWeather().getIcon()}"
                      alt="weather icon">
@@ -32,6 +40,7 @@
                     <p th:if="${weather.getCityInformation().getState() != null}"
                        th:text="'State: ' + ${weather.getCityInformation().getState()}"></p>
                     <p th:text="'City: ' + ${weather.getCityInformation().getCityName()}"></p>
+
                 </div>
             </div>
             <div class="weather_wind">
@@ -56,8 +65,10 @@
                         th:text="'Feels like: ' + ${weather.getTemperature().getFeelsLike()}"></span><br>
                     <img width="50px" height="40px"
                          src="https://github.com/timmawv/WeatherApp/blob/main/img/weather/humidity.svg?raw=true"
-                         alt="wind"><span th:text="'Humidity: ' + ${weather.getTemperature().getHumidity()}"></span>
+                         alt="wind"><span th:text="'Humidity: ' + ${weather.getTemperature().getHumidity()}"></span><br>
+
                 </div>
+
                 <div class="wind">
                     <h3>Wind</h3>
                     <img width="50px" height="40px"
@@ -99,7 +110,15 @@
                     </ion-icon>
                 </div>
             </form>
-            <h3 th:text="${weather.getWeather().getMain()}"></h3>
+            <h3 style="display: inline-block;" th:text="${weather.getWeather().getMain()}"></h3>
+
+            <form style="display: inline-block; margin-left: 15px" method="GET" action="/WeatherApp-1.0/forecast">
+                <input type="hidden" class="latitudeId" name="latitude" th:value="${weather.getCityInformation().getLatitude()}">
+                <input type="hidden" class="longitudeId" name="longitude" th:value="${weather.getCityInformation().getLongitude()}">
+                <input type="hidden" class="longitudeId" name="city" th:value="${weather.getCityInformation().getCityName()} + ', ' + ${weather.getCityInformation().getCountry()}">
+                <button type="submit" class="button-36" role="button">Forecast</button>
+            </form>
+
             <div class="img_city_info">
                 <img class="img_weather" width="200px" height="200px" th:src="${weather.getWeather().getIcon()}"
                      alt="weather icon">
@@ -112,7 +131,6 @@
                 </div>
             </div>
         </div>
-
 
     </div>
 </div>

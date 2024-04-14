@@ -14,7 +14,7 @@ import org.thymeleaf.context.Context;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = "/main-page")
-public class MainPageController extends HttpServlet {
+public class MainPageServlet extends HttpServlet {
 
     private final String htmlPageMain = "pages/main-page";
 

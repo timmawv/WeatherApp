@@ -1,19 +1,14 @@
 package avlyakulov.timur.servlet;
 
 import avlyakulov.timur.dao.LocationDao;
-import avlyakulov.timur.dao.SessionDao;
 import avlyakulov.timur.dao.api.UrlBuilder;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.dto.UserDto;
 import avlyakulov.timur.dto.WeatherCityDto;
-import avlyakulov.timur.model.Location;
-import avlyakulov.timur.model.Session;
 import avlyakulov.timur.service.LocationService;
-import avlyakulov.timur.service.SessionService;
 import avlyakulov.timur.dao.api.OpenGeoService;
 import avlyakulov.timur.dao.api.OpenWeatherService;
 import avlyakulov.timur.servlet.util.HttpRequestResponse;
-import avlyakulov.timur.util.CookieUtil;
 import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -28,7 +23,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/weather")
-public class MainPageLoggedController extends HttpServlet {
+public class MainPageLoggedServlet extends HttpServlet {
 
     private final HttpRequestResponse httpRequestResponse = new HttpRequestResponse();
 

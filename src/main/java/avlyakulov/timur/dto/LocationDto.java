@@ -30,4 +30,10 @@ public class LocationDto {
         this.longitude = longitude;
         this.userId = userId;
     }
+
+    public LocationDto(BigDecimal latitude, BigDecimal longitude, String name) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+    }
 }
