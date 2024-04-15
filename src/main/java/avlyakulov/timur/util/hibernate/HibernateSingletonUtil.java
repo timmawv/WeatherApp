@@ -59,6 +59,7 @@ public class HibernateSingletonUtil {
                 hibernateProperty.load(classLoader.getResourceAsStream(deployConfigurationType.getPropertyFileName()));
             } catch (IOException e) {
                 log.error("Error with configure file for hibernate");
+                throw new RuntimeException(e);
             }
             sessionFactory = new Configuration()
                     .addProperties(hibernateProperty)
@@ -67,6 +68,7 @@ public class HibernateSingletonUtil {
                     .addAnnotatedClass(Location.class)
                     .buildSessionFactory();
         }
+
     }
 
     public static SessionFactory getSessionFactory() {

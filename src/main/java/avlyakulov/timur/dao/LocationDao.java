@@ -1,14 +1,13 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
-import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.model.Location;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class LocationDao extends HibernateDao {
+public class LocationDao extends HibernateDao implements AbstractDao<Location> {
 
     public List<Location> findAll() {
         return executeNotInTransaction(session -> session.createQuery("from Location", Location.class).getResultList());

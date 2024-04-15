@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/main-page/search")
-public class MainPageWeatherSearchController extends HttpServlet {
+public class MainPageWeatherSearchServlet extends HttpServlet {
 
     private final String htmlPageMainWeather = "pages/main-page-weather";
 

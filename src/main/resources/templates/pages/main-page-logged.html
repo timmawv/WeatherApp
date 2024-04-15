@@ -8,8 +8,6 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="/WeatherApp-1.0/styles/css/main-page.css"/>
     <link type="text/css" rel="stylesheet" href="/WeatherApp-1.0/styles/css/weather.css"/>
-    <script src="/WeatherApp-1.0/styles/js/removeFavorite.js"></script>
-    <script src='https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js'></script>
 </head>
 <body>
 
@@ -18,7 +16,7 @@
 </header>
 
 <main>
-    <div th:insert="~{fragment/forecast_weather :: forecast_block}"></div>
+    <div style="visibility: visible" th:insert="~{fragment/forecast_weather :: forecast_block}"></div>
 
     <div th:if="${weatherList.size() == 0}" class="wrapper_sign">
         <h1>You didn't save any locations...</h1>
@@ -27,9 +25,13 @@
 
 <footer th:insert="~{fragment/footer :: footer}"></footer>
 
+<script src="/WeatherApp-1.0/styles/js/viewButton.js"></script>
+<script src="/WeatherApp-1.0/styles/js/removeFavorite.js"></script>
+<script src='https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js'></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         removeFavorite();
+        viewButton();
     });
 </script>
 </body>

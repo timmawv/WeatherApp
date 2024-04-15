@@ -1,39 +1,41 @@
 package avlyakulov.timur.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
+import java.time.format.DateTimeFormatter;
 
 @Entity
-@Table(name = "sessions")
+@Table(name = "sessions",
+        indexes = {
+                @Index(name = "idx_user_session", columnList = "expires_at")
+        })
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Session {
 
-    @Transient
-    private int minutesSessionExist = 30;
-
     @Id
-    //@JdbcTypeCode(SqlTypes.VARCHAR) // hibernate 6 way
     private String id;
 
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Transient
+    private int minutesSessionExist = 30;
+
     @PrePersist
     private void setExpiresAt() {
-        this.expiresAt = LocalDateTime.now().plusMinutes(minutesSessionExist);
+        this.expiresAt = LocalDateTime.now().withNano(0).plusMinutes(minutesSessionExist);
     }
 
     public Session(String id, User user) {

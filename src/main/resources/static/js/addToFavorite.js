@@ -1,17 +1,17 @@
 function addToFavorite() {
-    var buttons = document.querySelectorAll('.button');
+    const buttons = document.querySelectorAll('.button');
 
     buttons.forEach(function (button) {
         button.addEventListener('click', function () {
 
             event.preventDefault(); // Предотвращаем отправку формы по умолчанию
 
-            var form = button.closest('form');
-            var latitude = form.querySelector('#latitudeId').value;
-            var longitude = form.querySelector('#longitudeId').value;
-            var cityName = form.querySelector('#cityNameId').value;
+            const form = button.closest('form');
+            const latitude = form.querySelector('.latitudeId').value;
+            const longitude = form.querySelector('.longitudeId').value;
+            const cityName = form.querySelector('.cityNameId').value;
 
-            var isActive = button.classList.contains('active')
+            const isActive = button.classList.contains('active')
 
             if (isActive) {
                 fetch('/WeatherApp-1.0/weather/search', {

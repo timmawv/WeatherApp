@@ -1,0 +1,20 @@
+.location_sign {
+    text-align: center;
+}
+.btn-group {
+    margin: auto;
+}
+.hourly.images {
+    display: flex;
+    justify-content: space-between;
+}
+
+.weekly.images {
+    display: none;
+    justify-content: space-between;
+}
+
+.forecast {
+    width: 70%;
+    margin: auto;
+}

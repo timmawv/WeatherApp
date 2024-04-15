@@ -8,7 +8,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import java.util.List;
 
 @Slf4j
-public class SessionDao extends HibernateDao {
+public class SessionDao extends HibernateDao implements AbstractDao<Session> {
 
     public List<Session> findAll() {
         return executeNotInTransaction(session -> session.createQuery("from Session", Session.class).getResultList());

@@ -2,6 +2,7 @@ package avlyakulov.timur.listener;
 
 import avlyakulov.timur.util.hibernate.DeployConfigurationType;
 import avlyakulov.timur.util.hibernate.HibernateSingletonUtil;
+import avlyakulov.timur.util.hibernate.LiquibaseInitializer;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -13,6 +14,8 @@ public class HibernateInitializeListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         HibernateSingletonUtil.initSessionFactory(DeployConfigurationType.PROD);
+        LiquibaseInitializer liquibaseInitializer = new LiquibaseInitializer();
+        liquibaseInitializer.addMigrationsToDB();
         log.info("HibernateInitializeListener listener was created and initialize Hibernate connection");
     }
 
