@@ -1,8 +1,20 @@
-.forecast {
-    padding: 20px;
-    margin: 15px;
+.location_sign {
+    text-align: center;
 }
-/*.img_wrapper {*/
-/*    display: flex;*/
-/*    gap: 30px;*/
-/*}*/
+.btn-group {
+    margin: auto;
+}
+.hourly.images {
+    display: flex;
+    justify-content: space-between;
+}
+
+.weekly.images {
+    display: none;
+    justify-content: space-between;
+}
+
+.forecast {
+    width: 70%;
+    margin: auto;
+}

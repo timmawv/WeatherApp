@@ -1,15 +1,32 @@
 <div th:fragment="forecast_block" th:if="${forecasts != null}" class="container">
 
     <div class="forecast_wrapper">
-
         <h1 class="location_sign" th:text="${forecasts.getCityInfo()}"></h1>
         <div class="forecast">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary one active">Hourly forecast</button>
+                <button type="button" class="btn btn-outline-primary two">Weekly forecast</button>
+            </div>
             <input type="hidden" class="temp" th:value="${temp}">
             <input type="hidden" class="time" th:value="${time}">
-            <canvas id="myChart" style="width:100%;"></canvas>
-            <div class="d-flex justify-content-between" style="margin-left: 2px">
+            <input type="hidden" class="mainWeather" th:value="${mainWeather}">
+            <input type="hidden" class="descriptions" th:value="${descriptions}">
+            <canvas id="hourlyChart" style="width:100%; display: block"></canvas>
+            <div class="hourly images">
                 <div th:each="forecast : ${forecasts.getForecastHourly()}">
                     <img height="60px" width="60px" th:src="${forecast.getWeather().getIcon()}" alt="icon">
+                </div>
+            </div>
+
+            <input type="hidden" class="temp_weekly" th:value="${tempWeekly}">
+            <input type="hidden" class="time_weekly" th:value="${timeWeekly}">
+            <input type="hidden" class="mainWeatherWeekly" th:value="${mainWeatherWeekly}">
+            <input type="hidden" class="descriptions_weekly" th:value="${summaryWeatherWeekly}">
+
+            <canvas id="weeklyChart" style="width:100%; display: none"></canvas>
+            <div class="weekly images">
+                <div th:each="forecastWeekly : ${forecasts.getForecastWeekly()}">
+                    <img height="60px" width="60px" th:src="${forecastWeekly.getWeather().getIcon()}" alt="icon">
                 </div>
             </div>
         </div>

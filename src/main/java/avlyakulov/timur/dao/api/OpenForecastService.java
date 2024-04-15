@@ -1,6 +1,6 @@
 package avlyakulov.timur.dao.api;
 
-import avlyakulov.timur.dto.ForecastHourlyDto;
+import avlyakulov.timur.dto.ForecastDto;
 import avlyakulov.timur.dto.LocationDto;
 import avlyakulov.timur.servlet.util.HttpRequestResponse;
 import avlyakulov.timur.util.api.SetMainWeatherUtil;
@@ -24,15 +24,16 @@ public class OpenForecastService {
         this.httpRequestResponse = httpRequestResponse;
     }
 
-    public ForecastHourlyDto getForecastHourly(LocationDto locationDto) {
+    public ForecastDto getForecastWeeklyHourly(LocationDto locationDto) {
         String fullUrlForecast = getFullUrlForecast(locationDto);
         try {
             String bodyOfResponse = httpRequestResponse.getBodyOfResponse(fullUrlForecast);
-            ForecastHourlyDto forecastHourlyDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
+            ForecastDto forecastDto = objectMapper.readValue(bodyOfResponse, new TypeReference<>() {
             });
-            forecastHourlyDto.getForecastHourly().forEach(SetMainWeatherUtil::setMainWeather);
-            forecastHourlyDto.setCityInfo(locationDto.getName());
-            return forecastHourlyDto;
+            forecastDto.getForecastHourly().forEach(SetMainWeatherUtil::setMainWeather);
+            forecastDto.getForecastWeekly().forEach(SetMainWeatherUtil::setMainWeather);
+            forecastDto.setCityInfo(locationDto.getName());
+            return forecastDto;
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
