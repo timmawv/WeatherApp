@@ -61,18 +61,21 @@ public class RegisterController extends HttpServlet {
             return;
         }
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto(login, password, confirmPassword);
-        boolean isUserLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userRegistrationDto);
+        boolean isUserLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(userRegistrationDto, context);
         if (isUserLoginAndPasswordAreValid) {
             User user = new User(userRegistrationDto.getLogin(), userRegistrationDto.getPassword());
             try {
                 userService.createUser(user);
+                context.setVariable("success_registration", true);
+                ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
+                return;
             } catch (ModelAlreadyExistsException e) {
                 context.setVariable("error_field", e.getMessage());
                 ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
                 return;
             }
         }
-        context.setVariable("success_registration", true);
+        context.setVariable("success_registration", false);
         ThymeleafUtilRespondHtmlView.respondHtmlPage(htmlPageRegister, context, resp);
     }
 }

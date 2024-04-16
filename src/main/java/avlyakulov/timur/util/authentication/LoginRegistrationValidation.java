@@ -55,10 +55,10 @@ public class LoginRegistrationValidation {
 
 
     private boolean isLoginValid(String login, Context context) {
-        if (!login.contains(" ") && (login.length() >= 2 && login.length() <= 10)) {
+        if (!login.contains(" ") && (login.length() >= 2 && login.length() <= 16)) {
             return true;
         } else {
-            setErrorToContext(context, "Your login can't contain space. Your length has to be from 2 to 10 symbols.");
+            setErrorToContext(context, "Your login can't contain space. Your length has to be from 2 to 16 symbols.");
             return false;
         }
     }
