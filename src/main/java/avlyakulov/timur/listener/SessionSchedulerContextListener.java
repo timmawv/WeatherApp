@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
 public class SessionSchedulerContextListener implements ServletContextListener {
     private ScheduledExecutorService scheduler;
 
-    private final int intervalMinutes = 10;
+    private final int intervalMinutes = 120;
 
-    private final int initialDelay = 2;
+    private final int initialDelay = 10;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
