@@ -99,42 +99,42 @@ public class UserServiceTest {
 
         @Test
         void isUserLoginAndPasswordAreValid_returnTrue_userHasValidLoginAndPassword() {
-            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userLoginValid);
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(userLoginValid, context);
 
             assertThat(userLoginAndPasswordAreValid).isTrue();
         }
 
         @Test
         void isUserLoginAndPasswordAreValid_returnFalse_userHasInvalidLogin() {
-            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userLoginInvalid);
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid( userLoginInvalid, context);
 
             assertThat(userLoginAndPasswordAreValid).isFalse();
         }
 
         @Test
         void isUserLoginAndPasswordAreValid_returnTrue_userHasValidEmailLogin() {
-            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userEmailLoginValid);
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid( userEmailLoginValid, context);
 
             assertThat(userLoginAndPasswordAreValid).isTrue();
         }
 
         @Test
         void isUserLoginAndPasswordAreValid_returnFalse_userHasInvalidEmailLogin() {
-            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userEmailLoginInvalid);
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid( userEmailLoginInvalid, context);
 
             assertThat(userLoginAndPasswordAreValid).isFalse();
         }
 
         @Test
         void isUserLoginAndPasswordAreValid_returnFalse_userHasWeakPassword() {
-            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userPasswordInvalid);
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid( userPasswordInvalid, context);
 
             assertThat(userLoginAndPasswordAreValid).isFalse();
         }
 
         @Test
         void isUserLoginAndPasswordAreValid_returnFalse_userHasInvalidConfirmPassword() {
-            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid(context, userConfirmPasswordInvalid);
+            boolean userLoginAndPasswordAreValid = userService.isUserLoginAndPasswordAreValid( userConfirmPasswordInvalid, context);
 
             assertThat(userLoginAndPasswordAreValid).isFalse();
         }

@@ -1,14 +1,11 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.custom_exception.ModelAlreadyExistsException;
 import avlyakulov.timur.custom_exception.UserCredentialsException;
 import avlyakulov.timur.dao.UserDao;
 import avlyakulov.timur.dto.UserRegistrationDto;
 import avlyakulov.timur.model.User;
 import avlyakulov.timur.util.BCryptPassword;
-import avlyakulov.timur.util.ContextUtil;
 import avlyakulov.timur.util.authentication.LoginRegistrationValidation;
-import avlyakulov.timur.util.thymeleaf.ThymeleafUtilRespondHtmlView;
 import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.context.Context;
 
@@ -39,9 +36,8 @@ public class UserService extends LoginRegistrationValidation implements BCryptPa
         return user;
     }
 
-    public boolean isUserLoginAndPasswordAreValid(Context context, UserRegistrationDto userDto) {
+    public boolean isUserLoginAndPasswordAreValid(UserRegistrationDto userDto, Context context) {
         if (isUserLoginValid(userDto.getLogin(), context) && isPasswordTheSameAndStrong(userDto.getPassword(), userDto.getConfirmPassword(), context)) {
-            context.setVariable("success_registration", true);
             return true;
         }
         return false;

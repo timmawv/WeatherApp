@@ -3,7 +3,7 @@
 ## Description
 
 `Weather App` - It is MVC Java Servlet App with Unit and Integration tests for testing functionality.
-It has a view with thymeleaf pages you can check weather any city and and create account for saving locations in DB.
+It has a view with thymeleaf pages you can check weather any city and create account for saving locations in DB.
 
 Project from this [course](https://zhukovsd.github.io/java-backend-learning-course/)
 
@@ -14,7 +14,10 @@ Project from this [course](https://zhukovsd.github.io/java-backend-learning-cour
 * Session Management
 * Docker
 * Docker compose
+* CI/CD 
+* GitHub Actions
 * Postgres, H2
+* Liquibase
 * Slf4j
 * Integration testing, JUnit 5, Mockito
 * Thymeleaf, HTML, CSS, JS
@@ -44,6 +47,10 @@ Project from this [course](https://zhukovsd.github.io/java-backend-learning-cour
 
 <img src="img/git/success_registration.png">
 
-### Search weather
+### Search weather full view
 
 <img src="img/git/search.png">
+
+### Search weather short view
+
+<img src="img/git/search_short_view.png">
