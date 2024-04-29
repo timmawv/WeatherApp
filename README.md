@@ -12,7 +12,7 @@ As well I added liquibase for migrations, easy way to create tables and add some
 I added ci/cd for easy testing and pushing to docker hub my app.
 This app has Dockerfile and docker compose too. 
 
-Project from this [course](https://zhukovsd.github.io/java-backend-learning-course/)
+<!-- Project from this [course](https://zhukovsd.github.io/java-backend-learning-course/) -->
 
 ## Project Stack
 
