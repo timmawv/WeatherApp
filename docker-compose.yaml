@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres_db:
-    image: postgres:14-alpine
+    image: postgres:16-alpine
     volumes:
       - weather_volume:/var/lib/postgresql/data
       - ./src/main/resources/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
